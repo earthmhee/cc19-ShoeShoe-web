@@ -1,17 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  
   return (
     <>
-      <p className='bg-white-200'>Start here</p>
-      
+      {/* replace header with component later */}
+      <header>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header>
+      {/* replace header with component later */}
+      <p className="bg-white-200">Start here</p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
