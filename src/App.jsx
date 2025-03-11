@@ -1,15 +1,16 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { Outlet } from "react-router";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0);
 
-  return (
-    <>
-      <p className='bg-red-400'>Start here</p>
-      
-    </>
-  )
+	return (
+		<>
+			<p className="bg-white-200">header</p>
+			<Outlet />
+		</>
+	);
 }
 
-export default App
+export default App;
