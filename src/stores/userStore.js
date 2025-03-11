@@ -2,7 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-const host = "http://localhost:8000"; //เดี๋ยวไปใส่ env
+const host = "http://localhost:8001"; //เดี๋ยวไปใส่ env
 
 const useUserStore = create(
 	persist(
