@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-
+import SidebarResponsive from './components/Sidebar'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <p className='bg-red-400'>Start here</p>
+        <h1 className='text-3xl font-bold underline'> Test</h1>
+      <SidebarResponsive />
       
     </>
   )
