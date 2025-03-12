@@ -16,8 +16,8 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById("root")).render(
 	<>
 		{/* ClerkProvider have to be wrapped entire app at the entry point na krub */}
+		{/* "afterSignOutUrl" is the path the guest should be land in first place */}
 		<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-			{/* "afterSignOutUrl" is the path the guest should be land in first place */}
 			<AppRouter />
 			<ToastContainer position="top-center" style={{ zIndex: 9999 }} />
 		</ClerkProvider>
