@@ -1,9 +1,9 @@
-import { createRoot } from "react-dom/client";
 import "./index.css";
 import AppRouter from "./routes/AppRouter.jsx";
+import { createRoot } from "react-dom/client";
+import { ClerkProvider } from "@clerk/clerk-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ClerkProvider } from "@clerk/clerk-react";
 
 ///////////clerk//////////////////////////////////
 // Import Publishable Key from .env

@@ -1,16 +1,17 @@
-import { useState } from "react";
-import "./App.css";
-import { Outlet } from "react-router";
 
+import { useState } from "react";
+import { Outlet } from "react-router";
+import Layout from "./layouts/Layouts";
+import './App.css'
+import SidebarResponsive from './components/Sidebar'
 function App() {
-	const [count, setCount] = useState(0);
 
 	return (
 		<>
-			<p className="bg-white-200">header</p>
+			<SidebarResponsive />
 			<Outlet />
 		</>
 	);
 }
 
-export default App;
+export default App

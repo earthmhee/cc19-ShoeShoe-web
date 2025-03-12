@@ -20,18 +20,7 @@ function Register() {
 		navigate("/"); // ใช้ useNavigate แทน
 	};
 
-	return (
-		<div className="flex flex-col items-center">
-			<h1>สมัครสมาชิก</h1>
-			<SignUp afterSignUp={handleAuthSuccess} />
-			<p>
-				มีบัญชีแล้ว?{" "}
-				<Link to="/login" className="text-blue-500">
-					เข้าสู่ระบบ
-				</Link>
-			</p>
-		</div>
-	);
+	return <SignUp afterSignUp={handleAuthSuccess} />;
 }
 
 export default Register;
