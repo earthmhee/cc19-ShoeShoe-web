@@ -1,12 +1,17 @@
-import { Outlet } from "react-router";
-// import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
-import Navbar from "./components/navbar";
 
+import { useState } from "react";
+import { Outlet } from "react-router";
+import Layout from "./layouts/Layouts";
+import './App.css'
+import SidebarResponsive from './components/Sidebar'
+import Footer from "./components/Footer";
 function App() {
+
 	return (
 		<>
-			<Navbar />
+			<SidebarResponsive />
 			<Outlet />
+			<Footer />
 		</>
 	);
 }

@@ -62,14 +62,14 @@ function Navbar() {
             {openSearch && (
               <ul
                 tabIndex={0}
-                className="absolute mt-5 right-0 dropdown-content border bg-base-100 rounded-btn z-10 w-[380px] p-2 shadow-sm"
+                className="absolute mt-5 right-0 dropdown-content border bg-base-100 rounded-btn z-10 w-[380px] p-2 shadow-xs"
               >
                 <label className="flex items-center w-full rounded-md px-3 ">
                   <SearchIcon className="absolute left-2 w-5 text-gray-600 " />
                   <input
                     type="text"
                     placeholder="WHAT ARE YOU LOOKING FOR?"
-                    className=" pl-8 pr-2 py-2 w-full text-xs text-black outline-none placeholder-gray-500 border-b border-gray-600"
+                    className=" pl-8 pr-2 py-2 w-full text-xs text-black outline-hidden placeholder-gray-500 border-b border-gray-600"
                   />
                 </label>
               </ul>
@@ -87,7 +87,7 @@ function Navbar() {
             {openUser && (
               <ul
                 tabIndex={0}
-                className="absolute border right-0 mt-5 dropdown-content menu bg-base-100 rounded-btn z-10 w-40 p-2 shadow-sm"
+                className="absolute border right-0 mt-5 dropdown-content menu bg-base-100 rounded-btn z-10 w-40 p-2 shadow-xs"
               >
                 <li>
                   <Link to="/profile">MY ACCOUNT</Link>
