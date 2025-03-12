@@ -1,14 +1,20 @@
-import { createRoot } from "react-dom/client";
 import "./index.css";
-// import AppRouter from "./routes/AppRouter.jsx";
+import AppRouter from "./routes/AppRouter.jsx";
+import { createRoot } from "react-dom/client";
+import { ClerkProvider } from '@clerk/clerk-react'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App.jsx";
 
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
+
 createRoot(document.getElementById("root")).render(
-	<>
-    	<App />
-		{/* <AppRouter /> */}
-		<ToastContainer position="top-center" style={{ zIndex: 9999 }} />
-	</>
-);
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <AppRouter />
+      <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
+    </ClerkProvider>
+)
