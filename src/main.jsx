@@ -1,7 +1,7 @@
 import "./index.css";
-import AppRouter from "./routes/AppRouter.jsx";
+// import AppRouter from "./routes/AppRouter.jsx";
 import { createRoot } from "react-dom/client";
-import { ClerkProvider } from '@clerk/clerk-react'
+import { ClerkProvider } from "@clerk/clerk-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App.jsx";
@@ -13,8 +13,9 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById("root")).render(
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <AppRouter />
-      <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
-    </ClerkProvider>
-)
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <App />
+    {/* <AppRouter /> */}
+    <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
+  </ClerkProvider>
+);

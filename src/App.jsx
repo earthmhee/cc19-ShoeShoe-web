@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { useState } from "react";
 import { Outlet } from "react-router";
 import Layout from "./layouts/Layouts";
@@ -8,7 +8,7 @@ function App() {
 
 	return (
 		<>
-			<p className="bg-white-200">header</p>
+			<SidebarResponsive />
 			<Outlet />
 		</>
 	);
