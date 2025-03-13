@@ -19,8 +19,7 @@ function App() {
       </header>
       {/* replace header with component later */}
       <p className="bg-white-200">header</p>
-			{/* <Outlet /> */}
-      <ProductDetail />
+			<Outlet />
     </>
   );
 }

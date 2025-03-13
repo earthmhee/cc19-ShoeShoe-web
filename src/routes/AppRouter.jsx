@@ -1,13 +1,14 @@
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import useUserStore from "../stores/userStore";
 import App from "../App";
+import Products from "../pages/Products";
 
 const guestRouter = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <p>home</p> },
+			{ index: true, element: <Products/> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
 			{ path: "*", element: <Navigate to="/login" /> },
@@ -17,12 +18,7 @@ const guestRouter = createBrowserRouter([
 
 export default function AppRouter() {
 	const user = useUserStore((state) => state.user);
-	const finalRouter =
-		user?.role === "ADMIN"
-			? adminRouter
-			: user?.role === "USER"
-			? userRouter
-			: guestRouter;
+	const finalRouter =guestRouter
 
 	return <RouterProvider key={user?.id} router={finalRouter} />;
 }
