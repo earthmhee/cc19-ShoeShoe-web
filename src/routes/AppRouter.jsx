@@ -2,8 +2,6 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { useEffect, useState } from "react";
 import useUserStore from "../stores/userStore";
 import App from "../App";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
@@ -15,8 +13,6 @@ const guestRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
-			{ path: "login", element: <Login /> },
-			{ path: "register", element: <Register /> },
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	},

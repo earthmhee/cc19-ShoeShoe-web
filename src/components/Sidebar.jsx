@@ -514,8 +514,8 @@ import {
 	SignOutButton,
 	SignUpButton,
 	UserButton,
-	UserProfile,
 } from "@clerk/clerk-react";
+import UserProfileForSideBar from "./UserProfileForSideBar";
 
 function ResponsiveNavigation() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -713,7 +713,9 @@ function ResponsiveNavigation() {
 		<div className="flex flex-col ">
 			{/* Mobile menu button - only visible below lg breakpoint */}
 			<button
-				className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md"
+				className={`lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md ${
+					isOpen ? "translate-x-62" : "-translate-x-0"
+				} transition duration-200 ease-in-out`}
 				onClick={toggleSidebar}
 				aria-label="Toggle sidebar"
 			>
@@ -865,31 +867,50 @@ function ResponsiveNavigation() {
 									</button>
 								</SignedOut>
 								<SignedIn>
-									<UserButton />
+									<UserButton
+										appearance={{
+											elements: {
+												userButtonPopoverActionButton__signOut: {
+													color: "#99a1af",
+													"&:hover, &:focus, &:active": {
+														color: "#e7000b",
+													},
+												},
+												userButtonPopoverFooter: { display: "none" },
+											},
+										}}
+									/>
 								</SignedIn>
 								{/* User dropdown menu */}
 								{showUserMenu && (
 									<div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1">
 										<SignedOut>
-											<SignInButton mode="modal">
+											<SignInButton
+												mode="modal"
+												appearance={{
+													elements: {
+														footer: { display: "none" },
+													},
+												}}
+											>
 												<button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-													เข้าสู่ระบบ
+													Sign in
 												</button>
 											</SignInButton>
 
-											<SignUpButton mode="modal">
+											<SignUpButton
+												mode="modal"
+												appearance={{
+													elements: {
+														footer: { display: "none" },
+													},
+												}}
+											>
 												<button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-													สมัครสมาชิก
+													Register
 												</button>
 											</SignUpButton>
 										</SignedOut>
-										<SignedIn>
-											<SignOutButton>
-												<button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-													logout
-												</button>
-											</SignOutButton>
-										</SignedIn>
 									</div>
 								)}
 							</div>
@@ -925,12 +946,23 @@ function ResponsiveNavigation() {
 				<div className="flex flex-col h-full">
 					{/* Top navigation */}
 					<div className="flex border-b border-gray-200">
-						<button className="flex-1 py-4 text-center text-sm font-medium border-r border-gray-200">
-							เข้าสู่ระบบ
-						</button>
-						<button className="flex-1 py-4 text-center text-sm font-medium">
-							สมัครสมาชิก
-						</button>
+						<SignedOut>
+							<SignInButton mode="modal">
+								<button className="flex-1 py-4 text-center text-md font-bold font-medium border-r border-gray-200">
+									Sign in
+								</button>
+							</SignInButton>
+
+							<SignUpButton mode="modal">
+								<button className="flex-1 py-4 text-center text-md font-bold font-medium">
+									Register
+								</button>
+							</SignUpButton>
+						</SignedOut>
+
+						<SignedIn>
+							<UserProfileForSideBar />
+						</SignedIn>
 					</div>
 
 					{/* Menu items */}
@@ -1006,7 +1038,7 @@ function ResponsiveNavigation() {
 			{/* Overlay for mobile */}
 			{isOpen && (
 				<div
-					className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+					className="lg:hidden fixed inset-0 bg-black/[70%] bg-opacity-50 z-20"
 					onClick={toggleSidebar}
 					aria-hidden="true"
 				></div>
