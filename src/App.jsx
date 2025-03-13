@@ -15,17 +15,8 @@ function App() {
   return (
     <>
       {/* replace header with component later */}
-      {/* <header>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header> */}
-      {/* replace header with component later */}
-      {/* <ResponsiveNavigation /> */}
-			{/* <Outlet /> */}
+      <ResponsiveNavigation />
+		 <Outlet />
     </>
   );
 }
