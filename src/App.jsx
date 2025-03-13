@@ -26,8 +26,6 @@ function App() {
       {/* replace header with component later */}
       {/* <ResponsiveNavigation /> */}
 			{/* <Outlet /> */}
-      {/* <ProductDetail /> */}
-      <Addressbook/>
     </>
   );
 }
