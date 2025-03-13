@@ -1,3 +1,5 @@
+.env
+gitignore-old
 # Logs
 logs
 *.log
@@ -24,4 +26,4 @@ dist-ssr
 *.sw?
 
 # Secret key for Clerk
-.env
+
