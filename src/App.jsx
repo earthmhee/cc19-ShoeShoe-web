@@ -4,22 +4,30 @@ import "./App.css";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail"
 import CheckoutCardMockup from "./pages/Checkoutmockup";
+import ResponsiveNavigation from "./components/Sidebar";
+import AccountSidebar from "./components/Accountsidebar";
+import AccountDashboard from "./components/Accountdashboard";
+import AccountInformation from "./components/Accountinformation";
+import AddressBookForm from "./components/Addressbook";
+import Addressbook from "./components/Addressbook";
 
 function App() {
   return (
     <>
       {/* replace header with component later */}
-      <header>
+      {/* <header>
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
         </SignedIn>
-      </header>
+      </header> */}
       {/* replace header with component later */}
-      <p className="bg-white-200">header</p>
-			<Outlet />
+      {/* <ResponsiveNavigation /> */}
+			{/* <Outlet /> */}
+      {/* <ProductDetail /> */}
+      <Addressbook/>
     </>
   );
 }
