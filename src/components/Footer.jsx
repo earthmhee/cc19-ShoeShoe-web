@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '../icons';
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Link } from 'react-router';
 
 export default function Footer() {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,12 +30,12 @@ export default function Footer() {
                         {/* CUSTOMER SERVICE */}
                         <div>
                             <h3 className="font-bold text-lg mb-3">CUSTOMER SERVICE</h3>
-                            <ul className="space-y-2">
-                                <li><a href="#" className="hover:underline">SHOESHOE MEMBERSHIP</a></li>
-                                <li><a href="#" className="hover:underline">HOW TO ORDER</a></li>
-                                <li><a href="#" className="hover:underline">POLICIES</a></li>
-                                <li><a href="#" className="hover:underline">PRIVACY AND COOKIE POLICY</a></li>
-                                <li><a href="#" className="hover:underline">FAQs</a></li>
+                            <ul className="space-y-4">
+                                <Link to={"/membership"}><li><a className="hover:underline">SHOESHOE MEMBERSHIP</a></li></Link>
+                                <Link to={"/howtoorder"}><li><a className="hover:underline">HOW TO ORDER</a></li></Link>
+                                <Link to={"/policies"}><li><a className="hover:underline">POLICIES</a></li></Link>
+                                <Link to={"/privacy"}><li><a className="hover:underline">PRIVACY AND COOKIE POLICY</a></li></Link>
+                                <Link to={"/faqs"}><li><a className="hover:underline">FAQs</a></li></Link>
                                 <li className="mt-2 font-semibold">HOT LINE : 02-1147423</li>
                             </ul>
                         </div>
@@ -42,22 +43,23 @@ export default function Footer() {
                         {/* SHIPPING */}
                         <div>
                             <h3 className="font-bold text-lg mb-3">SHIPPING</h3>
-                            <ul className="space-y-2">
-                                <li><a href="#" className="hover:underline">SHIPPING POLICY</a></li>
-                                <li><a href="#" className="hover:underline">STATUS TRACKING</a></li>
-                                <li><a href="#" className="hover:underline">STORE LOCATION</a></li>
+                            <ul className="space-y-4">
+                                <Link to={"/shipping-policy"}><li><a className="hover:underline">SHIPPING POLICY</a></li></Link>
+                                <Link to={"/status-tracking"}><li><a className="hover:underline">STATUS TRACKING</a></li></Link>
+                                <Link to={"/amlocator"}><li><a className="hover:underline">STORE LOCATION</a></li></Link>
                             </ul>
                         </div>
 
                         {/* CONTACT US */}
                         <div>
                             <h3 className="font-bold text-lg mb-3">CONTACT US</h3>
-                            <ul className="space-y-2">
-                                <li><a href="#" className="hover:underline">ABOUT US</a></li>
-                                <li className="mt-2">
+                            <ul className="space-y-4">
+                                <Link to={"about-us"}><li><a className="hover:underline">ABOUT US</a></li></Link>
+
+                                <li className="mt-2 text-xs">
                                     <span className="font-semibold">CONTACT PHONE:</span> 02-1147423
+                                    <li className='textarea-xs'>PHONE HOURS, MON-SUN: 10 AM - 7 PM ICT</li>
                                 </li>
-                                <li>PHONE HOURS, MON-SUN: 10 AM - 7 PM ICT</li>
                                 <li>
                                     <a href="mailto:support@shoeshoe.com" className="text-blue-500 hover:underline">
                                         SUPPORT@SHOESHOE.COM
@@ -70,13 +72,13 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-lg mb-3">FOLLOW US</h3>
                             <div className="flex space-x-4">
-                                <a href="#" className="hover:scale-110 transition">
+                                <a className="hover:scale-110 transition">
                                     <FacebookIcon className="w-7" />
                                 </a>
-                                <a href="#" className="hover:scale-110 transition">
+                                <a className="hover:scale-110 transition">
                                     <InstagramIcon className="w-7" />
                                 </a>
-                                <a href="#" className="hover:scale-110 transition">
+                                <a className="hover:scale-110 transition">
                                     <YoutubeIcon className="w-7" />
                                 </a>
                             </div>
@@ -88,6 +90,6 @@ export default function Footer() {
                     © SHOESHOE SUPPLY CO., LTD. ALL RIGHTS RESERVED.
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }
