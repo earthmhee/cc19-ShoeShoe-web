@@ -5,6 +5,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
+import StoreLocator from "../pages/StoreLocator";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -13,6 +14,7 @@ const guestRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
+			{path: "stores", element: <StoreLocator/>},
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	},
