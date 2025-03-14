@@ -5,11 +5,8 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
-<<<<<<< HEAD
 import ProductDetail from "../pages/ProductDetail";
-=======
 import StoreLocator from "../pages/StoreLocator";
->>>>>>> dev
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
