@@ -5,6 +5,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
+import ProductDetail from "../pages/ProductDetail";
 import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
@@ -17,7 +18,10 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Products/> },
+			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "/login", element: <p>login</p> },
+			{ path: "/register", element: <p>register</p> },
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
