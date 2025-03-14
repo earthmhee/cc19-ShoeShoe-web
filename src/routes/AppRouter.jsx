@@ -6,6 +6,8 @@ import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
 
+import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
+
 // Guest Routes
 const guestRouter = createBrowserRouter([
 	{
@@ -13,7 +15,7 @@ const guestRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
-			{ path: "*", element: <Navigate to="/login" /> },
+			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
 ]);
@@ -25,6 +27,7 @@ const userRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Home /> },
+			{ path: "admin", element: <AdminDashboard /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
@@ -44,28 +47,53 @@ const adminRouter = createBrowserRouter([
 ]);
 
 export default function AppRouter() {
-	const role = useUserStore((state) => state.role);
+	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
+	const { user } = useUser();
 	const [router, setRouter] = useState(guestRouter);
 	const [isLoading, setIsLoading] = useState(true);
+	const {
+		setRole,
+		setToken,
+		setUser,
+		setClerkID,
+		role: userRole,
+	} = useUserStore();
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (role === "admin") {
-				setRouter(adminRouter);
-			} else if (role === "user") {
-				setRouter(userRouter);
+		const fetchRoleAndToken = async () => {
+			if (isSignedIn && user) {
+				const token = await getToken();
+				const role = user.publicMetadata?.role || "Customer";
+				const finalRouter = role === "Admin" ? adminRouter : userRouter;
+				setRouter(finalRouter);
+				setRole(role);
+				setToken(token);
+				setUser(user.fullName);
+				setClerkID(userId);
 			} else {
 				setRouter(guestRouter);
+				setRole(null);
+				setToken(null);
+				setUser(null);
+				setClerkID(null);
 			}
 			setIsLoading(false);
-		}, 100);
+		};
 
-		return () => clearTimeout(timer);
-	}, [role]);
+		if (isLoaded) {
+			fetchRoleAndToken();
+		}
+	}, [isLoaded, isSignedIn, user, getToken]);
 
-	if (isLoading) {
+	// do this because of the CLERK is need some time to load
+
+	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
 
-	return <RouterProvider router={router} />;
+	return (
+		<ClerkLoaded>
+			<RouterProvider key={user?.id} router={router} />
+		</ClerkLoaded>
+	);
 }
