@@ -5,10 +5,12 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
+import ProductDetail from "../pages/ProductDetail";
 import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
+import Dummydashboard from "../components/Dummydashboard";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -16,7 +18,10 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Products/> },
+			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "/login", element: <p>login</p> },
+			{ path: "/register", element: <p>register</p> },
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
@@ -59,6 +64,7 @@ export default function AppRouter() {
 		setToken,
 		setUser,
 		setClerkID,
+		createAccount,
 		role: userRole,
 	} = useUserStore();
 
@@ -73,6 +79,9 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
+				console.log('Set State Complete');
+				createAccount(token)
+				console.log('Create Account Complete');
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
@@ -88,12 +97,12 @@ export default function AppRouter() {
 		}
 	}, [isLoaded, isSignedIn, user, getToken]);
 
+	
 	// do this because of the CLERK is need some time to load
-
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
-
+	
 	return (
 		<ClerkLoaded>
 			<RouterProvider key={user?.id} router={router} />
