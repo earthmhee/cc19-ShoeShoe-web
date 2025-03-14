@@ -5,6 +5,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import Products from "../pages/Products";
+import ProductDetail from "../pages/ProductDetail";
 import StoreLocator from "../pages/StoreLocator";
 import AdminProducts from "../pages/admin/AdminProducts";
 import ProductForm from "../pages/admin/ProductForm";
@@ -12,14 +13,21 @@ import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
 
+import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
+import AccountInfo from "../pages/account/AccountInfo";
+import Dummydashboard from "../components/Dummydashboard";
+
 // Guest Routes
 const guestRouter = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
-			{path: "stores", element: <StoreLocator/>},
+			{ index: true, element: <Products/> },
+			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "/login", element: <p>login</p> },
+			{ path: "/register", element: <p>register</p> },
+			{ path: "stores", element: <StoreLocator /> },
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	
@@ -32,7 +40,8 @@ const userRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Home /> },
+			{ index: true, element: <Products /> },
+			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
@@ -57,28 +66,57 @@ const adminRouter = createBrowserRouter([
 ]);
 
 export default function AppRouter() {
-	const role = useUserStore((state) => state.role);
+	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
+	const { user } = useUser();
 	const [router, setRouter] = useState(guestRouter);
 	const [isLoading, setIsLoading] = useState(true);
+	const {
+		setRole,
+		setToken,
+		setUser,
+		setClerkID,
+		createAccount,
+		role: userRole,
+	} = useUserStore();
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (role === "admin") {
-				setRouter(adminRouter);
-			} else if (role === "user") {
-				setRouter(userRouter);
+		const fetchRoleAndToken = async () => {
+			if (isSignedIn && user) {
+				const token = await getToken();
+				const role = user.publicMetadata?.role || "Customer";
+				const finalRouter = role === "Admin" ? adminRouter : userRouter;
+				setRouter(finalRouter);
+				setRole(role);
+				setToken(token);
+				setUser(user.fullName);
+				setClerkID(userId);
+				console.log('Set State Complete');
+				createAccount(token)
+				console.log('Create Account Complete');
 			} else {
 				setRouter(guestRouter);
+				setRole(null);
+				setToken(null);
+				setUser(null);
+				setClerkID(null);
 			}
 			setIsLoading(false);
-		}, 100);
+		};
 
-		return () => clearTimeout(timer);
-	}, [role]);
+		if (isLoaded) {
+			fetchRoleAndToken();
+		}
+	}, [isLoaded, isSignedIn, user, getToken]);
 
-	if (isLoading) {
+	
+	// do this because of the CLERK is need some time to load
+	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
-
-	return <RouterProvider router={router} />;
+	
+	return (
+		<ClerkLoaded>
+			<RouterProvider key={user?.id} router={router} />
+		</ClerkLoaded>
+	);
 }

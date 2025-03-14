@@ -1,38 +1,39 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { useUser } from "@clerk/clerk-react";
+import { createMyAccount } from "../api/user";
 
 const useUserStore = create(
 	persist(
 		(set) => ({
+			clerkID: null,
 			user: null,
 			token: null,
 			role: null,
 
+			setClerkID: (clerkID) => {
+				set({ clerkID });
+			},
 			setUser: (user) => {
-				console.log("Setting user:", user);
 				set({ user });
 			},
 			setToken: (token) => {
-				console.log("Setting token:", token);
 				set({ token });
 			},
 			setRole: (role) => {
-				console.log("Setting role:", role);
 				set({ role });
 			},
-
+			createAccount : async (token) => {
+			  await createMyAccount(token)
+			  console.log('actionGetMyAccout working');
+			},
+			
 			logout: () => {
-				console.log("Logging out");
-				set({ user: null, token: null, role: null });
+				set({ clerkID: null, user: null, token: null, role: null });
 			},
 		}),
 		{
-			name: "user-state",
+			name: "state",
 			storage: createJSONStorage(() => localStorage),
-			onRehydrateStorage: (state) => {
-				console.log("Rehydrated state from localStorage:", state);
-			},
 		}
 	)
 );
