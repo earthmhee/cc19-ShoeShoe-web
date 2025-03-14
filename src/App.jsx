@@ -12,7 +12,7 @@ import CheckoutCardMockup from "./pages/Checkoutmockup";
 import ResponsiveNavigation from "./components/Sidebar";
 import AccountSidebar from "./components/Accountsidebar";
 import AccountDashboard from "./components/Accountdashboard";
-import AccountInformation from "./components/Accountinformation";
+import AccountInformation from "./components/AccountInformation";
 import AddressBookForm from "./components/Addressbook";
 import Addressbook from "./components/Addressbook";
 
