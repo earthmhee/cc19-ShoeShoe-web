@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-const NikeProductPage = () => {
+const ProductPage = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  const [currentTab, setCurrentTab] = useState('description');
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [isWishlisted, setIsWishlisted] = useState(false);
   
   // Product data
   const product = {
@@ -54,13 +54,18 @@ const NikeProductPage = () => {
     }
   };
 
+  // Toggle wishlist status
+  const toggleWishlist = () => {
+    setIsWishlisted(prev => !prev);
+  };
+
   return (
     <div className="bg-white flex flex-col lg:flex-row w-full max-w-6xl mx-auto p-4 gap-8">
       <div className="w-full lg:w-1/2">
         <div className="relative">
           <img 
             src={product.images[currentImage]} 
-            alt={`${product.name} view ${currentImage + 1}`} 
+            alt={`${product.name} view ${currentImage + 1}`}
             className="w-full h-auto rounded-lg"
           />
           
@@ -92,7 +97,7 @@ const NikeProductPage = () => {
             >
               <img 
                 src={img} 
-                alt={`Thumbnail ${index + 1}`} 
+                alt={`Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover rounded"
               />
             </button>
@@ -139,93 +144,58 @@ const NikeProductPage = () => {
         
         <div className="mt-6">
           <h3 className="text-md font-medium text-gray-900">Quantity</h3>
-          <div className="flex items-center mt-2 border border-gray-300 rounded-md">
+          <div className="flex items-center mt-2 w-32 border border-gray-300 rounded-md">
             <button 
               onClick={decreaseQuantity}
-              className="px-3 py-2 border-r border-gray-300"
+              className="px-4 py-2 flex-1 text-lg font-medium border-r border-gray-300 hover:bg-gray-100"
             >
               -
             </button>
-            <span className="px-4 py-2">{quantity}</span>
+            <span className="px-4 py-2 flex-1 text-center">{quantity}</span>
             <button 
               onClick={increaseQuantity}
-              className="px-3 py-2 border-l border-gray-300"
+              className="px-4 py-2 flex-1 text-lg font-medium border-l border-gray-300 hover:bg-gray-100"
             >
               +
             </button>
           </div>
         </div>
         
-        <div className="mt-6 flex gap-4">
-          <button className="bg-black text-white py-3 px-8 rounded-md font-medium hover:bg-gray-800 w-full">
+        <div className="mt-6 flex gap-2">
+          <button className="bg-black text-white py-3 px-8 rounded-md font-medium hover:bg-gray-800 w-4/5">
             ADD TO CART
           </button>
-          <button className="border border-black py-3 px-8 rounded-md font-medium hover:bg-gray-100 w-full">
-            Wishlist
+          <button 
+            onClick={toggleWishlist}
+            className="border border-black p-2 rounded-md font-medium hover:bg-gray-100 w-12 h-12 flex items-center justify-center transition-colors duration-200 ease-in-out"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill={isWishlisted ? "#e53e3e" : "none"} 
+              stroke={isWishlisted ? "#e53e3e" : "currentColor"} 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              className="w-6 h-6 transition-colors duration-200 ease-in-out hover:fill-red-500 hover:stroke-red-500"
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
           </button>
         </div>
 
         <div className="mt-8 border-t border-gray-200 pt-4">
-          <div className="flex border-b">
-            <button 
-              onClick={() => setCurrentTab('description')}
-              className={`px-4 py-2 font-medium ${currentTab === 'description' ? 'border-b-2 border-black' : ''}`}
-            >
-              Description
-            </button>
-            <button 
-              onClick={() => setCurrentTab('details')}
-              className={`px-4 py-2 font-medium ${currentTab === 'details' ? 'border-b-2 border-black' : ''}`}
-            >
-              Details
-            </button>
-            <button 
-              onClick={() => setCurrentTab('shipping')}
-              className={`px-4 py-2 font-medium ${currentTab === 'shipping' ? 'border-b-2 border-black' : ''}`}
-            >
-              Shipping
-            </button>
-          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3">Description</h3>
           
-          <div className="py-4">
-            {currentTab === 'description' && (
-              <div>
-                <p className="text-gray-700">{product.description}</p>
-                <ul className="mt-4 list-disc pl-5">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="text-gray-700 mt-1">{feature}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {currentTab === 'details' && (
-              <div>
-                <p className="text-gray-700">
-                  <strong>SKU:</strong> {product.sku}
-                </p>
-                <p className="text-gray-700 mt-2">
-                  <strong>Material:</strong> Synthetic upper, rubber outsole
-                </p>
-                <p className="text-gray-700 mt-2">
-                  <strong>Origin:</strong> Imported
-                </p>
-              </div>
-            )}
-            
-            {currentTab === 'shipping' && (
-              <div>
-                <p className="text-gray-700">
-                  Free standard shipping on all orders.
-                </p>
-                <p className="text-gray-700 mt-2">
-                  Estimated delivery time: 3-7 business days.
-                </p>
-                <p className="text-gray-700 mt-2">
-                  Express shipping available at checkout for an additional fee.
-                </p>
-              </div>
-            )}
+          <div className="py-2">
+            <p className="text-gray-700">{product.description}</p>
+            <ul className="mt-4 list-disc pl-5">
+              {product.features.map((feature, index) => (
+                <li key={index} className="text-gray-700 mt-1">{feature}</li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -233,4 +203,4 @@ const NikeProductPage = () => {
   );
 };
 
-export default NikeProductPage;
+export default ProductPage;
