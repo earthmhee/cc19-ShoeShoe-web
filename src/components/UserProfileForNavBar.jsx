@@ -18,6 +18,7 @@ function UserProfileForNavBar() {
 	const toggleUserMenu = () => {
 		setShowUserMenu(!showUserMenu);
 	};
+	const navigate = useNavigate();
 
 	const clerk = useClerk();
 	return (
@@ -95,7 +96,7 @@ function UserProfileForNavBar() {
 						<SignedIn>
 							<button
 								className="flex gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-								onClick={() => useNavigate("/account")}
+								onClick={() => navigate("/account")}
 							>
 								<svg
 									className="w-5 h-5"

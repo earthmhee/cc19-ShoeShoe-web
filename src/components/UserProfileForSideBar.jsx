@@ -6,11 +6,13 @@ import {
 	UserButton,
 	useClerk,
 } from "@clerk/clerk-react";
+import { useNavigate } from "react-router";
 
 function UserProfileForSideBar() {
 	const { user } = useUser();
 	const { signOut } = useAuth();
 	const [isOpen, setIsOpen] = useState(false);
+	const navigate = useNavigate();
 
 	const clerk = useClerk();
 	return (
@@ -37,7 +39,8 @@ function UserProfileForSideBar() {
 				{/* ปุ่ม Manage Account และ Sign Out */}
 				<div className="flex gap-1.5 mt-1">
 					<button
-						onClick={() => clerk.openUserProfile()}
+						// onClick={() => clerk.openUserProfile()}
+						onClick={() => navigate("/account")}
 						className="btn gap-0.5 px-2 py-1 h-8 text-xs rounded-md text-gray-700 hover:text-black hover:bg-slate-50"
 					>
 						<svg

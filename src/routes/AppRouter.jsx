@@ -5,8 +5,10 @@ import App from "../App";
 import Home from "../pages/Home";
 import AdminDashboard from "../pages/AdminDashboard";
 import Products from "../pages/Products";
+import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
+import AccountInfo from "../pages/account/AccountInfo";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -15,7 +17,8 @@ const guestRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
-			{ path: "*", element: <Navigate to="/" /> },
+			{ path: "stores", element: <StoreLocator /> },
+			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	},
 ]);
@@ -26,8 +29,8 @@ const userRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Home /> },
-			{ path: "admin", element: <AdminDashboard /> },
+			{ index: true, element: <Products /> },
+			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
