@@ -9,6 +9,7 @@ import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
+import Dummydashboard from "../components/Dummydashboard";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -59,6 +60,7 @@ export default function AppRouter() {
 		setToken,
 		setUser,
 		setClerkID,
+		createAccount,
 		role: userRole,
 	} = useUserStore();
 
@@ -73,6 +75,9 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
+				console.log('Set State Complete');
+				createAccount(token)
+				console.log('Create Account Complete');
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
@@ -88,12 +93,12 @@ export default function AppRouter() {
 		}
 	}, [isLoaded, isSignedIn, user, getToken]);
 
+	
 	// do this because of the CLERK is need some time to load
-
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
-
+	
 	return (
 		<ClerkLoaded>
 			<RouterProvider key={user?.id} router={router} />
