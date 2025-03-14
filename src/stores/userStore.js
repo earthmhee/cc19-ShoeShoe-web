@@ -1,21 +1,64 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { createMyAccount } from "../api/user";
 
-const userStore = (set) => ({
-  userData: null,
-  UserAccount: async (token, input) => {
-    const rs = await createUpdateAccount(token, input);
-    console.log("User", rs);
-    set({ userData: rs.data.results });
-  },
-  GetMyAccount: async (token) => {
-    const rs = await getMyAccount(token)
-    console.log('response', rs);
-    set({ userData: rs.data.results})
-  }
-});
+const useUserStore = create(
+	persist(
+		(set) => ({
+			clerkID: null,
+			user: null,
+			token: null,
+			role: null,
 
-// keep data on Local Storage with persist
-const useUserStore = create(persist(userStore, { name: "user" }))
+			setClerkID: (clerkID) => {
+				set({ clerkID });
+			},
+			setUser: (user) => {
+				set({ user });
+			},
+			setToken: (token) => {
+				set({ token });
+			},
+			setRole: (role) => {
+				set({ role });
+			},
+			createAccount : async (token) => {
+			  await createMyAccount(token)
+			  console.log('actionGetMyAccout working');
+			},
+			
+			logout: () => {
+				set({ clerkID: null, user: null, token: null, role: null });
+			},
+		}),
+		{
+			name: "state",
+			storage: createJSONStorage(() => localStorage),
+		}
+	)
+);
 
-export default useUserStore
+export default useUserStore;
+
+// import { create } from "zustand";
+// import { persist } from "zustand/middleware";
+// import { getMyAccount } from "../api/user";
+
+// const userStore = (set) => ({
+// 	userData: null,
+// 	UserAccount: async (token, input) => {
+// 		const rs = await createUpdateAccount(token, input);
+// 		console.log("User", rs);
+// 		set({ userData: rs.data.results });
+// 	},
+// 	actionGetMyAccount: async (token) => {
+// 		const rs = await getMyAccount(token);
+// 		console.log("response", rs);
+// 		set({ userData: rs.data.results });
+// 	},
+// });
+
+// // keep data on Local Storage with persist
+// const useUserStore = create(persist(userStore, { name: "user" }));
+
+// export default useUserStore;

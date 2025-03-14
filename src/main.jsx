@@ -4,18 +4,22 @@ import { createRoot } from "react-dom/client";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import App from "./App.jsx";
 
+///////////clerk//////////////////////////////////
+// Import Publishable Key from .env
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+	throw new Error("Missing Publishable Key from Clerk");
 }
-
+////////////////////////////////////////////////////////////////////
 createRoot(document.getElementById("root")).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-    {/* <App /> */}
-    <AppRouter />
-    <ToastContainer position="top-center" style={{ zIndex: 9999 }} />
-  </ClerkProvider>
+	<>
+		{/* ClerkProvider have to be wrapped entire app at the entry point na krub */}
+		{/* "afterSignOutUrl" is the path the guest should be land in first place */}
+		<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+			<AppRouter />
+			<ToastContainer position="top-center" style={{ zIndex: 9999 }} />
+		</ClerkProvider>
+	</>
 );
