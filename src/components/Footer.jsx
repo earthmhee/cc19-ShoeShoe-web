@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '../icons';
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link } from 'react-router';
@@ -6,10 +6,8 @@ import { Link } from 'react-router';
 export default function Footer() {
     const [isOpen, setIsOpen] = useState(false);
 
-
     return (
         <footer className="w-full bg-white border-t border-gray-300 text-sm relative md:block hidden">
-
             <div className="md:hidden flex justify-center py-4">
                 <button
                     className="flex items-center space-x-2 text-blue-500 font-semibold"
@@ -31,12 +29,34 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-lg mb-3">CUSTOMER SERVICE</h3>
                             <ul className="space-y-4">
-                                <Link to={"/membership"}><li><a className="hover:underline">SHOESHOE MEMBERSHIP</a></li></Link>
-                                <Link to={"/howtoorder"}><li><a className="hover:underline">HOW TO ORDER</a></li></Link>
-                                <Link to={"/policies"}><li><a className="hover:underline">POLICIES</a></li></Link>
-                                <Link to={"/privacy"}><li><a className="hover:underline">PRIVACY AND COOKIE POLICY</a></li></Link>
-                                <Link to={"/faqs"}><li><a className="hover:underline">FAQs</a></li></Link>
-                                <li className="mt-2 font-semibold">HOT LINE : 02-1147423</li>
+                                <li>
+                                    <Link to="/membership" className="hover:underline">
+                                        SHOESHOE MEMBERSHIP
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/howtoorder" className="hover:underline">
+                                        HOW TO ORDER
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/policies" className="hover:underline">
+                                        POLICIES
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/privacy" className="hover:underline">
+                                        PRIVACY AND COOKIE POLICY
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/faqs" className="hover:underline">
+                                        FAQs
+                                    </Link>
+                                </li>
+                                <li className="mt-2 font-semibold">
+                                    HOT LINE : 02-1147423
+                                </li>
                             </ul>
                         </div>
 
@@ -44,9 +64,21 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-lg mb-3">SHIPPING</h3>
                             <ul className="space-y-4">
-                                <Link to={"/shipping-policy"}><li><a className="hover:underline">SHIPPING POLICY</a></li></Link>
-                                <Link to={"/status-tracking"}><li><a className="hover:underline">STATUS TRACKING</a></li></Link>
-                                <Link to={"/amlocator"}><li><a className="hover:underline">STORE LOCATION</a></li></Link>
+                                <li>
+                                    <Link to="/shipping-policy" className="hover:underline">
+                                        SHIPPING POLICY
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/status-tracking" className="hover:underline">
+                                        STATUS TRACKING
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/amlocator" className="hover:underline">
+                                        STORE LOCATION
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
 
@@ -54,14 +86,24 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-lg mb-3">CONTACT US</h3>
                             <ul className="space-y-4">
-                                <Link to={"about-us"}><li><a className="hover:underline">ABOUT US</a></li></Link>
-
-                                <li className="mt-2 text-xs">
-                                    <span className="font-semibold">CONTACT PHONE:</span> 02-1147423
-                                    <li className='textarea-xs'>PHONE HOURS, MON-SUN: 10 AM - 7 PM ICT</li>
+                                <li>
+                                    <Link to="/about-us" className="hover:underline">
+                                        ABOUT US
+                                    </Link>
+                                </li>
+                                <li className="mt-2">
+                                    <div className="text-xs">
+                                        <span className="font-semibold">CONTACT PHONE:</span> 02-1147423
+                                        <div className="textarea-xs">
+                                            PHONE HOURS, MON-SUN: 10 AM - 7 PM ICT
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
-                                    <a href="mailto:support@shoeshoe.com" className="text-blue-500 hover:underline">
+                                    <a 
+                                        href="mailto:support@shoeshoe.com" 
+                                        className="text-blue-500 hover:underline"
+                                    >
                                         SUPPORT@SHOESHOE.COM
                                     </a>
                                 </li>
@@ -72,13 +114,25 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-lg mb-3">FOLLOW US</h3>
                             <div className="flex space-x-4">
-                                <a className="hover:scale-110 transition">
+                                <a 
+                                    href="#" 
+                                    className="hover:scale-110 transition"
+                                    aria-label="Facebook"
+                                >
                                     <FacebookIcon className="w-7" />
                                 </a>
-                                <a className="hover:scale-110 transition">
+                                <a 
+                                    href="#" 
+                                    className="hover:scale-110 transition"
+                                    aria-label="Instagram"
+                                >
                                     <InstagramIcon className="w-7" />
                                 </a>
-                                <a className="hover:scale-110 transition">
+                                <a 
+                                    href="#" 
+                                    className="hover:scale-110 transition"
+                                    aria-label="YouTube"
+                                >
                                     <YoutubeIcon className="w-7" />
                                 </a>
                             </div>
@@ -90,6 +144,6 @@ export default function Footer() {
                     © SHOESHOE SUPPLY CO., LTD. ALL RIGHTS RESERVED.
                 </div>
             </div>
-        </footer >
+        </footer>
     );
 }

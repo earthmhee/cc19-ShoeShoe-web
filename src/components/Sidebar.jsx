@@ -47,7 +47,6 @@ function ResponsiveNavigation() {
       try {
         const response = await getAllProduct();
         setProducts(response.data.data || []);
-        console.log(response.data.products);
         console.log(response.data.data);
       } catch (error) {
         console.log("Error fetching products:", error);
@@ -253,9 +252,12 @@ function ResponsiveNavigation() {
             <div className="flex items-center">
 
               <button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
-                <Link to="/" className="flex items-center">
-                 <a><ShoeshoeLogo /></a>
-                </Link>
+                <Link 
+  to="/" 
+  className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
+>
+  <ShoeshoeLogo />
+</Link>
               </button>
 
 
