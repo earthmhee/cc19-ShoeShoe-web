@@ -16,11 +16,16 @@ import AccountInformation from "./components/Accountinformation";
 import AddressBookForm from "./components/Addressbook";
 import Addressbook from "./components/Addressbook";
 
+import Layout from "./layouts/Layouts";
+import './App.css'
+import SidebarResponsive from './components/Sidebar'
+import Footer from "./components/Footer";
 function App() {
 	return (
 		<>
 			<ResponsiveNavigation />
 			<Outlet />
+			<Footer />
 		</>
 	);
 }

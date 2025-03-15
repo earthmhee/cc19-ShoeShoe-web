@@ -12,10 +12,18 @@ import ProductForm from "../pages/admin/ProductForm";
 import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
+import HowtoOrder from "../pages/FooterPages/Howtoorder";
+import Membership from "../pages/FooterPages/Membership";
+import Policies from "../pages/FooterPages/Policies";
+import Privacy from "../pages/FooterPages/Privacy";
+import FAQS from "../pages/FooterPages/FAQS";
+import ShippingPolicy from "../pages/FooterPages/ShippingPolicy";
+import StatusTracking from "../pages/FooterPages/StatusTracking";
+import AboutUs from "../pages/FooterPages/AboutUs";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-import Dummydashboard from "../components/Dummydashboard";
+// import Dummydashboard from "../components/Dummydashboard";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -27,7 +35,19 @@ const guestRouter = createBrowserRouter([
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
+
+			//Footer Pages
+			{ path: "/membership", element: <Membership /> },
+			{ path: "/howtoorder", element: <HowtoOrder /> },
+			{ path: "/policies", element: <Policies /> },
+			{ path: "/privacy", element: <Privacy /> },
+			{ path: "/faqs", element: <FAQS /> },
+			{ path: "/shipping-policy", element: <ShippingPolicy /> },
+			{ path: "/status-tracking", element: <StatusTracking /> },
+			{ path: "/amlocator", element: <StoreLocator /> },
 			{ path: "stores", element: <StoreLocator /> },
+			{ path: "/about-us", element: <AboutUs /> },
+			
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	
@@ -64,6 +84,8 @@ const adminRouter = createBrowserRouter([
 	  
 	},
 ]);
+
+
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
