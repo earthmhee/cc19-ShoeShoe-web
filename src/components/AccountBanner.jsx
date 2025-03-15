@@ -7,7 +7,7 @@ function AccountBanner({ userName = 'User', backgroundImage = '/path/to/default-
       <div 
         className="w-full h-32 bg-black relative overflow-hidden"
         style={{
-          backgroundImage="https://www.ajantashoes.com/pub/media/Mens_Shoes_Collection_Banner.jpg",
+          backgroundImage: `url("https://www.ajantashoes.com/pub/media/Mens_Shoes_Collection_Banner.jpg")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
