@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { changePassword, createUpdateAccount } from "../api/user";
+import { changePassword, createUpdateAccount } from "../../api/user";
 
 const AccountInformation = () => {
 	const [formData, setFormData] = useState({

@@ -1,5 +1,5 @@
 import React from "react";
-import AccountInformation from "../../components/AccountInformation";
+import AccountInformation from "../../components/accountManage/Accountinformation";
 
 function AccountUpdate() {
 	return (

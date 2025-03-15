@@ -1,5 +1,5 @@
 import React from "react";
-import AccountDashboard from "../../components/Accountdashboard";
+import AccountDashboard from "../../components/accountManage/Accountdashboard";
 
 function AccountInfo() {
 	return (
