@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { changePassword, createUpdateAccount } from "../api/user";
 
 const AccountInformation = () => {
 	const [formData, setFormData] = useState({
@@ -18,9 +17,7 @@ const AccountInformation = () => {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [signOutOtherDevices, setSignOutOtherDevices] = useState(true);
 	const [error, setError] = useState("");
-	const [errorPassword, setErrorPassword] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
-	const [successMessagePassword, setSuccessMessagePassword] = useState("");
 
 	const navigate = useNavigate();
 	const { isSignedIn, isLoaded: authLoaded, getToken } = useAuth();
@@ -62,14 +59,23 @@ const AccountInformation = () => {
 	const handleAccountSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const token = await getToken();
-			const response = await createUpdateAccount(token, formData);
-			if (response.status === 200) {
-				setSuccessMessage("Account information updated successfully!");
-				setError("");
-			} else {
-				throw new Error(response.data.msg || "Failed to update account");
-			}
+			const response = await fetch(
+				"http://localhost:8001/api/user/update-account",
+				{
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					credentials: "include",
+					body: JSON.stringify({
+						firstName: formData.firstName,
+						lastName: formData.lastName,
+					}),
+				}
+			);
+			const data = await response.json();
+			if (!response.ok)
+				throw new Error(data.error || "Failed to update account");
+			setSuccessMessage("Account information updated successfully!");
+			setError("");
 		} catch (err) {
 			setError(err.message || "Failed to update account information");
 			setSuccessMessage("");
@@ -79,41 +85,38 @@ const AccountInformation = () => {
 
 	const handleChangePassword = async (e) => {
 		e.preventDefault();
-		if (newPassword.trim() === "" || confirmPassword.trim() === "") {
-			setErrorPassword("Please fill your password");
-			setSuccessMessagePassword("");
-			return;
-		}
 		if (newPassword !== confirmPassword) {
-			setErrorPassword("Passwords do not match");
-			setSuccessMessagePassword("");
+			setError("Passwords do not match");
+			setSuccessMessage("");
 			return;
 		}
 		try {
-			const token = await getToken();
-			const response = await changePassword(
-				token,
-				newPassword,
-				confirmPassword,
-				signOutOtherDevices
+			const response = await fetch(
+				"http://localhost:8001/api/user/change-password",
+				{
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					credentials: "include",
+					body: JSON.stringify({
+						newPassword,
+						confirmPassword,
+						signOutOtherDevices,
+					}),
+				}
 			);
-			console.log("Response:", response);
-			if (response.status === 200) {
-				setSuccessMessagePassword(
-					response.data.msg || "Password changed successfully!"
-				);
-				setErrorPassword("");
-				setNewPassword("");
-				setConfirmPassword("");
-				setSignOutOtherDevices(true);
-			} else {
-				throw new Error(response.data.error || "Failed to change password");
+			const data = await response.json();
+			if (!response.ok) {
+				throw new Error(data.error || "Failed to change password");
 			}
+			setSuccessMessage(data.msg || "Password changed successfully!");
+			setError("");
+			setNewPassword("");
+			setConfirmPassword("");
+			setSignOutOtherDevices(true);
 		} catch (err) {
-			setErrorPassword(
-				err.message || "Failed to change password: Please try again."
-			);
-			setSuccessMessagePassword("");
+			setError(err.message || "Failed to change password: Please try again.");
+			setSuccessMessage("");
+			console.error("Password change error:", err);
 		}
 	};
 
@@ -299,8 +302,8 @@ const AccountInformation = () => {
 										setNewPassword("");
 										setConfirmPassword("");
 										setSignOutOtherDevices(true);
-										setErrorPassword("");
-										setSuccessMessagePassword("");
+										setError("");
+										setSuccessMessage("");
 									}}
 									className="btn w-20 h-8 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
 								>
@@ -313,11 +316,9 @@ const AccountInformation = () => {
 									Save
 								</button>
 							</div>
-							{errorPassword && (
-								<p className="text-red-500 mt-2">{errorPassword}</p>
-							)}
-							{successMessagePassword && (
-								<p className="text-green-500 mt-2">{successMessagePassword}</p>
+							{error && <p className="text-red-500 mt-2">{error}</p>}
+							{successMessage && (
+								<p className="text-green-500 mt-2">{successMessage}</p>
 							)}
 						</form>
 					</div>

@@ -23,9 +23,7 @@ const AccountDashboard = () => {
 		<div className="w-full max-w-4xl">
 			{/* Dashboard Header */}
 			<div className="mb-6">
-				<h1 className="text-2xl font-medium text-gray-800">
-					Account Dashboard
-				</h1>
+				<h1 className="text-2xl font-bold text-gray-800">ACCOUNT DASHBOARD</h1>
 				<p className="text-gray-600 mt-1">
 					Welcome back, {user.name.split(" ")[0]}!
 				</p>

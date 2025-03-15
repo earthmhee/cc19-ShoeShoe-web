@@ -10,6 +10,8 @@ import StoreLocator from "../pages/StoreLocator";
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
+import SubLayoutAccount from "../components/accountManage/subLayoutAccount";
+import Addressbook from "../components/Addressbook";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -32,12 +34,14 @@ const userRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{
-				path: "account",
+				path: "account", // children ของ account
+				element: <SubLayoutAccount />,
 				children: [
 					{ index: true, element: <AccountInfo /> },
 					{ path: "update", element: <AccountUpdate /> },
+					{ path: "address", element: <Addressbook /> },
 				],
-			}, //เดี๋ยวต้องมี children ของ account ต่อ
+			},
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
@@ -66,6 +70,7 @@ export default function AppRouter() {
 		setToken,
 		setUser,
 		setClerkID,
+		createAccount,
 		role: userRole,
 	} = useUserStore();
 
@@ -80,6 +85,9 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
+				console.log("Set State Complete");
+				createAccount(token);
+				console.log("Create Account Complete");
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
@@ -96,7 +104,6 @@ export default function AppRouter() {
 	}, [isLoaded, isSignedIn, user, getToken]);
 
 	// do this because of the CLERK is need some time to load
-
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}

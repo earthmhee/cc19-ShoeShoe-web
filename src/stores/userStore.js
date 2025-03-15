@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { useUser } from "@clerk/clerk-react";
+import { createMyAccount } from "../api/user";
 
 const useUserStore = create(
 	persist(
@@ -21,6 +21,10 @@ const useUserStore = create(
 			},
 			setRole: (role) => {
 				set({ role });
+			},
+			createAccount: async (token) => {
+				await createMyAccount(token);
+				console.log("actionGetMyAccount working");
 			},
 
 			logout: () => {
