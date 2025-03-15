@@ -27,22 +27,20 @@ const AccountSidebar = () => {
     setIsExpanded(!isExpanded);
   };
   
-
   const handleMenuItemClick = (item) => {
     setActiveItem(item);
     //  add navigation logic here
   };
   
   return (
-    <div className="w-full max-w-md border border-gray-200">
-
+    <div className="w-full sm:max-w-xs md:max-w-md border border-gray-200 rounded-sm mb-6 sm:mb-0">
       <div 
-        className="flex justify-between items-center px-4 py-3 bg-gray-100 cursor-pointer"
+        className="flex justify-between items-center px-3 sm:px-4 py-2 sm:py-3 bg-gray-100 cursor-pointer"
         onClick={toggleMenu}
       >
-        <h2 className="text-gray-600 font-medium">MY ACCOUNT</h2>
+        <h2 className="text-sm sm:text-base text-gray-600 font-medium">MY ACCOUNT</h2>
         <svg 
-          className={`w-4 h-4 text-gray-600 transform transition-transform duration-300 ease-in-out ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-600 transform transition-transform duration-300 ease-in-out ${isExpanded ? 'rotate-180' : ''}`}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24" 
@@ -52,7 +50,6 @@ const AccountSidebar = () => {
         </svg>
       </div>
       
-
       <div 
         ref={dropdownRef}
         className="overflow-hidden transition-all duration-300 ease-in-out"
@@ -65,14 +62,14 @@ const AccountSidebar = () => {
           {menuItems.map((item) => (
             <div 
               key={item.id}
-              className={`px-4 py-3 cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 cursor-pointer ${
                 activeItem === item.label 
                   ? 'bg-gray-200 font-medium' 
                   : 'bg-gray-50 hover:bg-gray-100'
               }`}
               onClick={() => handleMenuItemClick(item.label)}
             >
-              <span className={`text-sm ${
+              <span className={`text-xs sm:text-sm ${
                 activeItem === item.label 
                   ? 'text-gray-800' 
                   : 'text-gray-500'

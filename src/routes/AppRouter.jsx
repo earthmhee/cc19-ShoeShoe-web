@@ -10,7 +10,7 @@ import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-import Dummydashboard from "../components/Dummydashboard";
+
 
 // Guest Routes
 const guestRouter = createBrowserRouter([

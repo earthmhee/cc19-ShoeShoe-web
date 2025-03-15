@@ -11,18 +11,17 @@ const AccountDashboard = ({ userData }) => {
     subscribedToNewsletter: false,
   };
 
-  // Use provided userData or default if not available
   const user = userData || defaultUserData;
 
   return (
     <div className="w-full max-w-4xl">
-      {/* Dashboard Header */}
+
       <div className="mb-6">
         <h1 className="text-2xl font-medium text-gray-800">Account Dashboard</h1>
         <p className="text-gray-600 mt-1">Welcome back, {user.name.split(' ')[0]}!</p>
       </div>
 
-      {/* Account Overview Section */}
+
       <div className="border border-gray-200 rounded p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-medium text-gray-800">My Account Information</h2>
