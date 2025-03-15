@@ -47,7 +47,6 @@ function ResponsiveNavigation() {
       try {
         const response = await getAllProduct();
         setProducts(response.data.data || []);
-        console.log(response.data.products);
         console.log(response.data.data);
       } catch (error) {
         console.log("Error fetching products:", error);
@@ -251,13 +250,14 @@ function ResponsiveNavigation() {
           {/* Top navigation */}
           <div className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
             <div className="flex items-center">
-
               <button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
-                <Link to="/" className="flex items-center">
-                 <a><ShoeshoeLogo /></a>
+                <Link
+                  to="/"
+                  className="inline-flex items-center mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
+                >
+                  <ShoeshoeLogo />
                 </Link>
               </button>
-
 
               <nav className="flex space-x-6">
                 {menuItems.map((item) => (
@@ -419,8 +419,9 @@ function ResponsiveNavigation() {
 
       {/* Sidebar - visible when isOpen=true on mobile or small screens */}
       <div
-        className={`fixed inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:hidden transition duration-200 ease-in-out z-30 w-64 bg-white shadow-lg overflow-y-auto`}
+        className={`fixed inset-y-0 left-0 transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:hidden transition duration-200 ease-in-out z-30 w-64 bg-white shadow-lg overflow-y-auto`}
         aria-hidden={!isOpen}
       >
         <div className="flex flex-col h-full">
@@ -445,8 +446,9 @@ function ResponsiveNavigation() {
                   {item.label}
                   {item.hasChildren && (
                     <svg
-                      className={`w-4 h-4 transition-transform ${expandedMenus[item.id] ? "rotate-180" : ""
-                        }`}
+                      className={`w-4 h-4 transition-transform ${
+                        expandedMenus[item.id] ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -502,8 +504,6 @@ function ResponsiveNavigation() {
           </div>
         </div>
       </div>
-
-
 
       {/* Overlay for mobile */}
       {isOpen && (
