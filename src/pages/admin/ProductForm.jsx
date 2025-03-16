@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { ArrowLeft, Plus, X, Upload } from 'lucide-react';
+import { ArrowLeft, Plus, X, Upload, AlertTriangle } from 'lucide-react';
 import AdminLayout from '../../layouts/AdminLayout';
-import axios from 'axios';
+import { getProductById, createProduct, updateProduct, getCategories } from '../../services/api';
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -29,70 +29,59 @@ const ProductForm = () => {
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState('');
 
-  // Fetch categories on component mount
+  // Fetch categories and product data (if editing) on component mount
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
+      setLoading(true);
+      setError('');
+      
       try {
-        // You'll need to create this endpoint in your backend
-        const response = await axios.get('http://localhost:8001/api/category/show-category');
-        if (response.data && response.data.data) {
-          setCategories(response.data.data);
+        // Fetch categories
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
+        
+        // If editing, fetch product data
+        if (isEditMode) {
+          const productData = await getProductById(id);
+          
+          if (productData) {
+            // Parse images from JSON string if necessary
+            let parsedImages = [];
+            try {
+              if (typeof productData.images === 'string') {
+                parsedImages = JSON.parse(productData.images);
+              } else if (Array.isArray(productData.images)) {
+                parsedImages = productData.images;
+              }
+            } catch (e) {
+              console.error('Error parsing images:', e);
+              parsedImages = [];
+            }
+            
+            setFormData({
+              productname: productData.productname || '',
+              description: productData.description || '',
+              price: productData.price?.toString() || '',
+              discount: productData.discount?.toString() || '',
+              brand: productData.brand || '',
+              gender: productData.gender || 'Men',
+              category_id: productData.category_id?.toString() || '',
+              images: parsedImages
+            });
+            
+            setImageUrls(parsedImages);
+          }
         }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        setError('Failed to load categories. Please try refreshing the page.');
+      } catch (err) {
+        console.error('Error fetching initial data:', err);
+        setError('Failed to load data. Please try refreshing the page.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchCategories();
-
-    // If editing, fetch product data
-    if (isEditMode) {
-      fetchProductData();
-    }
-  }, [id]);
-
-  const fetchProductData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`http://localhost:8001/api/product/show-product/${id}`);
-      
-      if (response.data && response.data.data) {
-        const productData = response.data.data;
-        
-        // Parse images from JSON string if necessary
-        let parsedImages = [];
-        try {
-          if (typeof productData.images === 'string') {
-            parsedImages = JSON.parse(productData.images);
-          } else if (Array.isArray(productData.images)) {
-            parsedImages = productData.images;
-          }
-        } catch (e) {
-          console.error('Error parsing images:', e);
-          parsedImages = [];
-        }
-        
-        setFormData({
-          productname: productData.productname || '',
-          description: productData.description || '',
-          price: productData.price?.toString() || '',
-          discount: productData.discount?.toString() || '',
-          brand: productData.brand || '',
-          gender: productData.gender || 'Men',
-          category_id: productData.category_id?.toString() || '',
-          images: parsedImages
-        });
-        
-        setImageUrls(parsedImages);
-      }
-    } catch (error) {
-      console.error('Error fetching product data:', error);
-      setError('Failed to load product data. Please try refreshing the page.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchInitialData();
+  }, [id, isEditMode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -142,13 +131,17 @@ const ProductForm = () => {
       formData.append('upload_preset', 'shoeshoe_uploads'); // Replace with your upload preset
       
       try {
-        const response = await axios.post(
+        const response = await fetch(
           'https://api.cloudinary.com/v1_1/your-cloud-name/image/upload', // Replace with your Cloudinary cloud name
-          formData
+          {
+            method: 'POST',
+            body: formData
+          }
         );
         
-        if (response.data && response.data.secure_url) {
-          uploadedUrls.push(response.data.secure_url);
+        const data = await response.json();
+        if (data && data.secure_url) {
+          uploadedUrls.push(data.secure_url);
         }
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -172,38 +165,29 @@ const ProductForm = () => {
         return;
       }
       
-      // When submitting, we need to convert the images to a JSON string
-      // In a real implementation, you would upload the images to a server or cloud storage
-      
-      // Mock image upload - in a real app, use uploadImagesToCloudinary()
+      // In a real implementation, you would upload the images
       // const imageUrls = await uploadImagesToCloudinary();
       
-      // For now, we'll use the existing URLs in our formData
+      // For now, we'll use the existing URLs or placeholder
       const productData = {
         ...formData,
         price: parseInt(formData.price),
-        discount: formData.discount ? parseInt(formData.discount) : 0,
-        images: JSON.stringify(imageUrls)
+        discount: formData.discount ? parseFloat(formData.discount) : 0,
+        images: JSON.stringify(imageUrls.length > 0 ? imageUrls : ['https://via.placeholder.com/400'])
       };
       
       if (isEditMode) {
         // Update existing product
-        await axios.patch(
-          `http://localhost:8001/api/product/update-product/${id}`,
-          productData
-        );
+        await updateProduct(id, productData);
       } else {
         // Create new product
-        await axios.post(
-          'http://localhost:8001/api/product/add-product',
-          productData
-        );
+        await createProduct(productData);
       }
       
       // Navigate back to products list
       navigate('/admin/products');
-    } catch (error) {
-      console.error('Error saving product:', error);
+    } catch (err) {
+      console.error('Error saving product:', err);
       setError('Failed to save product. Please try again.');
     } finally {
       setSaving(false);
@@ -237,7 +221,7 @@ const ProductForm = () => {
         <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
           <div className="flex">
             <div className="flex-shrink-0">
-              <X className="h-5 w-5 text-red-500" />
+              <AlertTriangle className="h-5 w-5 text-red-500" />
             </div>
             <div className="ml-3">
               <p className="text-sm text-red-700">{error}</p>
@@ -285,7 +269,7 @@ const ProductForm = () => {
             {/* Discount */}
             <div>
               <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
-                Discount (%)
+                Discount (decimal: 0.2 = 20%)
               </label>
               <input
                 type="number"
@@ -295,7 +279,8 @@ const ProductForm = () => {
                 onChange={handleChange}
                 className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
                 min="0"
-                max="100"
+                max="1"
+                step="0.01"
               />
             </div>
             
@@ -412,6 +397,10 @@ const ProductForm = () => {
                       src={url}
                       alt={`Product preview ${index + 1}`}
                       className="h-24 w-24 object-cover rounded-md"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/100';
+                      }}
                     />
                     <button
                       type="button"

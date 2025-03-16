@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import axios from 'axios';
+import { getDashboardStats } from '../../services/api';
+import { AlertTriangle } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [salesData, setSalesData] = useState([]);
@@ -12,23 +13,30 @@ const AdminDashboard = () => {
     totalProducts: 0,
     pendingOrders: 0
   });
+  const [recentOrders, setRecentOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // In a real application, we would fetch this data from your backend
-    // For now, we'll use placeholder data
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         
-        // Mock data for now - in the final implementation we'll connect to actual endpoints
-        // Example API calls:
-        // const salesResponse = await axios.get('http://localhost:8001/api/admin/sales');
-        // const productResponse = await axios.get('http://localhost:8001/api/admin/products');
-        // const statsResponse = await axios.get('http://localhost:8001/api/admin/stats');
+        // Fetch data from API
+        const dashboardData = await getDashboardStats();
         
-        // Placeholder data
-        const mockSalesData = [
+        // Update state with real data
+        setSalesData(dashboardData.salesData);
+        setProductData(dashboardData.productData);
+        setStats(dashboardData.stats);
+        setRecentOrders(dashboardData.recentOrders);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setError('Failed to load dashboard data. Please try again later.');
+        
+        // Set fallback data if API fails
+        setSalesData([
           { month: 'Jan', sales: 4000 },
           { month: 'Feb', sales: 3000 },
           { month: 'Mar', sales: 5000 },
@@ -36,28 +44,22 @@ const AdminDashboard = () => {
           { month: 'May', sales: 1890 },
           { month: 'Jun', sales: 2390 },
           { month: 'Jul', sales: 3490 },
-        ];
+        ]);
         
-        const mockProductData = [
+        setProductData([
           { name: 'Sneakers', value: 45 },
           { name: 'Running', value: 25 },
           { name: 'Sports', value: 15 },
           { name: 'Sandals', value: 10 },
           { name: 'Slippers', value: 5 },
-        ];
+        ]);
         
-        const mockStats = {
+        setStats({
           totalSales: 125400,
           totalOrders: 182,
           totalProducts: 76,
           pendingOrders: 8
-        };
-        
-        setSalesData(mockSalesData);
-        setProductData(mockProductData);
-        setStats(mockStats);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        });
       } finally {
         setIsLoading(false);
       }
@@ -85,6 +87,11 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
   if (isLoading) {
     return (
       <AdminLayout>
@@ -101,6 +108,19 @@ const AdminDashboard = () => {
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-gray-600">Welcome to your admin dashboard</p>
       </div>
+      
+      {error && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertTriangle className="h-5 w-5 text-yellow-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -139,7 +159,7 @@ const AdminDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip formatter={(value) => `฿${value.toLocaleString()}`} />
                 <Legend />
                 <Line type="monotone" dataKey="sales" stroke="#3B82F6" strokeWidth={2} />
               </LineChart>
@@ -192,40 +212,34 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {/* Sample orders - we'll replace with real data later */}
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#ORD-1234</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">John Doe</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 14, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Paid
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">฿3,800</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#ORD-1233</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Jane Smith</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 13, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                    Pending
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">฿5,990</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#ORD-1232</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Mike Johnson</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 12, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Paid
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">฿2,890</td>
-              </tr>
+              {recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
+                  <tr key={order.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#{order.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {order.user?.firstname} {order.user?.lastname}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(order.order_date)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        ${order.payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 
+                          order.payment_status === 'Unpaid' ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-red-100 text-red-800'}`}>
+                        {order.payment_status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">฿{order.total_amount.toLocaleString()}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">
+                    No recent orders found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
