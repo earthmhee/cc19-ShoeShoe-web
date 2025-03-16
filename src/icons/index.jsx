@@ -166,3 +166,42 @@ export function YoutubeIcon(props) {
         </svg>
     )
 }
+
+export function CloseIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M18 18l-6-6m0 0L6 6m6 6l6-6m-6 6l-6 6"
+                stroke="#000"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+
+export function MenuIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M4 6h16M4 12h16M4 18h16"
+                stroke="#000"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+

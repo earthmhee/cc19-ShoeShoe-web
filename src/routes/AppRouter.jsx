@@ -56,6 +56,20 @@ const userRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
+
+
+			//Footer Pages
+			{ path: "/membership", element: <Membership /> },
+			{ path: "/howtoorder", element: <HowtoOrder /> },
+			{ path: "/policies", element: <Policies /> },
+			{ path: "/privacy", element: <Privacy /> },
+			{ path: "/faqs", element: <FAQS /> },
+			{ path: "/shipping-policy", element: <ShippingPolicy /> },
+			{ path: "/status-tracking", element: <StatusTracking /> },
+			{ path: "/amlocator", element: <StoreLocator /> },
+			{ path: "stores", element: <StoreLocator /> },
+			{ path: "/about-us", element: <AboutUs /> },
+			
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
