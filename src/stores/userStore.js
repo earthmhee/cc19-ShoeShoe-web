@@ -22,11 +22,11 @@ const useUserStore = create(
 			setRole: (role) => {
 				set({ role });
 			},
-			createAccount : async (token) => {
-			  await createMyAccount(token)
-			  console.log('actionGetMyAccout working');
+			createAccount: async (token) => {
+				await createMyAccount(token);
+				console.log("actionGetMyAccount working");
 			},
-			
+
 			logout: () => {
 				set({ clerkID: null, user: null, token: null, role: null });
 			},
