@@ -2,13 +2,13 @@
 
 export function ShoeshoeLogo() {
     return (
-        <a href="https://www.fontspace.com/category/bold">
+        <div>
             <img
                 src="https://see.fontimg.com/api/rf5/nA4zP/YzY0OWQ5ZWNjNGQxNGE5YmFhNTAzNWQxMGExNDBmNzAudHRm/c2hvZXNob2U/simple-stacked.png?r=fs&h=130&w=2000&fg=000000&bg=FFFFFF&tb=1&s=65"
                 alt="Bold fonts"
                 className="flex text-center items-center justify-center w-28 "
             />
-        </a>
+        </div>
     );
 }
 
@@ -65,3 +65,104 @@ export function ShoppingCartIcon(props) {
     )
 }
 
+export function FacebookIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            {...props}
+        >
+            <path
+                fill="#1877F2"
+                d="M15 8a7 7 0 00-7-7 7 7 0 00-1.094 13.915v-4.892H5.13V8h1.777V6.458c0-1.754 1.045-2.724 2.644-2.724.766 0 1.567.137 1.567.137v1.723h-.883c-.87 0-1.14.54-1.14 1.093V8h1.941l-.31 2.023H9.094v4.892A7.001 7.001 0 0015 8z"
+            />
+            <path
+                fill="#fff"
+                d="M10.725 10.023L11.035 8H9.094V6.687c0-.553.27-1.093 1.14-1.093h.883V3.87s-.801-.137-1.567-.137c-1.6 0-2.644.97-2.644 2.724V8H5.13v2.023h1.777v4.892a7.037 7.037 0 002.188 0v-4.892h1.63z"
+            />
+        </svg>
+    )
+}
+
+export function InstagramIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <rect x={2} y={2} width={28} height={28} rx={6} fill="url(#a)" />
+            <rect x={2} y={2} width={28} height={28} rx={6} fill="url(#b)" />
+            <rect x={2} y={2} width={28} height={28} rx={6} fill="url(#c)" />
+            <path d="M23 10.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" fill="#fff" />
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M16 21a5 5 0 100-10 5 5 0 000 10zm0-2a3 3 0 100-6 3 3 0 000 6z"
+                fill="#fff"
+            />
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M6 15.6c0-3.36 0-5.04.654-6.324a6 6 0 012.622-2.622C10.56 6 12.24 6 15.6 6h.8c3.36 0 5.04 0 6.324.654a6 6 0 012.622 2.622C26 10.56 26 12.24 26 15.6v.8c0 3.36 0 5.04-.654 6.324a6 6 0 01-2.622 2.622C21.44 26 19.76 26 16.4 26h-.8c-3.36 0-5.04 0-6.324-.654a6 6 0 01-2.622-2.622C6 21.44 6 19.76 6 16.4v-.8zM15.6 8h.8c1.713 0 2.878.002 3.778.075.877.072 1.325.202 1.638.361a4 4 0 011.748 1.748c.16.313.29.761.36 1.638.074.9.076 2.065.076 3.778v.8c0 1.713-.002 2.878-.075 3.778-.072.877-.202 1.325-.361 1.638a4 4 0 01-1.748 1.748c-.313.16-.761.29-1.638.36-.9.074-2.065.076-3.778.076h-.8c-1.713 0-2.878-.002-3.778-.075-.877-.072-1.325-.202-1.638-.361a4 4 0 01-1.748-1.748c-.16-.313-.29-.761-.36-1.638C8.001 19.278 8 18.113 8 16.4v-.8c0-1.713.002-2.878.075-3.778.072-.877.202-1.325.361-1.638a4 4 0 011.748-1.748c.313-.16.761-.29 1.638-.36.9-.074 2.065-.076 3.778-.076z"
+                fill="#fff"
+            />
+            <defs>
+                <radialGradient
+                    id="a"
+                    cx={0}
+                    cy={0}
+                    r={1}
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="rotate(-55.376 27.916 .066) scale(25.5196)"
+                >
+                    <stop stopColor="#B13589" />
+                    <stop offset={0.79309} stopColor="#C62F94" />
+                    <stop offset={1} stopColor="#8A3AC8" />
+                </radialGradient>
+                <radialGradient
+                    id="b"
+                    cx={0}
+                    cy={0}
+                    r={1}
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="rotate(-65.136 29.766 6.89) scale(22.5942)"
+                >
+                    <stop stopColor="#E0E8B7" />
+                    <stop offset={0.444662} stopColor="#FB8A2E" />
+                    <stop offset={0.71474} stopColor="#E2425C" />
+                    <stop offset={1} stopColor="#E2425C" stopOpacity={0} />
+                </radialGradient>
+                <radialGradient
+                    id="c"
+                    cx={0}
+                    cy={0}
+                    r={1}
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(38.50003 -5.5 1.1764 8.23476 .5 3)"
+                >
+                    <stop offset={0.156701} stopColor="#406ADC" />
+                    <stop offset={0.467799} stopColor="#6A45BE" />
+                    <stop offset={1} stopColor="#6A45BE" stopOpacity={0} />
+                </radialGradient>
+            </defs>
+        </svg>
+    )
+}
+
+export function YoutubeIcon(props) {
+    return (
+        <svg viewBox="0 -7 48 48" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path
+                d="M219.044 391.27l-.002-13.582 12.97 6.814-12.968 6.768zm28.476-15.936s-.47-3.33-1.908-4.798c-1.826-1.926-3.871-1.935-4.809-2.047-6.717-.489-16.792-.489-16.792-.489h-.022s-10.075 0-16.792.49c-.939.111-2.983.12-4.81 2.046-1.439 1.467-1.907 4.798-1.907 4.798s-.48 3.913-.48 7.824v3.668c0 3.912.48 7.823.48 7.823s.468 3.331 1.907 4.798c1.827 1.926 4.225 1.866 5.293 2.067 3.84.371 16.32.486 16.32.486s10.086-.015 16.803-.505c.938-.113 2.983-.122 4.809-2.048 1.439-1.467 1.908-4.798 1.908-4.798s.48-3.91.48-7.823v-3.668c0-3.911-.48-7.824-.48-7.824z"
+                transform="translate(-200 -368)"
+                fill="#CE1312"
+                stroke="none"
+                strokeWidth={1}
+                fillRule="evenodd"
+            />
+        </svg>
+    )
+}
