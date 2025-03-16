@@ -24,7 +24,7 @@ import AboutUs from "../pages/FooterPages/AboutUs";
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
-import SubLayoutAccount from "../components/accountManage/subLayoutAccount";
+import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
 
 // Guest Routes

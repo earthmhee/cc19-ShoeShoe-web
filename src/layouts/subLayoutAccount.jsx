@@ -1,7 +1,7 @@
 // src/components/SubLayout.jsx
 import React from "react";
 import { Outlet } from "react-router";
-import AccountSidebar from "./Accountsidebar";
+import AccountSidebar from "../components/accountManage/Accountsidebar";
 
 const SubLayoutAccount = () => {
 	return (
