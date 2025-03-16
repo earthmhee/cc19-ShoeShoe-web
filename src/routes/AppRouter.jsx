@@ -9,7 +9,8 @@ import StoreLocator from "../pages/StoreLocator";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-import Dummydashboard from "../components/Dummydashboard";
+import CheckoutComplete from "../pages/CheckoutStatus";
+import CheckoutTest from "../pages/CheckoutTest";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -32,6 +33,8 @@ const userRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
+			{ path: "checkout/:id", element: <CheckoutTest />},
+			{ path: "checkout-status/:session", element: <CheckoutComplete />},
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
