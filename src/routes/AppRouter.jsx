@@ -23,6 +23,8 @@ import AboutUs from "../pages/FooterPages/AboutUs";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
+import CheckoutComplete from "../pages/CheckoutStatus";
+import CheckoutTest from "../pages/CheckoutTest";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
@@ -74,6 +76,8 @@ const userRouter = createBrowserRouter([
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "checkout/:id", element: <CheckoutTest />},
+			{ path: "checkout-status/:session", element: <CheckoutComplete />},
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
