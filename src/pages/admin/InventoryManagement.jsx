@@ -470,36 +470,32 @@ const InventoryManagement = () => {
                                 className="relative group"
                               >
                                 {editing ? (
-                                  <div className="flex flex-col items-center p-2 border border-gray-300 rounded-md bg-white shadow-sm">
-                                    <span className="text-xs font-medium text-gray-600 mb-1">
+                                  <div className="flex items-center p-2 border border-gray-300 rounded-md bg-white shadow-sm">
+                                    <span className="text-sm font-medium text-gray-600 mr-2">
                                       US {size.us_size}
                                     </span>
-                                    <div className="flex items-center">
-                                      <input
-                                        type="number"
-                                        min="0"
-                                        value={editingStock[stockKey]}
-                                        onChange={(e) => handleStockChange(product.id, size.id, e.target.value)}
-                                        className="w-16 p-1 text-center border border-gray-300 rounded"
-                                      />
-                                      <button
-                                        onClick={() => saveStockChange(product, size.id)}
-                                        className="ml-1 p-1 text-green-600 hover:text-green-900"
-                                      >
-                                        <Save size={16} />
-                                      </button>
-                                    </div>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      value={editingStock[stockKey]}
+                                      onChange={(e) => handleStockChange(product.id, size.id, e.target.value)}
+                                      className="w-16 p-1 text-center border border-gray-300 rounded"
+                                    />
+                                    <button
+                                      onClick={() => saveStockChange(product, size.id)}
+                                      className="ml-1 p-1 text-green-600 hover:text-green-900"
+                                    >
+                                      <Save size={16} />
+                                    </button>
                                   </div>
                                 ) : (
                                   <div 
-                                    className={`flex flex-col items-center py-1 px-3 rounded-md cursor-pointer hover:shadow-md transition-all ${bgColor}`}
+                                    className={`flex items-center py-1 px-3 rounded-md cursor-pointer hover:shadow-md transition-all ${bgColor}`}
                                     onClick={() => startEditingStock(product.id, size.id, stockQuantity)}
                                   >
-                                    <span className="text-xs font-medium">US {size.us_size}</span>
-                                    <div className="flex items-center mt-1">
-                                      <span className="font-medium">{stockQuantity}</span>
-                                      <Edit size={12} className="ml-1 opacity-0 group-hover:opacity-100" />
-                                    </div>
+                                    <span className="text-sm font-medium">US {size.us_size}</span>
+                                    <span className="ml-2 font-medium">{stockQuantity}</span>
+                                    <Edit size={12} className="ml-1 opacity-0 group-hover:opacity-100" />
                                   </div>
                                 )}
                               </div>
