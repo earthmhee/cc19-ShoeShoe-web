@@ -67,7 +67,7 @@ const userRouter = createBrowserRouter([
 			{ path: "/shipping-policy", element: <ShippingPolicy /> },
 			{ path: "/status-tracking", element: <StatusTracking /> },
 			{ path: "/amlocator", element: <StoreLocator /> },
-			{ path: "stores", element: <StoreLocator /> },
+			{ path: "/stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
 			
 			{ path: "*", element: <Navigate to="/" /> },
