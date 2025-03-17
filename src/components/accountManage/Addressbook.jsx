@@ -7,14 +7,14 @@ import { useAuth } from "@clerk/clerk-react";
 const emptyData = {
 	firstName: "",
 	lastName: "",
-	address: "",
+	homenum: "",
 	phone: "",
 	country: "thailand",
 	province: "",
 	district: "",
 	subDistrict: "",
-	zipCode: "",
-	isDefaultShipping: false,
+	postcode: "",
+	// isDefaultShipping: false,
 };
 
 const Addressbook = () => {
@@ -32,6 +32,7 @@ const Addressbook = () => {
 		setFormData(emptyData);
 	};
 
+	// Fetch provinces data
 	useEffect(() => {
 		const fetchProvinces = async () => {
 			try {
@@ -48,24 +49,25 @@ const Addressbook = () => {
 		fetchProvinces();
 	}, []);
 
-	// ดึงข้อมูลที่อยู่ที่มีอยู่จาก backend
+	// Fetch existing addresses from backend
 	useEffect(() => {
-		// if (!isSignedIn) {
-		// 	navigate("/sign-in");
-		// 	return;
-		// }
-		// const fetchAddresses = async () => {
-		// 	try {
-		// 		const token = await getToken();
-		// 		const response = await axios.get("/api/user/addresses", {
-		// 			headers: { Authorization: `Bearer ${token}` },
-		// 		});
-		// 		setAddresses(response.data);
-		// 	} catch (err) {
-		// 		console.error("Error fetching addresses:", err);
-		// 	}
-		// };
-		// fetchAddresses();
+		if (!isSignedIn) {
+			navigate("/sign-in");
+			return;
+		}
+		const fetchAddresses = async () => {
+			try {
+				const token = await getToken();
+				const response = await axios.get("http://localhost:8001/api/address", {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				console.log(response);
+				setAddresses(response.data.addresses);
+			} catch (err) {
+				console.error("Error fetching addresses:", err);
+			}
+		};
+		fetchAddresses();
 	}, [isSignedIn, getToken, navigate]);
 
 	useEffect(() => {
@@ -78,7 +80,7 @@ const Addressbook = () => {
 				...prev,
 				district: "",
 				subDistrict: "",
-				zipCode: "",
+				postcode: "",
 			}));
 		}
 	}, [formData.province, provinces]);
@@ -89,7 +91,7 @@ const Addressbook = () => {
 				(d) => d.name_en === formData.district
 			);
 			setSubDistricts(selectedDistrict ? selectedDistrict.tambon : []);
-			setFormData((prev) => ({ ...prev, subDistrict: "", zipCode: "" }));
+			setFormData((prev) => ({ ...prev, subDistrict: "", postcode: "" }));
 		}
 	}, [formData.district, districts]);
 
@@ -100,7 +102,7 @@ const Addressbook = () => {
 			);
 			setFormData((prev) => ({
 				...prev,
-				zipCode: selectedSubDistrict ? selectedSubDistrict.zip_code : "",
+				postcode: selectedSubDistrict ? selectedSubDistrict.zip_code : "",
 			}));
 		}
 	}, [formData.subDistrict, subDistricts]);
@@ -113,54 +115,79 @@ const Addressbook = () => {
 		});
 	};
 
-	// ส่งฟอร์ม
+	// Submit form
 	const handleSubmit = async (e) => {
-		// e.preventDefault();
-		// if (addresses.length >= 3) {
-		// 	setError("Maximum 3 addresses allowed.");
-		// 	setSuccessMessage("");
-		// 	return;
-		// }
-		// try {
-		// const token = await getToken();
-		// const response = await axios.post(
-		// 	"/api/user/addresses",
-		// 	{
-		// 		firstName: formData.firstName,
-		// 		lastName: formData.lastName,
-		// 		address: formData.address,
-		// 		phone: formData.phone,
-		// 		country: formData.country,
-		// 		province: formData.province,
-		// 		district: formData.district,
-		// 		subDistrict: formData.subDistrict,
-		// 		zipCode: formData.zipCode,
-		// 		isDefaultShipping: formData.isDefaultShipping,
-		// 	},
-		// 	{
-		// 		headers: { Authorization: `Bearer ${token}` },
-		// 	}
-		// );
-		// setAddresses([...addresses, response.data]);
-		// setFormData({
-		// 	firstName: "",
-		// 	lastName: "",
-		// 	address: "",
-		// 	phone: "",
-		// 	country: "thailand",
-		// 	province: "",
-		// 	district: "",
-		// 	subDistrict: "",
-		// 	zipCode: "",
-		// 	isDefaultShipping: false,
-		// });
-		// setSuccessMessage("Address added successfully!");
-		// setError("");
-		// } catch (err) {
-		// 	setError(err.response?.data?.error || "Failed to add address.");
-		// 	setSuccessMessage("");
-		// 	console.error("Address submit error:", err);
-		// }
+		e.preventDefault();
+		if (addresses.length >= 3) {
+			setError("Maximum 3 addresses allowed.");
+			setSuccessMessage("");
+			return;
+		}
+		try {
+			const token = await getToken();
+			const response = await axios.post(
+				"http://localhost:8001/api/address",
+				{
+					firstName: formData.firstName,
+					lastName: formData.lastName,
+					homenum: formData.homenum,
+					phone: formData.phone,
+					country: formData.country,
+					province: formData.province,
+					district: formData.district,
+					subDistrict: formData.subDistrict,
+					postcode: formData.postcode,
+					// isDefaultShipping: formData.isDefaultShipping,
+				},
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
+			setAddresses([...addresses, response.data.homenum]);
+			setFormData(emptyData);
+			setSuccessMessage("Address added successfully!");
+			setError("");
+		} catch (err) {
+			setError(err.response?.data?.data?.msg || "Failed to add address.");
+			setSuccessMessage("");
+			console.error("Address submit error:", err);
+		}
+	};
+
+	// Handle edit address
+	const handleEditAddress = (addressId) => {
+		const addressToEdit = addresses.find((addr) => addr.id === addressId);
+		if (addressToEdit) {
+			setFormData({
+				firstName: addressToEdit.firstName,
+				lastName: addressToEdit.lastName,
+				homenum: addressToEdit.homenum,
+				phone: addressToEdit.phone,
+				country: addressToEdit.country,
+				province: addressToEdit.province,
+				district: addressToEdit.district,
+				subDistrict: addressToEdit.subDistrict,
+				postcode: addressToEdit.postcode,
+				// isDefaultShipping: addressToEdit.isDefaultShipping,
+			});
+		}
+	};
+
+	// Handle delete address
+	const handleDeleteAddress = async (addressId) => {
+		try {
+			const token = await getToken();
+			await axios.delete(`http://localhost:8001/api/address/${addressId}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			setAddresses(addresses.filter((addr) => addr.id !== addressId));
+			setSuccessMessage("Address deleted successfully!");
+			setError("");
+		} catch (err) {
+			setError(err.response?.data?.msg || "Failed to delete address.");
+			setSuccessMessage("");
+			console.error("Address delete error:", err);
+		}
 	};
 
 	return (
@@ -180,20 +207,39 @@ const Addressbook = () => {
 						{addresses.length === 0 ? (
 							<p className="text-gray-500">No addresses added yet.</p>
 						) : (
-							<ul className="space-y-4">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								{addresses.map((addr) => (
-									<li key={addr.id} className="border-b pb-2">
-										<p>
-											{addr.firstName} {addr.lastName} - {addr.address},{" "}
-											{addr.subDistrict}, {addr.district}, {addr.province},{" "}
-											{addr.zipCode} (Phone: {addr.phone})
-										</p>
-										{addr.isDefaultShipping && (
-											<span className="text-green-500 ml-2">Default</span>
-										)}
-									</li>
+									<div
+										key={addr.id}
+										className="card bg-base-100 shadow-md border border-gray-200 rounded-lg p-4"
+									>
+										<div className="flex justify-between items-center">
+											<p className="text-sm">
+												{addr?.firstName} {addr?.lastName} - {addr?.homenum},{" "}
+												{addr?.subDistrict}, {addr?.district}, {addr?.province},{" "}
+												{addr?.postcode} (Phone: {addr?.phone})
+											</p>
+											{/* {addr.isDefaultShipping && (
+												<span className="text-green-500 ml-2">Default</span>
+											)} */}
+										</div>
+										<div className="card-actions mt-2">
+											<button
+												onClick={() => handleEditAddress(addr.id)}
+												className="btn btn-sm btn-primary mr-2"
+											>
+												Edit
+											</button>
+											<button
+												onClick={() => handleDeleteAddress(addr.id)}
+												className="btn btn-sm btn-error"
+											>
+												Delete
+											</button>
+										</div>
+									</div>
 								))}
-							</ul>
+							</div>
 						)}
 					</div>
 				</div>
@@ -251,16 +297,16 @@ const Addressbook = () => {
 							{/* Address */}
 							<div>
 								<label
-									htmlFor="address"
+									htmlFor="homenum"
 									className="block mb-2 text-sm font-medium text-gray-700"
 								>
 									Address <span className="text-red-500">*</span>
 								</label>
 								<input
 									type="text"
-									id="address"
-									name="address"
-									value={formData.address}
+									id="homenum"
+									name="homenum"
+									value={formData.homenum}
 									onChange={handleChange}
 									className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
 									required
@@ -347,8 +393,7 @@ const Addressbook = () => {
 										<option value="">Please select a province</option>
 										{provinces.map((province) => (
 											<option key={province.id} value={province.name_en}>
-												{province.name_en}{" "}
-												{/* ใช้ name_en เพื่อให้เป็นภาษาอังกฤษ */}
+												{province.name_en}
 											</option>
 										))}
 									</select>
@@ -394,8 +439,7 @@ const Addressbook = () => {
 										<option value="">Please select a district</option>
 										{districts.map((district) => (
 											<option key={district.id} value={district.name_en}>
-												{district.name_en}{" "}
-												{/* ใช้ name_en เพื่อให้เป็นภาษาอังกฤษ */}
+												{district.name_en}
 											</option>
 										))}
 									</select>
@@ -441,8 +485,7 @@ const Addressbook = () => {
 										<option value="">Please select a subdistrict</option>
 										{subDistricts.map((subDistrict) => (
 											<option key={subDistrict.id} value={subDistrict.name_en}>
-												{subDistrict.name_en}{" "}
-												{/* ใช้ name_en เพื่อให้เป็นภาษาอังกฤษ */}
+												{subDistrict.name_en}
 											</option>
 										))}
 									</select>
@@ -473,16 +516,16 @@ const Addressbook = () => {
 							{/* Zip/Postal Code */}
 							<div>
 								<label
-									htmlFor="zipCode"
+									htmlFor="postcode"
 									className="block mb-2 text-sm font-medium text-gray-700"
 								>
 									Zip/Postal Code <span className="text-red-500">*</span>
 								</label>
 								<input
 									type="text"
-									id="zipCode"
-									name="zipCode"
-									value={formData.zipCode}
+									id="postcode"
+									name="postcode"
+									value={formData.postcode}
 									onChange={handleChange}
 									className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
 									required
@@ -493,7 +536,7 @@ const Addressbook = () => {
 						</div>
 
 						{/* Default Shipping Checkbox */}
-						<div className="mt-6 flex items-center">
+						{/* <div className="mt-6 flex items-center">
 							<input
 								type="checkbox"
 								id="isDefaultShipping"
@@ -508,7 +551,7 @@ const Addressbook = () => {
 							>
 								DEFAULT SHIPPING ADDRESS
 							</label>
-						</div>
+						</div> */}
 
 						{/* Action Buttons */}
 						<div className="mt-8 flex justify-end gap-4">

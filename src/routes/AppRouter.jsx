@@ -26,6 +26,9 @@ import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
+import MyOrders from "../components/ordersAndWishList/MyOrders";
+import WishList from "../components/ordersAndWishList/WishList";
+import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -69,6 +72,14 @@ const userRouter = createBrowserRouter([
 					{ index: true, element: <AccountInfo /> },
 					{ path: "update", element: <AccountUpdate /> },
 					{ path: "address", element: <Addressbook /> },
+					{ path: "wishList", element: <WishList /> },
+					{
+						path: "orders",
+						children: [
+							{ index: true, element: <MyOrders /> },
+							{ path: ":id", element: <ViewOrder /> },
+						],
+					},
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
