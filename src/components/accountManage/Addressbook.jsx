@@ -210,7 +210,7 @@ const Addressbook = () => {
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								{addresses.map((addr) => (
 									<div
-										key={addr.id}
+										key={addr?.id}
 										className="card bg-base-100 shadow-md border border-gray-200 rounded-lg p-4"
 									>
 										<div className="flex justify-between items-center">
