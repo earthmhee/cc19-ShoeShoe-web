@@ -10,7 +10,10 @@ import {
   UserProfile,
 } from "@clerk/clerk-react";
 import { Link } from "react-router";
-import { CloseIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UserIcon } from "../icons";
+import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UpArrowIcon, UserIcon } from "../icons";
+import UserProfileForSideBar from "./UserProfileForSideBar";
+import useUserStore from "../stores/userStore";
+import UserProfileForNavBar from "./UserProfileForNavBar";
 
 function ResponsiveNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -174,9 +177,18 @@ function ResponsiveNavigation() {
   return (
     <div className="flex flex-col ">
 
+      {/* Mobile menu button - only visible below lg breakpoint */}
+      <button
+        className={`lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white opacity-50 hover:opacity-100 cursor-pointer shadow-md ${isOpen ? "translate-x-72" : "-translate-x-0"
+          } transition duration-200 ease-in-out`}
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+      >
+        {isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6 " />}
+      </button>
 
       {/* Top Navbar - only visible on lg screens and above */}
-      <div className=" bg-white shadow-md z-30">
+      <div className="hidden lg:block bg-white shadow-md z-30">
 
         <div className="containerflex items-center gap-10">
           {/* Top navigation */}
@@ -184,14 +196,6 @@ function ResponsiveNavigation() {
 
             <div className="flex items-center">
 
-              {/* Mobile menu button - only visible below lg breakpoint */}
-              <button
-                className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md"
-                onClick={toggleSidebar}
-                aria-label="Toggle sidebar"
-              >
-                {isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6" />}
-              </button>
 
               <button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
                 <Link to="/" className="flex items-center">
@@ -201,23 +205,27 @@ function ResponsiveNavigation() {
 
 
 
-              <nav className="hidden lg:flex space-x-3 ">
+              <nav className="flex space-x-6 ">
                 {menuItems.map((item) => (
                   <div key={item.id} className="relative group">
-                    <div
-                      className="py-2 font-medium text-sm cursor-pointer flex items-center"
-                      onClick={() =>
-                        item.hasChildren && toggleTopSubmenu(item.id)
-                      }
+
+                    <div className="py-2 text-sm cursor-pointer flex items-center font-normal hover:scale-105"
+                      onMouseEnter={() => item.hasChildren && toggleTopSubmenu(item.id)}
+                      onMouseLeave={() => item.hasChildren && toggleTopSubmenu(item.id)}
                     >
+
                       {item.label}
                       {item.hasChildren}
                     </div>
 
                     {/* Dropdown menu */}
                     {item.hasChildren && expandedTopMenus[item.id] && (
-                      <div className="absolute left-0 mt-1 w-64 bg-white shadow-lg rounded-md z-50 ">
-                        <div className="p-4">
+                      <div
+                        className="absolute left-0 w-64 bg-white shadow-lg rounded-md border z-50"
+                        onMouseEnter={() => item.hasChildren && toggleTopSubmenu(item.id)}
+                        onMouseLeave={() => item.hasChildren && toggleTopSubmenu(item.id)}
+                      >
+                        <div className=" inline-flex space-x-8 p-4">
                           {item.children.map((section, idx) => (
                             <div key={idx} className="mb-4">
                               {section.heading && (
@@ -229,7 +237,7 @@ function ResponsiveNavigation() {
                                 {section.items.map((subItem, subIdx) => (
                                   <li
                                     key={subIdx}
-                                    className="hover:text-red-600 cursor-pointer text-sm"
+                                    className="hover:underline cursor-pointer text-sm"
                                   >
                                     {subItem}
                                   </li>
@@ -273,18 +281,19 @@ function ResponsiveNavigation() {
                 </SignedIn>
 
                 {/* User dropdown menu */}
-                {showUserMenu &&(
-                  <div className="dropdown-content menu absolute right-0 mt-30 w-52 bg-white rounded-box shadow-lg z-10 py-1 border duration-300">
+                {showUserMenu && (
+                  <div
+                    className="dropdown-content menu absolute right-0 mt-30 w-52 bg-white rounded-box shadow-lg z-10 py-1 border duration-300">
                     <SignedOut>
                       <SignInButton mode="modal">
                         <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                          เข้าสู่ระบบ
+                          Sign in
                         </button>
                       </SignInButton>
 
                       <SignUpButton mode="modal">
                         <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                          สมัครสมาชิก
+                          Register
                         </button>
                       </SignUpButton>
                     </SignedOut>
@@ -303,25 +312,105 @@ function ResponsiveNavigation() {
                 <ShoppingCartIcon className="w-5 cursor-pointer transform transition duration-300 hover:rotate-6" />
               </button>
             </div>
+          </div>
+        </div>
+      </div>
 
 
+      {/* Sidebar - visible when isOpen=true on mobile or small screens */}
+      <div
+        className={`fixed inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:hidden transition duration-200 ease-in-out z-30 w-74 bg-white shadow-lg overflow-y-auto`}
+        aria-hidden={!isOpen}
+      >
+        <div className="flex flex-col h-full ">
+          {/* Top navigation */}
+          <div className="flex border-b  border-gray-200 ">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="flex-1 py-4 text-center text-sm cursor-pointer hover:font-semibold text-md relative before:absolute before:right-0 before:top-[20%] before:h-[60%] before:w-[1px] before:bg-gray-200">
+                  Sign in
+                </button>
+              </SignInButton>
+
+              <SignUpButton mode="modal">
+                <button className="flex-1 py-4 text-center text-sm cursor-pointer hover:font-semibold">
+                  Register
+                </button>
+              </SignUpButton>
+            </SignedOut>
+
+            <SignedIn>
+              <UserProfileForSideBar />
+            </SignedIn>
+          </div>
+
+          {/* Menu items */}
+          <nav className="flex-1 overflow-y-auto mt-4 ">
+            {menuItems.map((item) => (
+              <div key={item.id}>
+                <div
+                  className="py-1 px-4 text-xs flex justify-between items-center cursor-pointer hover:font-semibold"
+                  onClick={() => item.hasChildren && toggleSubmenu(item.id)}
+                >
+                  <span>{item.label}</span>
+                  {item.hasChildren && (
+                    expandedMenus[item.id] ? <UpArrowIcon className="w-6" /> : <DownArrowIcon className="w-6" />
+                  )}
+                </div>
+
+                {/* Submenu */}
+                {item.hasChildren && expandedMenus[item.id] && (
+                  <div className="bg-gray-50 py-2 px-4 text-sm ">
+                    {item.children.map((section, idx) => (
+                      <div key={idx} className="mb-4">
+                        {section.heading && (
+                          <h4 className="font-medium text-1xl mb-2 uppercase">
+                            {section.heading}
+                          </h4>
+                        )}
+                        <ul className="space-y-2">
+                          {section.items.map((subItem, subIdx) => (
+                            <li
+                              key={subIdx}
+                              className=" hover:underline cursor-pointer text-xs"
+                            >
+                              {subItem}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </nav>
+
+          {/* Language selector */}
+          <div className="py-3 px-4 border-t border-gray-200 flex justify-between items-center">
+            <span className="text-sm font-medium">LANGUAGE</span>
+            <button
+              className="text-sm font-medium"
+              onClick={() => setLanguage(language === "TH" ? "EN" : "TH")}
+            >
+              {language}
+            </button>
           </div>
         </div>
       </div>
 
 
 
+
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/60 transition-opacity duration-300 z-20"
+          className="lg:hidden fixed inset-0 bg-black/[70%] bg-opacity-50 z-20"
           onClick={toggleSidebar}
-          role="button"
-          tabIndex={0}
-          aria-label="Close sidebar"
+          aria-hidden="true"
         ></div>
       )}
-
     </div>
   );
 }

@@ -14,11 +14,11 @@ function StatusTracking() {
                 </ul>
             </div>
 
-            <h2 className='text-2xl mb-5'>STATUS TRACKING</h2>
-            <h2 className='text-2xl mb-5'>ตรวจสอบสถานะสินค้าของคุณได้ที่นี่</h2>
+            <h2 className='font-semibold text-2xl mb-5'>STATUS TRACKING</h2>
+            <h2 className='font-semibold text-2xl mb-5'>Check Your Order Status Here</h2>
 
-            <p className='mb-3'>ตรวจสอบสถานะพัสดุ (Kerry Express)https://th.kerryexpress.com/th/track/v2/</p>
-            <p>ตรวจสอบสถานะพัสดุ (EMS) http://track.thailandpost.co.th/tracking/default.aspx</p>
+            <p className='mb-3'>📦 Track your package with Kerry Express: https://th.kerryexpress.com/th/track/v2/</p>
+            <p className='mb-3'>📮 Track your package with EMS (Thailand Post): http://track.thailandpost.co.th/tracking/default.aspx</p>
 
         </div>
     )
