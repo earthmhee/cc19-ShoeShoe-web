@@ -31,7 +31,7 @@ import Addressbook from "../components/accountManage/Addressbook";
 import MyOrders from "../components/ordersAndWishList/MyOrders";
 import WishList from "../components/ordersAndWishList/WishList";
 import ViewOrder from "../components/ordersAndWishList/ViewOrder";
-
+import OrderDetail from "../pages/admin/OrderDetail";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -58,7 +58,6 @@ const guestRouter = createBrowserRouter([
 
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
-		
 	},
 ]);
 
@@ -87,8 +86,8 @@ const userRouter = createBrowserRouter([
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "checkout/:id", element: <CheckoutTest />},
-			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			{ path: "checkout/:id", element: <CheckoutTest /> },
+			{ path: "checkout-status/:session", element: <CheckoutComplete /> },
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -107,19 +106,20 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-	  path: "/", // Change the base path to "/admin"
-	  children: [
-		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-		{ path: "users", element: <UserManagement /> }, // /admin/users 
-		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-	  ],
+		path: "/", // Change the base path to "/admin"
+		children: [
+			{ index: true, element: <AdminDashboard /> }, // This renders at /admin
+			{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
+			{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
+			{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
+			{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
+			{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+			{ path: "orders/:id", element: <OrderDetail /> },
+			{ path: "users", element: <UserManagement /> }, // /admin/users
+			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
+		],
 	},
-  ]);
+]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
