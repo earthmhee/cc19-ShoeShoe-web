@@ -52,7 +52,7 @@ const Addressbook = () => {
 	// Fetch existing addresses from backend
 	useEffect(() => {
 		if (!isSignedIn) {
-			navigate("/sign-in");
+			navigate("/");
 			return;
 		}
 		const fetchAddresses = async () => {
@@ -67,8 +67,9 @@ const Addressbook = () => {
 				console.error("Error fetching addresses:", err);
 			}
 		};
+
 		fetchAddresses();
-	}, [isSignedIn, getToken, navigate]);
+	}, [isSignedIn, getToken, navigate, addresses.length]);
 
 	useEffect(() => {
 		if (formData.province) {
@@ -213,11 +214,15 @@ const Addressbook = () => {
 										key={addr?.id}
 										className="card bg-base-100 shadow-md border border-gray-200 rounded-lg p-4"
 									>
-										<div className="flex justify-between items-center">
+										<div
+											className="flex justify-between items-center"
+											key={addr?.id}
+										>
 											<p className="text-sm">
-												{addr?.firstName} {addr?.lastName} - {addr?.homenum},{" "}
-												{addr?.subDistrict}, {addr?.district}, {addr?.province},{" "}
-												{addr?.postcode} (Phone: {addr?.phone})
+												{addr?.id} {addr?.firstName} {addr?.lastName} -{" "}
+												{addr?.homenum}, {addr?.subDistrict}, {addr?.district},{" "}
+												{addr?.province}, {addr?.postcode} (Phone: {addr?.phone}
+												)
 											</p>
 											{/* {addr.isDefaultShipping && (
 												<span className="text-green-500 ml-2">Default</span>
