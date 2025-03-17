@@ -5,14 +5,14 @@ import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 
 const emptyData = {
-	firstName: "",
-	lastName: "",
+	firstname: "",
+	lastname: "",
 	homenum: "",
 	phone: "",
 	country: "thailand",
 	province: "",
 	district: "",
-	subDistrict: "",
+	subdistrict: "",
 	postcode: "",
 	// isDefaultShipping: false,
 };
@@ -80,7 +80,7 @@ const Addressbook = () => {
 			setFormData((prev) => ({
 				...prev,
 				district: "",
-				subDistrict: "",
+				subdistrict: "",
 				postcode: "",
 			}));
 		}
@@ -92,21 +92,21 @@ const Addressbook = () => {
 				(d) => d.name_en === formData.district
 			);
 			setSubDistricts(selectedDistrict ? selectedDistrict.tambon : []);
-			setFormData((prev) => ({ ...prev, subDistrict: "", postcode: "" }));
+			setFormData((prev) => ({ ...prev, subdistrict: "", postcode: "" }));
 		}
 	}, [formData.district, districts]);
 
 	useEffect(() => {
-		if (formData.subDistrict) {
+		if (formData.subdistrict) {
 			const selectedSubDistrict = subDistricts.find(
-				(s) => s.name_en === formData.subDistrict
+				(s) => s.name_en === formData.subdistrict
 			);
 			setFormData((prev) => ({
 				...prev,
 				postcode: selectedSubDistrict ? selectedSubDistrict.zip_code : "",
 			}));
 		}
-	}, [formData.subDistrict, subDistricts]);
+	}, [formData.subdistrict, subDistricts]);
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
@@ -129,14 +129,14 @@ const Addressbook = () => {
 			const response = await axios.post(
 				"http://localhost:8001/api/address",
 				{
-					firstName: formData.firstName,
-					lastName: formData.lastName,
+					firstname: formData.firstname,
+					lastname: formData.lastname,
 					homenum: formData.homenum,
 					phone: formData.phone,
 					country: formData.country,
 					province: formData.province,
 					district: formData.district,
-					subDistrict: formData.subDistrict,
+					subdistrict: formData.subdistrict,
 					postcode: formData.postcode,
 					// isDefaultShipping: formData.isDefaultShipping,
 				},
@@ -149,7 +149,7 @@ const Addressbook = () => {
 			setSuccessMessage("Address added successfully!");
 			setError("");
 		} catch (err) {
-			setError(err.response?.data?.data?.msg || "Failed to add address.");
+			setError(err.response?.data?.msg || "Failed to add address.");
 			setSuccessMessage("");
 			console.error("Address submit error:", err);
 		}
@@ -160,14 +160,14 @@ const Addressbook = () => {
 		const addressToEdit = addresses.find((addr) => addr.id === addressId);
 		if (addressToEdit) {
 			setFormData({
-				firstName: addressToEdit.firstName,
-				lastName: addressToEdit.lastName,
+				firstname: addressToEdit.firstname,
+				lastname: addressToEdit.lastname,
 				homenum: addressToEdit.homenum,
 				phone: addressToEdit.phone,
 				country: addressToEdit.country,
 				province: addressToEdit.province,
 				district: addressToEdit.district,
-				subDistrict: addressToEdit.subDistrict,
+				subdistrict: addressToEdit.subdistrict,
 				postcode: addressToEdit.postcode,
 				// isDefaultShipping: addressToEdit.isDefaultShipping,
 			});
@@ -219,10 +219,9 @@ const Addressbook = () => {
 											key={addr?.id}
 										>
 											<p className="text-sm">
-												{addr?.id} {addr?.firstName} {addr?.lastName} -{" "}
-												{addr?.homenum}, {addr?.subDistrict}, {addr?.district},{" "}
-												{addr?.province}, {addr?.postcode} (Phone: {addr?.phone}
-												)
+												{addr?.firstname} {addr?.lastname} - {addr?.homenum},{" "}
+												{addr?.subdistrict}, {addr?.district}, {addr?.province},{" "}
+												{addr?.postcode} (Phone: {addr?.phone})
 											</p>
 											{/* {addr.isDefaultShipping && (
 												<span className="text-green-500 ml-2">Default</span>
@@ -262,16 +261,16 @@ const Addressbook = () => {
 							{/* First Name */}
 							<div>
 								<label
-									htmlFor="firstName"
+									htmlFor="firstname"
 									className="block mb-2 text-sm font-medium text-gray-700"
 								>
 									First Name <span className="text-red-500">*</span>
 								</label>
 								<input
 									type="text"
-									id="firstName"
-									name="firstName"
-									value={formData.firstName}
+									id="firstname"
+									name="firstname"
+									value={formData.firstname}
 									onChange={handleChange}
 									className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
 									required
@@ -282,16 +281,16 @@ const Addressbook = () => {
 							{/* Last Name */}
 							<div>
 								<label
-									htmlFor="lastName"
+									htmlFor="lastname"
 									className="block mb-2 text-sm font-medium text-gray-700"
 								>
 									Last Name <span className="text-red-500">*</span>
 								</label>
 								<input
 									type="text"
-									id="lastName"
-									name="lastName"
-									value={formData.lastName}
+									id="lastname"
+									name="lastname"
+									value={formData.lastname}
 									onChange={handleChange}
 									className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
 									required
@@ -473,24 +472,24 @@ const Addressbook = () => {
 							{/* Sub District */}
 							<div>
 								<label
-									htmlFor="subDistrict"
+									htmlFor="subdistrict"
 									className="block mb-2 text-sm font-medium text-gray-700"
 								>
 									Sub District <span className="text-red-500">*</span>
 								</label>
 								<div className="relative">
 									<select
-										id="subDistrict"
-										name="subDistrict"
-										value={formData.subDistrict}
+										id="subdistrict"
+										name="subdistrict"
+										value={formData.subdistrict}
 										onChange={handleChange}
 										className="w-full p-2 border border-gray-300 rounded appearance-none focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
 										required
 									>
-										<option value="">Please select a subdistrict</option>
-										{subDistricts.map((subDistrict) => (
-											<option key={subDistrict.id} value={subDistrict.name_en}>
-												{subDistrict.name_en}
+										<option value="">Please select a subDistrict</option>
+										{subDistricts.map((subdistrict) => (
+											<option key={subdistrict.id} value={subdistrict.name_en}>
+												{subdistrict.name_en}
 											</option>
 										))}
 									</select>
@@ -511,7 +510,7 @@ const Addressbook = () => {
 										</svg>
 									</div>
 								</div>
-								{formData.subDistrict === "" && formData.district !== "" && (
+								{formData.subdistrict === "" && formData.district !== "" && (
 									<p className="text-blue-500 mt-1">
 										Please select a subdistrict
 									</p>

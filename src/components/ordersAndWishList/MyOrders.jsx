@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
+import OrderImg from "./OrderImg";
+import { format, parseISO } from "date-fns";
 
 const MyOrders = () => {
 	const [orders, setOrders] = useState([]);
@@ -76,18 +78,19 @@ const MyOrders = () => {
 					{orders.map((order) => (
 						<div
 							key={order.id}
-							className="card bg-base-100 shadow-md border border-gray-200 rounded-lg"
+							className="card bg-base-100 shadow-md border border-gray-200 rounded-lg hover:shadow-xl hover:cursor-pointer transition delay-50 duration-100 ease-in-out hover:scale-101 "
+							onClick={() => handleViewOrder(order.id)}
 						>
 							<div className="card-body">
 								{/* Order Header */}
 								<div className="flex justify-between items-center">
 									<h2 className="card-title text-lg font-semibold">
 										Order #{order.id} -{" "}
-										{new Date(order.order_date).toLocaleDateString()}
+										{format(parseISO(order.order_date), "dd/MM/yyyy hh:mm a")}
 									</h2>
 									<div className="flex gap-2">
 										<span
-											className={`badge ${
+											className={`badge rounded ${
 												order.shipment_status === "Pending"
 													? "badge-warning"
 													: order.shipment_status === "Shipped"
@@ -95,16 +98,16 @@ const MyOrders = () => {
 													: "badge-success"
 											}`}
 										>
-											{order.shipment_status}
+											Shipment: <strong>{order.shipment_status}</strong>
 										</span>
 										<span
-											className={`badge ${
+											className={`badge rounded  ${
 												order.payment_status === "Unpaid"
 													? "badge-error"
 													: "badge-success"
 											}`}
 										>
-											{order.payment_status}
+											Payment: <strong>{order.payment_status}</strong>
 										</span>
 									</div>
 								</div>
@@ -112,13 +115,29 @@ const MyOrders = () => {
 								{/* Order Items */}
 								<div className="mt-4">
 									<h3 className="text-md font-medium">Items:</h3>
-									<ul className="list-disc list-inside">
+									{/* <ul className="list-disc list-inside">
 										{order.orderItems.map((item) => (
-											<li key={item.id} className="text-sm text-gray-600">
-												{item.product?.name} ({item.quantity} x ฿{item.price})
+											<li
+												key={item.id}
+												className="text-sm text-gray-600 flex items-center gap-4 mb-4"
+											>
+												<div className="stack w-24">
+													{item.product?.images && (
+														<img
+															src={item.product.images}
+															alt={item.product.productname}
+															className="rounded-box"
+														/>
+													)}
+												</div>
+												<div>
+													{item.product?.productname} ({item.quantity} x ฿
+													{item.price})
+												</div>
 											</li>
 										))}
-									</ul>
+									</ul> */}
+									<OrderImg order={order} />
 								</div>
 
 								{/* Total Amount */}
@@ -127,27 +146,30 @@ const MyOrders = () => {
 								</p>
 
 								{/* Card Actions */}
-								<div className="card-actions mt-4">
-									<button
-										onClick={() => handleViewOrder(order.id)}
-										className="btn btn-primary btn-sm"
-									>
-										View Details
-									</button>
+								<div className="card-actions mt-4 flex justify-end">
+									{order.payment_status === "Unpaid" && (
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												// navigate("/");
+											}}
+											className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
+										>
+											Continue to payment
+										</button>
+									)}
 									{order.shipment_status === "Pending" &&
 										order.payment_status === "Unpaid" && (
 											<button
-												onClick={() => handleDeleteOrder(order.id)}
-												className="btn btn-error btn-sm"
+												onClick={(e) => {
+													e.stopPropagation();
+													handleDeleteOrder(order.id);
+												}}
+												className="btn btn-ghost btn-sm bg-gray-300 text-white hover:bg-gray-200 transition delay-50 duration-100 ease-in-out hover:scale-90 "
 											>
 												Delete
 											</button>
 										)}
-									{order.payment_status === "Unpaid" && (
-										<button className="btn btn-warning btn-sm">
-											Continue to payment
-										</button>
-									)}
 								</div>
 							</div>
 						</div>

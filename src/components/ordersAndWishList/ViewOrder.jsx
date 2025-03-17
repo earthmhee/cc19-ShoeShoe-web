@@ -1,8 +1,8 @@
-// src/components/ViewOrder.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
+import OrderImg from "./OrderImg"; // Import the OrderImg component
 
 const ViewOrder = () => {
 	const { id } = useParams(); // ดึง order ID จาก URL
@@ -23,11 +23,12 @@ const ViewOrder = () => {
 			try {
 				const token = await getToken();
 				const response = await axios.get(
-					`http://localhost:8000/api/order/view-order/${id}`,
+					`http://localhost:8001/api/order/view-order/${id}`,
 					{
 						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
+				console.log("Order response:", response.data); // ตรวจสอบข้อมูลที่ได้
 				setOrder(response.data.data); // ตั้งค่าข้อมูลคำสั่งซื้อจาก response
 			} catch (err) {
 				setError(err.response?.data?.msg || "Failed to fetch order details.");
@@ -46,6 +47,8 @@ const ViewOrder = () => {
 		return <p className="text-gray-500">Loading order details...</p>;
 	}
 
+	const userAddress = order.user.address[0];
+
 	return (
 		<div className="w-full max-w-4xl mx-auto p-6">
 			<div className="border-b border-gray-300 pb-2 mb-6">
@@ -55,6 +58,28 @@ const ViewOrder = () => {
 			{/* Order Details Card */}
 			<div className="card bg-base-100 shadow-md border border-gray-200 rounded-lg">
 				<div className="card-body">
+					<div className="pb-2">
+						<button
+							onClick={handleBack}
+							className="absolute p-[30px] -top-4 -left-4 text-gray-600 hover:text-gray-800 focus:outline-none hover:cursor-pointer transition delay-50 duration-100 ease-in-out hover:scale-105 "
+							aria-label="Back to Orders"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								strokeWidth={2}
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M15 19l-7-7 7-7"
+								/>
+							</svg>
+						</button>
+					</div>
 					{/* Order Header */}
 					<div className="flex justify-between items-center mb-4">
 						<h2 className="card-title text-lg font-semibold">
@@ -63,7 +88,7 @@ const ViewOrder = () => {
 						</h2>
 						<div className="flex gap-2">
 							<span
-								className={`badge ${
+								className={`badge rounded ${
 									order.shipment_status === "Pending"
 										? "badge-warning"
 										: order.shipment_status === "Shipped"
@@ -71,58 +96,81 @@ const ViewOrder = () => {
 										: "badge-success"
 								}`}
 							>
-								{order.shipment_status}
+								Shipment: <strong>{order.shipment_status}</strong>
 							</span>
 							<span
-								className={`badge ${
+								className={`badge rounded  ${
 									order.payment_status === "Unpaid"
 										? "badge-error"
 										: "badge-success"
 								}`}
 							>
-								{order.payment_status}
+								Payment: <strong>{order.payment_status}</strong>
 							</span>
 						</div>
 					</div>
 
 					{/* User Information */}
 					<div className="mb-4">
-						<h3 className="text-md font-medium">User Information:</h3>
+						<h3 className="text-md font-bold">User Information</h3>
 						<p>
-							<strong>Name:</strong> {order.user.firstname}{" "}
-							{order.user.lastname}
+							Name:{" "}
+							<strong className="font-semibold">
+								{order.user?.firstname || "N/A"} {order.user?.lastname || ""}
+							</strong>
 						</p>
 						<p>
-							<strong>Email:</strong> {order.user.email}
+							Phone:{" "}
+							<strong className="font-semibold">
+								{order.user?.phone || "N/A"}
+							</strong>
 						</p>
+					</div>
+
+					{/* Shipping Address */}
+					<div className="mb-4">
+						<h3 className="text-md font-medium">Shipping Address</h3>
+
 						<p>
-							<strong>Phone:</strong> {order.user.phone}
-						</p>
-						<p>
-							<strong>Address:</strong> {order.user.address}
+							{userAddress.firstname} {userAddress.lastname}
+							<br /> {userAddress.homenum}, {userAddress.subdistrict},{" "}
+							{userAddress.district},<br />
+							{userAddress.province} Thailand{" "}
+							{/* <span className="first-letter:uppercase">
+								{userAddress.country}
+							</span>{" "} */}
+							{userAddress.postcode}
+							<br />
+							{userAddress.phone}
 						</p>
 					</div>
 
 					{/* Order Items */}
 					<div className="mb-4">
-						<h3 className="text-md font-medium">Items:</h3>
-						<ul className="list-disc list-inside">
-							{order.orderItems.map((item) => (
-								<li key={item.id} className="text-sm text-gray-600">
-									{item.product?.name} ({item.quantity} x ฿{item.price})
-								</li>
-							))}
-						</ul>
+						<h3 className="text-md font-medium">Items</h3>
+						<OrderImg order={order} /> {/* Use OrderImg component here */}
 					</div>
 
 					{/* Payment Information */}
 					<div className="mb-4">
-						<h3 className="text-md font-medium">Payment Information:</h3>
+						<h3 className="text-md font-bold">Payment Information</h3>
 						{order.payment ? (
 							<p>
-								<strong>Payment Status:</strong> {order.payment.status}
+								Payment Status:{" "}
+								<strong
+									className={`${
+										order.payment_status === "Unpaid"
+											? "text-red-700"
+											: "text-green-700"
+									} font-semibold`}
+								>
+									{order.payment.status}
+								</strong>
 								<br />
-								<strong>Transaction ID:</strong> {order.payment.transaction_id}
+								Payment method:{" "}
+								<strong className="font-semibold">
+									{order?.payment?.paymentmethod || "N/A"}
+								</strong>
 							</p>
 						) : (
 							<p>No payment information available.</p>
@@ -135,13 +183,26 @@ const ViewOrder = () => {
 					</p>
 
 					{/* Card Actions */}
-					<div className="card-actions mt-4">
-						<button onClick={handleBack} className="btn btn-primary btn-sm">
+
+					{/* <button onClick={handleBack} className="btn btn-primary btn-sm">
 							Back to Orders
-						</button>
+						</button> */}
+
+					<div className="card-actions mt-4 flex justify-end">
 						{order.payment_status === "Unpaid" && (
-							<button className="btn btn-warning btn-sm">Buy Now</button>
+							<button className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105">
+								Continue to payment
+							</button>
 						)}
+						{order.shipment_status === "Pending" &&
+							order.payment_status === "Unpaid" && (
+								<button
+									onClick={() => handleDeleteOrder(order.id)}
+									className="btn btn-ghost btn-sm bg-gray-300 text-white hover:bg-gray-200 transition delay-50 duration-100 ease-in-out hover:scale-90 "
+								>
+									Delete
+								</button>
+							)}
 					</div>
 				</div>
 			</div>
