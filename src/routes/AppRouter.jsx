@@ -23,11 +23,12 @@ import AboutUs from "../pages/FooterPages/AboutUs";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-import CheckoutComplete from "../pages/CheckoutStatus";
-import CheckoutTest from "../pages/CheckoutTest";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
+import CartPage from "../pages/CartPage";
+import CheckoutComplete from "../pages/CheckoutStatus";
+import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
 
 
@@ -37,7 +38,7 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Products  /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
@@ -53,6 +54,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "/amlocator", element: <StoreLocator /> },
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
+
 
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
@@ -77,6 +79,7 @@ const userRouter = createBrowserRouter([
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "/cart" , element : <CartPage /> },
 			{ path: "checkout/:id", element: <CheckoutTest />},
 			{ path: "checkout-status/:session", element: <CheckoutComplete />},
 			//Footer Pages
@@ -109,6 +112,17 @@ const adminRouter = createBrowserRouter([
 		{ path: "users", element: <UserManagement /> }, // /admin/users 
 		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
 	  ],
+		path: "/",
+		children: [
+			{ index: true, element: <AdminDashboard /> },
+			{ path: "products", element: <AdminProducts /> },
+			{ path: "products/new", element: <ProductForm /> },
+			{ path: "products/edit/:id", element: <ProductForm /> },
+			{ path: "inventory", element: <InventoryManagement /> },
+			{ path: "orders", element: <OrderManagement /> },
+			{ path: "users", element: <UserManagement /> },
+			{ path: "*", element: <Navigate to="/admin" /> },
+		],
 	},
   ]);
 
@@ -140,6 +154,9 @@ export default function AppRouter() {
 				console.log("Set State Complete");
 				createAccount(token);
 				console.log("Create Account Complete");
+				console.log("Set State Complete");
+				createAccount(token);
+				console.log("Create Account Complete");
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
@@ -155,10 +172,12 @@ export default function AppRouter() {
 		}
 	}, [isLoaded, isSignedIn, user, getToken]);
 
+
 	// do this because of the CLERK is need some time to load
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
+
 
 	return (
 		<ClerkLoaded>
