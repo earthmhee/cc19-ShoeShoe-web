@@ -21,6 +21,9 @@ import ShippingPolicy from "../pages/FooterPages/ShippingPolicy";
 import StatusTracking from "../pages/FooterPages/StatusTracking";
 import AboutUs from "../pages/FooterPages/AboutUs";
 
+import CheckoutTest from "../pages/CheckoutTest"
+import CheckoutStatus from "../pages/CheckoutStatus"
+
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
@@ -74,6 +77,8 @@ const userRouter = createBrowserRouter([
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "checkout/:id", element: <CheckoutTest />},
+			{ path: "checkout-status/:session", element: <CheckoutStatus />},
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
