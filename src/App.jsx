@@ -1,9 +1,9 @@
 import { Outlet } from "react-router";
 import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
+	SignedIn,
+	SignedOut,
+	SignInButton,
+	UserButton,
 } from "@clerk/clerk-react";
 import "./App.css";
 import Home from "./pages/Home";
@@ -23,17 +23,17 @@ import Footer from "./components/Footer";
 import { CartProvider } from "./components/CartProvider";
 
 function App() {
-  return (
-    <div>
-      <CartProvider>
-        <ResponsiveNavigation />
-        <div className="h-fit mt-2">
-          <Outlet />
-        </div>
-        <Footer />
-      </CartProvider>
-    </div>
-  );
+	return (
+		<div>
+			<CartProvider>
+				<ResponsiveNavigation />
+				<div className="h-fit mt-2">
+					<Outlet />
+				</div>
+				<Footer />
+			</CartProvider>
+		</div>
+	);
 }
 
 export default App;
