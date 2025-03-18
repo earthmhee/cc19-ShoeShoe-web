@@ -26,11 +26,13 @@ import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
+import MyOrders from "../components/ordersAndWishList/MyOrders";
+import WishList from "../components/ordersAndWishList/WishList";
+import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
-
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -38,7 +40,7 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products  /> },
+			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
@@ -55,10 +57,8 @@ const guestRouter = createBrowserRouter([
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
 
-
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
-		
 	},
 ]);
 
@@ -76,12 +76,20 @@ const userRouter = createBrowserRouter([
 					{ index: true, element: <AccountInfo /> },
 					{ path: "update", element: <AccountUpdate /> },
 					{ path: "address", element: <Addressbook /> },
+					{ path: "wishList", element: <WishList /> },
+					{
+						path: "orders",
+						children: [
+							{ index: true, element: <MyOrders /> },
+							{ path: ":id", element: <ViewOrder /> },
+						],
+					},
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "/cart" , element : <CartPage /> },
-			{ path: "checkout/:id", element: <CheckoutTest />},
-			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			{ path: "/cart", element: <CartPage /> },
+			{ path: "checkout/:id", element: <CheckoutTest /> },
+			{ path: "checkout-status/:session", element: <CheckoutComplete /> },
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -100,18 +108,18 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-	  path: "/", // Change the base path to "/admin"
-	  children: [
-		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-		{ path: "orders/:id", element: <OrderDetail /> },
-		{ path: "users", element: <UserManagement /> }, // /admin/users 
-		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-	  ],
+		path: "/", // Change the base path to "/admin"
+		children: [
+			{ index: true, element: <AdminDashboard /> }, // This renders at /admin
+			{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
+			{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
+			{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
+			{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
+			{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+			{ path: "orders/:id", element: <OrderDetail /> },
+			{ path: "users", element: <UserManagement /> }, // /admin/users
+			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
+		],
 		path: "/",
 		children: [
 			{ index: true, element: <AdminDashboard /> },
@@ -124,7 +132,7 @@ const adminRouter = createBrowserRouter([
 			{ path: "*", element: <Navigate to="/admin" /> },
 		],
 	},
-  ]);
+]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
@@ -172,12 +180,10 @@ export default function AppRouter() {
 		}
 	}, [isLoaded, isSignedIn, user, getToken]);
 
-
 	// do this because of the CLERK is need some time to load
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
-
 
 	return (
 		<ClerkLoaded>
