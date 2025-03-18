@@ -29,8 +29,8 @@ const MyOrders = () => {
 						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
-				console.log(response);
-				setOrders(response.data.data); // ตั้งค่าคำสั่งซื้อจาก response
+				console.log(response.data.data);
+				setOrders(response.data.data.orders); // ตั้งค่าคำสั่งซื้อจาก response
 			} catch (err) {
 				setError(err.response?.data?.msg || "Failed to fetch orders.");
 				console.error("Error fetching orders:", err);
@@ -49,6 +49,7 @@ const MyOrders = () => {
 					headers: { Authorization: `Bearer ${token}` },
 				}
 			);
+			console.log(`orders : ${orders}`);
 			setOrders(orders.filter((order) => order.id !== orderId));
 			setSuccessMessage("Order deleted successfully!");
 			setError("");
