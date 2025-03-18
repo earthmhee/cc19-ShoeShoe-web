@@ -173,7 +173,7 @@ const AdminProducts = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Products</h1>
           <Link 
-            to="/admin/products/new" 
+            to="/products/new" 
             className="px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 hover:bg-gray-800"
           >
             <PlusIcon size={18} className="mr-2" />
@@ -407,7 +407,7 @@ const AdminProducts = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
                               <div className="flex justify-center items-center space-x-2">
                                 <Link 
-                                  to={`/admin/products/edit/${product.id}`}
+                                  to={`/products/edit/${product.id}`}
                                   className="text-blue-600 hover:text-blue-900"
                                 >
                                   <PencilIcon size={18} />

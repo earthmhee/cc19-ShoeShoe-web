@@ -29,6 +29,7 @@ import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
+import OrderDetail from "../pages/admin/OrderDetail";
 
 
 // Guest Routes
@@ -105,6 +106,7 @@ const adminRouter = createBrowserRouter([
 		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
 		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
 		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+		{ path: "orders/:id", element: <OrderDetail /> },
 		{ path: "users", element: <UserManagement /> }, // /admin/users 
 		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
 	  ],
