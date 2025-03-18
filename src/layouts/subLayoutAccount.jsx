@@ -6,7 +6,7 @@ import AccountSidebar from "../components/accountManage/Accountsidebar";
 const SubLayoutAccount = () => {
 	return (
 		<div
-			className={`flex flex-col lg:flex-row h-screen lg:pt-0 pt-16 max-w-7xl mx-auto`}
+			className={`flex flex-col lg:flex-row min-h-screen lg:pt-0 pt-16 max-w-7xl mx-auto`}
 		>
 			{/* SubSidebar (ด้านซ้าย) */}
 			<AccountSidebar />
