@@ -2,13 +2,13 @@
 
 export function ShoeshoeLogo() {
     return (
-        <a href="https://www.fontspace.com/category/bold">
+        <div>
             <img
                 src="https://see.fontimg.com/api/rf5/nA4zP/YzY0OWQ5ZWNjNGQxNGE5YmFhNTAzNWQxMGExNDBmNzAudHRm/c2hvZXNob2U/simple-stacked.png?r=fs&h=130&w=2000&fg=000000&bg=FFFFFF&tb=1&s=65"
                 alt="Bold fonts"
                 className="flex text-center items-center justify-center w-28 "
             />
-        </a>
+        </div>
     );
 }
 

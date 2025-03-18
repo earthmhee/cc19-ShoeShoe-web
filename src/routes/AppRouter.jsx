@@ -23,7 +23,13 @@ import AboutUs from "../pages/FooterPages/AboutUs";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-// import Dummydashboard from "../components/Dummydashboard";
+import CheckoutComplete from "../pages/CheckoutStatus";
+import CheckoutTest from "../pages/CheckoutTest";
+import AccountUpdate from "../pages/account/AccountUpdate";
+import SubLayoutAccount from "../layouts/subLayoutAccount";
+import Addressbook from "../components/accountManage/Addressbook";
+import OrderDetail from "../pages/admin/OrderDetail";
+
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -31,7 +37,7 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products/> },
+			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
@@ -47,10 +53,10 @@ const guestRouter = createBrowserRouter([
 			{ path: "/amlocator", element: <StoreLocator /> },
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
-			
+
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
-	
+		
 	},
 ]);
 
@@ -61,31 +67,50 @@ const userRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
-			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
+			{
+				path: "account", // children ของ account
+				element: <SubLayoutAccount />,
+				children: [
+					{ index: true, element: <AccountInfo /> },
+					{ path: "update", element: <AccountUpdate /> },
+					{ path: "address", element: <Addressbook /> },
+				],
+			},
+			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "checkout/:id", element: <CheckoutTest />},
+			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			//Footer Pages
+			{ path: "/membership", element: <Membership /> },
+			{ path: "/howtoorder", element: <HowtoOrder /> },
+			{ path: "/policies", element: <Policies /> },
+			{ path: "/privacy", element: <Privacy /> },
+			{ path: "/faqs", element: <FAQS /> },
+			{ path: "/shipping-policy", element: <ShippingPolicy /> },
+			{ path: "/status-tracking", element: <StatusTracking /> },
+			{ path: "/amlocator", element: <StoreLocator /> },
+			{ path: "stores", element: <StoreLocator /> },
+			{ path: "/about-us", element: <AboutUs /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
 ]);
 
-//Admin Routes
 const adminRouter = createBrowserRouter([
 	{
-		path: "/",
-		children: [
-			{ index: true, element: <AdminDashboard /> },
-			{ path: "products", element: <AdminProducts /> },
-			{ path: "products/new", element: <ProductForm /> },
-			{ path: "products/edit/:id", element: <ProductForm/> },
-			{ path: "inventory", element: <InventoryManagement /> },
-			{ path: "orders", element: <OrderManagement /> },
-			{ path: "users", element: <UserManagement /> },
-			{ path: "*", element: <Navigate to="/admin" /> },
-		  ],
-	  
+	  path: "/", // Change the base path to "/admin"
+	  children: [
+		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
+		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
+		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
+		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
+		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
+		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+		{ path: "orders/:id", element: <OrderDetail /> },
+		{ path: "users", element: <UserManagement /> }, // /admin/users 
+		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
+	  ],
 	},
-]);
-
-
+  ]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
@@ -112,9 +137,9 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
-				console.log('Set State Complete');
-				createAccount(token)
-				console.log('Create Account Complete');
+				console.log("Set State Complete");
+				createAccount(token);
+				console.log("Create Account Complete");
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
@@ -130,12 +155,11 @@ export default function AppRouter() {
 		}
 	}, [isLoaded, isSignedIn, user, getToken]);
 
-	
 	// do this because of the CLERK is need some time to load
 	if (!isLoaded || isLoading) {
 		return <div>Loading...</div>;
 	}
-	
+
 	return (
 		<ClerkLoaded>
 			<RouterProvider key={user?.id} router={router} />

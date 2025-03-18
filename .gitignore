@@ -1,5 +1,9 @@
 .env
 gitignore-old
+Accountinformation-old.jsx
+Accountinformation-old
+SidebarCopy.jsx
+SidebarCopy
 # Logs
 logs
 *.log

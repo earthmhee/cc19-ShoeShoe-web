@@ -1,121 +1,149 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { 
-  ChevronLeft, 
-  LayoutDashboard, 
-  ShoppingBag, 
+  LayoutGrid, 
   Package, 
+  ShoppingBag, 
   Users, 
+  ClipboardList, 
   LogOut,
   Menu,
   X
 } from 'lucide-react';
+import useUserStore from '../stores/userStore';
+import { useClerk, useUser } from '@clerk/clerk-react'; // Add useUser hook
 
 const AdminLayout = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
   
-  const menuItems = [
-    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/admin' },
-    { icon: <ShoppingBag size={20} />, label: 'Products', path: '/admin/products' },
-    { icon: <Package size={20} />, label: 'Orders', path: '/admin/orders' },
-    { icon: <Package size={20} />, label: 'Inventory', path: '/admin/inventory' },
-    { icon: <Users size={20} />, label: 'Users', path: '/admin/users' },
+  const { user, logout } = useUserStore();
+  const { signOut } = useClerk();
+  const { user: clerkUser } = useUser(); // Get the clerk user for profile image
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      navigate('/');
+    }
+  };
+
+  const sidebarItems = [
+    { name: 'Dashboard', path: '/', icon: <LayoutGrid size={20} /> },
+    { name: 'Products', path: '/products', icon: <Package size={20} /> },
+    { name: 'Inventory', path: '/inventory', icon: <ClipboardList size={20} /> },
+    { name: 'Orders', path: '/orders', icon: <ShoppingBag size={20} /> },
+    { name: 'Customers', path: '/users', icon: <Users size={20} /> },
   ];
 
-  const isActive = (path) => {
-    return location.pathname === path;
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
+
+  // Get profile image URL or fallback to initial
+  const profileImageUrl = clerkUser?.imageUrl;
+  const userInitial = user ? user.charAt(0).toUpperCase() : 'A';
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Mobile sidebar backdrop */}
-      {mobileOpen && (
+      {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 lg:hidden z-10"
-          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
         ></div>
       )}
-      
+
       {/* Sidebar */}
       <div 
-        className={`fixed lg:static inset-y-0 left-0 z-20 flex flex-col bg-white border-r border-gray-200 
-          ${collapsed ? 'w-20' : 'w-64'} 
-          ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          transition-all duration-300`}
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-md transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
-        {/* Sidebar header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          {!collapsed && <h1 className="text-xl font-bold">Admin Panel</h1>}
-          <button 
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 hidden lg:block"
-          >
-            <ChevronLeft 
-              size={20} 
-              className={`transition-transform ${collapsed ? 'rotate-180' : ''}`} 
-            />
-          </button>
-          <button 
-            onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-lg hover:bg-gray-200 lg:hidden"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        
-        {/* Sidebar links */}
-        <div className="flex-1 py-6 overflow-y-auto">
-          <nav className="px-2 space-y-1">
-            {menuItems.map((item) => (
+        <div className="flex flex-col h-full">
+          {/* Sidebar header */}
+          <div className="flex items-center justify-between h-16 px-4 border-b">
+            <Link to="/" className="text-xl font-semibold text-black">
+              ShoeShoe Admin
+            </Link>
+            <button 
+              className="p-1 rounded-md hover:bg-gray-100 lg:hidden"
+              onClick={toggleSidebar}
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Sidebar menu */}
+          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+            {sidebarItems.map((item) => (
               <Link
-                key={item.path}
+                key={item.name}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors 
-                  ${isActive(item.path) 
-                    ? 'bg-black text-white' 
-                    : 'text-gray-700 hover:bg-gray-100'}`}
+                className="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-100"
               >
-                {item.icon}
-                {!collapsed && <span>{item.label}</span>}
+                <span className="mr-3 text-gray-500">{item.icon}</span>
+                {item.name}
               </Link>
             ))}
           </nav>
-        </div>
-        
-        {/* Sidebar footer */}
-        <div className="p-4 border-t">
-          <Link
-            to="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-          >
-            <LogOut size={20} />
-            {!collapsed && <span>Back to Website</span>}
-          </Link>
-        </div>
-      </div>
-      
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header */}
-        <header className="bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
-          <div className="flex items-center justify-between">
-            <button 
-              onClick={() => setMobileOpen(true)}
-              className="p-1.5 rounded-lg hover:bg-gray-100 lg:hidden"
-            >
-              <Menu size={20} />
-            </button>
-            <h1 className="text-xl font-semibold ml-2 lg:ml-0">Shoeshoe Admin</h1>
-            <div className="flex items-center gap-4">
-              {/* Notifications, profile, etc. could go here */}
+          
+          {/* User profile in sidebar */}
+          <div className="p-4 border-t border-b">
+            <div className="flex items-center space-x-3 mb-3">
+              {profileImageUrl ? (
+                <img 
+                  src={profileImageUrl} 
+                  alt="Profile" 
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
+                  {userInitial}
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  {user || 'Admin User'}
+                </p>
+                <p className="text-xs text-gray-500">Administrator</p>
+              </div>
             </div>
           </div>
+          
+          {/* Logout button */}
+          <div className="p-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center w-full px-4 py-2 text-left text-red-600 rounded-md hover:bg-red-50"
+            >
+              <LogOut size={20} className="mr-3" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Top header - simplified */}
+        <header className="flex items-center h-16 px-6 bg-white border-b">
+          <div className="flex items-center">
+            <button 
+              className="p-1 mr-4 rounded-md hover:bg-gray-100 lg:hidden" 
+              onClick={toggleSidebar}
+            >
+              <Menu size={24} />
+            </button>
+          </div>
         </header>
-        
-        {/* Main content area */}
-        <main className="flex-1 overflow-y-auto p-6">
+
+        {/* Page content */}
+        <main className="flex-1 p-6 overflow-y-auto">
           {children}
         </main>
       </div>
@@ -123,4 +151,4 @@ const AdminLayout = ({ children }) => {
   );
 };
 
-export default AdminLayout
+export default AdminLayout;
