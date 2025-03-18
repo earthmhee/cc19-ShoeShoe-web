@@ -23,6 +23,7 @@ function AddressSelect() {
 	const navigate = useNavigate();
 
 	const handleSelect = () => {
+		console.log("click");
 		setSelect(!select);
 	};
 
@@ -63,11 +64,13 @@ function AddressSelect() {
 							{addresses.map((addr) => (
 								<div
 									key={addr?.id}
-									className={`card bg-base-100 shadow-md border border-gray-200 rounded-lg p-4 ${
-										handleSelect ? "border-black border-8" : ""
+									className={`card bg-base-100  rounded-lg p-4 ${
+										select
+											? "border-black font-semi-bold scale-103 shadow-lg"
+											: " border-gray-200 bg-gray-200 shadow-md"
 									}`}
 									onClick={() => {
-										handleSelect;
+										handleSelect();
 									}}
 								>
 									<div
