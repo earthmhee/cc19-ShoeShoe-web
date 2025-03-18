@@ -27,7 +27,7 @@ function App() {
 			<div className="h-fit mt-2">
 				<Outlet />
 			</div>
-			{/* <Footer /> */}
+			<Footer />
 		</div>
 	);
 }
