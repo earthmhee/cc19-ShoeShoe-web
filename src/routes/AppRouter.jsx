@@ -29,9 +29,6 @@ import Addressbook from "../components/accountManage/Addressbook";
 import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
-import AccountUpdate from "../pages/account/AccountUpdate";
-import SubLayoutAccount from "../layouts/subLayoutAccount";
-import Addressbook from "../components/accountManage/Addressbook";
 import OrderDetail from "../pages/admin/OrderDetail";
 
 
@@ -72,7 +69,30 @@ const userRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
-			{ path: "account", element: <AccountInfo /> }, //เดี๋ยวต้องมี children ของ account ต่อ
+			{
+				path: "account", // children ของ account
+				element: <SubLayoutAccount />,
+				children: [
+					{ index: true, element: <AccountInfo /> },
+					{ path: "update", element: <AccountUpdate /> },
+					{ path: "address", element: <Addressbook /> },
+				],
+			},
+			{ path: "/product/:id", element: <ProductDetail /> },
+			{ path: "/cart" , element : <CartPage /> },
+			{ path: "checkout/:id", element: <CheckoutTest />},
+			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			//Footer Pages
+			{ path: "/membership", element: <Membership /> },
+			{ path: "/howtoorder", element: <HowtoOrder /> },
+			{ path: "/policies", element: <Policies /> },
+			{ path: "/privacy", element: <Privacy /> },
+			{ path: "/faqs", element: <FAQS /> },
+			{ path: "/shipping-policy", element: <ShippingPolicy /> },
+			{ path: "/status-tracking", element: <StatusTracking /> },
+			{ path: "/amlocator", element: <StoreLocator /> },
+			{ path: "stores", element: <StoreLocator /> },
+			{ path: "/about-us", element: <AboutUs /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
@@ -105,6 +125,7 @@ const adminRouter = createBrowserRouter([
 		],
 	},
   ]);
+
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
 	const { user } = useUser();
