@@ -82,14 +82,17 @@ const userRouter = createBrowserRouter([
 						children: [
 							{ index: true, element: <MyOrders /> },
 							{ path: ":id", element: <ViewOrder /> },
+							{ path: "checkout/:id", element: <CheckoutTest /> },
+							{
+								path: "checkout-status/:session",
+								element: <CheckoutComplete />,
+							},
 						],
 					},
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-			{ path: "checkout/:id", element: <CheckoutTest /> },
-			{ path: "checkout-status/:session", element: <CheckoutComplete /> },
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },

@@ -151,7 +151,7 @@ const MyOrders = () => {
 										<button
 											onClick={(e) => {
 												e.stopPropagation();
-												// navigate("/");
+												navigate(`checkout/${order.id}`);
 											}}
 											className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
 										>
