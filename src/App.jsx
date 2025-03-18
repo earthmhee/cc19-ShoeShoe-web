@@ -20,14 +20,18 @@ import Layout from "./layouts/Layouts";
 import "./App.css";
 import SidebarResponsive from "./components/Sidebar";
 import Footer from "./components/Footer";
+import { CartProvider } from "./components/CartProvider";
+
 function App() {
 	return (
 		<div>
-			<ResponsiveNavigation />
-			<div className="h-fit mt-2">
-				<Outlet />
-			</div>
-			<Footer />
+			<CartProvider>
+				<ResponsiveNavigation />
+				<div className="h-fit mt-2">
+					<Outlet />
+				</div>
+				<Footer />
+			</CartProvider>
 		</div>
 	);
 }
