@@ -38,14 +38,13 @@ const CartPage = () => {
 	const handleCheckout = async () => {
 		if (items.length === 0) return;
 
-		if (!isSignedIn) {
-			alert("กรุณาเข้าสู่ระบบเพื่อดำเนินการสั่งซื้อ");
-			navigate("/login");
-			return;
-		}
-
 		setCheckoutLoading(true);
 		try {
+			if (!isSignedIn) {
+				alert("กรุณาเข้าสู่ระบบเพื่อดำเนินการสั่งซื้อ");
+				navigate("/login");
+				return;
+			}
 			const token = await getToken();
 
 			const result = await checkout({
@@ -205,7 +204,9 @@ const CartPage = () => {
 					</div>
 				</div>
 				<div>
-					<AddressSelect onSelectAddress={setSelectedAddressId} />
+					{isSignedIn && (
+						<AddressSelect onSelectAddress={setSelectedAddressId} />
+					)}
 					<div className="bg-gray-50 p-6 rounded-lg h-fit">
 						<h2 className="text-lg font-bold mb-4">สรุปคำสั่งซื้อ</h2>
 
