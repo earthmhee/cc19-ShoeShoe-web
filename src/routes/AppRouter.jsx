@@ -33,6 +33,7 @@ import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
+import Payment from "../pages/Payment";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -42,8 +43,7 @@ const guestRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "/login", element: <p>login</p> },
-			{ path: "/register", element: <p>register</p> },
+			{ path: "/cart", element: <CartPage /> },
 
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
@@ -57,7 +57,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
 
-			{ path: "*", element: <Navigate to="/login" /> },
+			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
 ]);
@@ -86,10 +86,18 @@ const userRouter = createBrowserRouter([
 					},
 				],
 			},
+			{
+				path: "checkout",
+				children: [
+					{ path: ":id", element: <Payment /> },
+					{
+						path: "checkout-status/:session",
+						element: <CheckoutComplete />,
+					},
+				],
+			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-			{ path: "checkout/:id", element: <CheckoutTest /> },
-			{ path: "checkout-status/:session", element: <CheckoutComplete /> },
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -108,17 +116,17 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-		path: "/", // Change the base path to "/admin"
+		path: "/",
 		children: [
-			{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-			{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-			{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-			{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-			{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-			{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+			{ index: true, element: <AdminDashboard /> },
+			{ path: "products", element: <AdminProducts /> },
+			{ path: "products/new", element: <ProductForm /> },
+			{ path: "products/edit/:id", element: <ProductForm /> },
+			{ path: "inventory", element: <InventoryManagement /> },
+			{ path: "orders", element: <OrderManagement /> },
 			{ path: "orders/:id", element: <OrderDetail /> },
-			{ path: "users", element: <UserManagement /> }, // /admin/users
-			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
+			{ path: "users", element: <UserManagement /> },
+			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
 ]);
@@ -148,9 +156,6 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
-				console.log("Set State Complete");
-				createAccount(token);
-				console.log("Create Account Complete");
 				console.log("Set State Complete");
 				createAccount(token);
 				console.log("Create Account Complete");

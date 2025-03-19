@@ -28,7 +28,7 @@ const ViewOrder = () => {
 						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
-				console.log("Order response:", response.data); // ตรวจสอบข้อมูลที่ได้
+				console.log(response.data.data);
 				setOrder(response.data.data); // ตั้งค่าข้อมูลคำสั่งซื้อจาก response
 			} catch (err) {
 				setError(err.response?.data?.msg || "Failed to fetch order details.");
@@ -47,7 +47,7 @@ const ViewOrder = () => {
 		return <p className="text-gray-500">Loading order details...</p>;
 	}
 
-	const userAddress = order.user.address[0];
+	const userAddress = order.address;
 
 	return (
 		<div className="w-full max-w-4xl mx-auto p-6">
