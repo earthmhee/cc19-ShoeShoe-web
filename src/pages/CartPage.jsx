@@ -27,7 +27,7 @@ const CartPage = () => {
 
 	useEffect(() => {
 		fetchCart();
-	}, []);
+	}, [fetchCart]);
 
 	// Format price with Thai Baht symbol
 	const formatPrice = (price) => {
@@ -49,9 +49,6 @@ const CartPage = () => {
 
 			const result = await checkout({
 				shippingDetails: selectedAddressId,
-				// city: user?.city || "กรุณาระบุเมือง",
-				// postalCode: user?.postalCode || "10110",
-				// country: "Thailand",
 			});
 
 			if (result) {
