@@ -1,6 +1,6 @@
 // src/components/MyOrders.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import OrderImg from "./OrderImg";
@@ -29,8 +29,8 @@ const MyOrders = () => {
 						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
-				console.log(response);
-				setOrders(response.data.data); // ตั้งค่าคำสั่งซื้อจาก response
+				console.log(response.data.data);
+				setOrders(response.data.data.orders); // ตั้งค่าคำสั่งซื้อจาก response
 			} catch (err) {
 				setError(err.response?.data?.msg || "Failed to fetch orders.");
 				console.error("Error fetching orders:", err);
@@ -49,6 +49,7 @@ const MyOrders = () => {
 					headers: { Authorization: `Bearer ${token}` },
 				}
 			);
+			console.log(`orders : ${orders}`);
 			setOrders(orders.filter((order) => order.id !== orderId));
 			setSuccessMessage("Order deleted successfully!");
 			setError("");
@@ -148,15 +149,17 @@ const MyOrders = () => {
 								{/* Card Actions */}
 								<div className="card-actions mt-4 flex justify-end">
 									{order.payment_status === "Unpaid" && (
-										<button
-											onClick={(e) => {
-												e.stopPropagation();
-												// navigate("/");
-											}}
-											className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
-										>
-											Continue to payment
-										</button>
+										<Link to={`/checkout/${order.id}`}>
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													// navigate(`checkout/${order.id}`);
+												}}
+												className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
+											>
+												Continue to payment
+											</button>
+										</Link>
 									)}
 									{order.shipment_status === "Pending" &&
 										order.payment_status === "Unpaid" && (

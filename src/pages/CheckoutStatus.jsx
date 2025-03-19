@@ -5,36 +5,33 @@ import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 
 const CheckoutComplete = () => {
-  const navigate = useNavigate();
-  const { session } = useParams();
-  const { getToken } = useAuth();
-  const [status, setStatus] = useState(null);
-  console.log(session);
-  
-  useEffect(() => {
-    // code
-    fetchPayment();
-  }, []);
+	const navigate = useNavigate();
+	const { session } = useParams();
+	const { getToken } = useAuth();
+	const [status, setStatus] = useState(null);
 
-  const fetchPayment = async () => {
-    const token = await getToken();
-    try {
-      const res = await checkOutStatus(token, session);
-      setStatus(res.data.status);
-      alert("Payment success", res.data.message);
-      console.log("Payment success", res.data.message);
-      
-    //   createAlert("success", res.data.message);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+	useEffect(() => {
+		// code
+		fetchPayment();
+	}, []);
 
-  if (status === "open") {
-    return <Navigate to="/" />;
-  }
+	const fetchPayment = async () => {
+		const token = await getToken();
+		try {
+			const res = await checkOutStatus(token, session);
+			setStatus(res.data.status);
+			alert("Payment success", res.data.message);
+			createAlert("success", res.data.message);
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
-  return <div>Loading...</div>;
+	if (status === "open") {
+		return <Navigate to="/" />;
+	}
+
+	return <div>Loading...</div>;
 };
 export default CheckoutComplete;
