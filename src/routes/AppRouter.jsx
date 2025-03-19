@@ -151,9 +151,6 @@ export default function AppRouter() {
 				console.log("Set State Complete");
 				createAccount(token);
 				console.log("Create Account Complete");
-				console.log("Set State Complete");
-				createAccount(token);
-				console.log("Create Account Complete");
 			} else {
 				setRouter(guestRouter);
 				setRole(null);
