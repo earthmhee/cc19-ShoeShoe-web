@@ -27,7 +27,7 @@ const CartPage = () => {
 
 	useEffect(() => {
 		fetchCart();
-	}, []);
+	}, [fetchCart]);
 
 	// Format price with Thai Baht symbol
 	const formatPrice = (price) => {
