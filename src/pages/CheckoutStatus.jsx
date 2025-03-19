@@ -14,6 +14,7 @@ const CheckoutComplete = () => {
 		// code
 		fetchPayment();
 	}, []);
+
 	const fetchPayment = async () => {
 		const token = await getToken();
 		try {

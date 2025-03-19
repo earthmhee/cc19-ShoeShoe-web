@@ -43,7 +43,8 @@ const guestRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "/cart", element: <CartPage /> },
+			{ path: "/login", element: <p>login</p> },
+			{ path: "/register", element: <p>register</p> },
 
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
@@ -57,7 +58,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
 
-			{ path: "*", element: <Navigate to="/" /> },
+			{ path: "*", element: <Navigate to="/login" /> },
 		],
 	},
 ]);
