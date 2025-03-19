@@ -30,9 +30,9 @@ import MyOrders from "../components/ordersAndWishList/MyOrders";
 import WishList from "../components/ordersAndWishList/WishList";
 import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 import CartPage from "../pages/CartPage";
-import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
+import CheckoutComplete from "../pages/CheckoutStatus";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -44,6 +44,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/login", element: <p>login</p> },
 			{ path: "/register", element: <p>register</p> },
+			{ path: "/cart", element: <CartPage /> },
 
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
@@ -120,17 +121,7 @@ const adminRouter = createBrowserRouter([
 			{ path: "users", element: <UserManagement /> }, // /admin/users
 			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
 		],
-		path: "/",
-		children: [
-			{ index: true, element: <AdminDashboard /> },
-			{ path: "products", element: <AdminProducts /> },
-			{ path: "products/new", element: <ProductForm /> },
-			{ path: "products/edit/:id", element: <ProductForm /> },
-			{ path: "inventory", element: <InventoryManagement /> },
-			{ path: "orders", element: <OrderManagement /> },
-			{ path: "users", element: <UserManagement /> },
-			{ path: "*", element: <Navigate to="/admin" /> },
-		],
+		
 	},
 ]);
 

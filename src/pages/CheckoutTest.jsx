@@ -13,7 +13,7 @@ const CheckoutTest = () => {
   // Javascript
   const { getToken } = useAuth();
   // const { id } = useParams();
-  const id = 1
+  const id = 8
 
   const fetchClientSecret = async () => {
     const token = await getToken()

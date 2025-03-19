@@ -9,7 +9,8 @@ const CheckoutComplete = () => {
   const { session } = useParams();
   const { getToken } = useAuth();
   const [status, setStatus] = useState(null);
-
+  console.log(session);
+  
   useEffect(() => {
     // code
     fetchPayment();
@@ -21,6 +22,8 @@ const CheckoutComplete = () => {
       const res = await checkOutStatus(token, session);
       setStatus(res.data.status);
       alert("Payment success", res.data.message);
+      console.log("Payment success", res.data.message);
+      
     //   createAlert("success", res.data.message);
       navigate("/");
     } catch (error) {

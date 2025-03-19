@@ -600,7 +600,8 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [addedToCart, setAddedToCart] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
-
+  const items = useCartStore((state) => state.items);
+  console.log("items in ProductDetail:", items);
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) {
@@ -877,6 +878,7 @@ const ProductDetail = () => {
       {product.brand && (
         <div className="text-sm text-gray-500 uppercase mb-1">
           {product.brand}
+          {JSON.stringify(items)}
         </div>
       )}
 
