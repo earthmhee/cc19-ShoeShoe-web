@@ -33,6 +33,7 @@ import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
+import Payment from "../pages/Payment";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -82,12 +83,17 @@ const userRouter = createBrowserRouter([
 						children: [
 							{ index: true, element: <MyOrders /> },
 							{ path: ":id", element: <ViewOrder /> },
-							{ path: "checkout/:id", element: <CheckoutTest /> },
-							{
-								path: "checkout-status/:session",
-								element: <CheckoutComplete />,
-							},
 						],
+					},
+				],
+			},
+			{
+				path: "checkout",
+				children: [
+					{ path: ":id", element: <Payment /> },
+					{
+						path: "checkout-status/:session",
+						element: <CheckoutComplete />,
 					},
 				],
 			},

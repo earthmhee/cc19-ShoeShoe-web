@@ -29,7 +29,7 @@ const CheckoutTest = () => {
 
 	const options = { fetchClientSecret };
 	return (
-		<div id="checkout">
+		<div id="checkout" className="card shadow border py-20 max-w-6xl m-auto">
 			<EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
 				<EmbeddedCheckout />
 			</EmbeddedCheckoutProvider>

@@ -1,6 +1,6 @@
 // src/components/MyOrders.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import OrderImg from "./OrderImg";
@@ -149,15 +149,17 @@ const MyOrders = () => {
 								{/* Card Actions */}
 								<div className="card-actions mt-4 flex justify-end">
 									{order.payment_status === "Unpaid" && (
-										<button
-											onClick={(e) => {
-												e.stopPropagation();
-												navigate(`checkout/${order.id}`);
-											}}
-											className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
-										>
-											Continue to payment
-										</button>
+										<Link to={`/checkout/${order.id}`}>
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													// navigate(`checkout/${order.id}`);
+												}}
+												className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105"
+											>
+												Continue to payment
+											</button>
+										</Link>
 									)}
 									{order.shipment_status === "Pending" &&
 										order.payment_status === "Unpaid" && (
