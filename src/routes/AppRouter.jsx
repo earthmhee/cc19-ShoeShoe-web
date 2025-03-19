@@ -43,7 +43,6 @@ const guestRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
-			// { path: "/cart", element: <h1>Hello</h1> },
 			{ path: "/cart", element: <CartPage /> },
 
 			//Footer Pages
@@ -117,18 +116,6 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-		path: "/", // Change the base path to "/admin"
-		children: [
-			{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-			{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-			{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-			{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-			{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-			{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-			{ path: "orders/:id", element: <OrderDetail /> },
-			{ path: "users", element: <UserManagement /> }, // /admin/users
-			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-		],
 		path: "/",
 		children: [
 			{ index: true, element: <AdminDashboard /> },
@@ -137,8 +124,9 @@ const adminRouter = createBrowserRouter([
 			{ path: "products/edit/:id", element: <ProductForm /> },
 			{ path: "inventory", element: <InventoryManagement /> },
 			{ path: "orders", element: <OrderManagement /> },
+			{ path: "orders/:id", element: <OrderDetail /> },
 			{ path: "users", element: <UserManagement /> },
-			{ path: "*", element: <Navigate to="/admin" /> },
+			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
 ]);
@@ -168,9 +156,6 @@ export default function AppRouter() {
 				setToken(token);
 				setUser(user.fullName);
 				setClerkID(userId);
-				console.log("Set State Complete");
-				createAccount(token);
-				console.log("Create Account Complete");
 				console.log("Set State Complete");
 				createAccount(token);
 				console.log("Create Account Complete");
