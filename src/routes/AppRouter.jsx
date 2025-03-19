@@ -120,17 +120,6 @@ const adminRouter = createBrowserRouter([
 			{ path: "users", element: <UserManagement /> }, // /admin/users
 			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
 		],
-		path: "/",
-		children: [
-			{ index: true, element: <AdminDashboard /> },
-			{ path: "products", element: <AdminProducts /> },
-			{ path: "products/new", element: <ProductForm /> },
-			{ path: "products/edit/:id", element: <ProductForm /> },
-			{ path: "inventory", element: <InventoryManagement /> },
-			{ path: "orders", element: <OrderManagement /> },
-			{ path: "users", element: <UserManagement /> },
-			{ path: "*", element: <Navigate to="/admin" /> },
-		],
 	},
 ]);
 

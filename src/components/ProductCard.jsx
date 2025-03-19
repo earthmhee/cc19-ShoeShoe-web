@@ -85,7 +85,7 @@ function ProductCard() {
 									<div className="relative overflow-hidden bg-gray-50 aspect-square">
 										<img
 											src={mainImage}
-											alt={product.name}
+											alt={product.productname}
 											className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
 										/>
 
@@ -101,25 +101,15 @@ function ProductCard() {
 										)}
 									</div>
 
-									<div className="mt-4 flex flex-col items-center text-center">
+									<div className="mt-4 flex flex-col items-center text- center">
 										<span
 											className="text-s font-normal text-gray-900 hover:underline truncate w-full"
 											style={productNameStyle}
 										>
-											{product.name}
+											{product.productname}
 										</span>
 
-										{product.description && (
-											<p
-												className="mt-1 text-xs text-gray-500 line-clamp-2"
-												style={{
-													fontFamily: "'Lexend', sans-serif",
-													fontWeight: 300,
-												}}
-											>
-												{product.description}
-											</p>
-										)}
+										
 										<div className="mt-1">
 											<span
 												className="text-s font-light text-gray-900"
