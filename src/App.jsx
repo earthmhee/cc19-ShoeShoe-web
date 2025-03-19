@@ -21,6 +21,9 @@ import "./App.css";
 import SidebarResponsive from "./components/Sidebar";
 import Footer from "./components/Footer";
 import { CartProvider } from "./components/CartProvider";
+import UserChatProvider from "./components/chat/UserChatProvider";
+import UserChatWidget from "./components/chat/UserChatWidget";
+import "./components/chat/UserChat.css";
 
 function App() {
 	return (
@@ -31,6 +34,11 @@ function App() {
 					<Outlet />
 				</div>
 				<Footer />
+				<SignedIn>
+					<UserChatProvider>
+						<UserChatWidget/>
+					</UserChatProvider>
+				</SignedIn>
 			</CartProvider>
 		</div>
 	);
