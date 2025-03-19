@@ -43,7 +43,6 @@ const guestRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
-			// { path: "/cart", element: <h1>Hello</h1> },
 			{ path: "/cart", element: <CartPage /> },
 
 			//Footer Pages
