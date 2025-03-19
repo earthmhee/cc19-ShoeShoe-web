@@ -14,14 +14,14 @@ const CheckoutComplete = () => {
     // code
     fetchPayment();
   }, []);
-
+  console.log('Before fetch payment');
   const fetchPayment = async () => {
     const token = await getToken();
     try {
       const res = await checkOutStatus(token, session);
       setStatus(res.data.status);
       alert("Payment success", res.data.message);
-    //   createAlert("success", res.data.message);
+      console.log("Payment success", res.data.message);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -32,6 +32,6 @@ const CheckoutComplete = () => {
     return <Navigate to="/" />;
   }
 
-  return <div>Loading...</div>;
+  return <div>Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...</div>;
 };
 export default CheckoutComplete;

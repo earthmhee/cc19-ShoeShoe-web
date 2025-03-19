@@ -22,7 +22,7 @@ import StatusTracking from "../pages/FooterPages/StatusTracking";
 import AboutUs from "../pages/FooterPages/AboutUs";
 
 import CheckoutTest from "../pages/CheckoutTest"
-import CheckoutStatus from "../pages/CheckoutStatus"
+import CheckoutComplete from "../pages/CheckoutStatus";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
@@ -79,7 +79,7 @@ const userRouter = createBrowserRouter([
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "checkout/:id", element: <CheckoutTest />},
-			{ path: "checkout-status/:session", element: <CheckoutStatus />},
+			{ path: "checkout-status/:session", element: <CheckoutComplete />},
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },

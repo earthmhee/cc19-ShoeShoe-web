@@ -7,13 +7,14 @@ import {
 
 import { useAuth } from "@clerk/clerk-react";
 import { checkout } from "../api/payment";
+import { useParams } from "react-router";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutTest = () => {
   // Javascript
   const { getToken } = useAuth();
-  // const { id } = useParams();
-  const id = 1
+  const { id } = useParams();
+  // const id = 4
 
   const fetchClientSecret = async () => {
     const token = await getToken()
