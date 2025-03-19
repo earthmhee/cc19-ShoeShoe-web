@@ -227,16 +227,16 @@ const Addressbook = () => {
 												<span className="text-green-500 ml-2">Default</span>
 											)} */}
 										</div>
-										<div className="card-actions mt-2">
+										<div className="card-actions mt-2 justify-end">
 											<button
 												onClick={() => handleEditAddress(addr.id)}
-												className="btn btn-sm btn-primary mr-2"
+												className="btn btn-sm text-white h-7 w-15 border-none bg-black hover:bg-gray-800 transition delay-50 duration-100 ease-in-out hover:scale-103"
 											>
 												Edit
 											</button>
 											<button
 												onClick={() => handleDeleteAddress(addr.id)}
-												className="btn btn-sm btn-error"
+												className="btn btn-sm  border-gray-500 h-7 text-gray-200  bg-gray-500  hover:bg-gray-300 hover:border-gray-300 hover:text-black transition delay-50 duration-100 ease-in-out hover:scale-103"
 											>
 												Delete
 											</button>
