@@ -30,13 +30,13 @@ function App() {
 		<div>
 			<CartProvider>
 				<ResponsiveNavigation />
-				<div className="h-fit mt-2">
+				<div className="h-fit mt-2 ">
 					<Outlet />
 				</div>
 				<Footer />
 				<SignedIn>
 					<UserChatProvider>
-						<UserChatWidget/>
+						<UserChatWidget />
 					</UserChatProvider>
 				</SignedIn>
 			</CartProvider>
