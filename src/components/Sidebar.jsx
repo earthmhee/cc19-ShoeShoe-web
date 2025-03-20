@@ -13,6 +13,7 @@ import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingC
 import UserProfileForSideBar from "./UserProfileForSideBar";
 import useUserStore from "../stores/userStore";
 import UserProfileForNavBar from "./UserProfileForNavBar";
+import CartIcon from "./CartIcon";
 
 function ResponsiveNavigation() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -268,7 +269,7 @@ function ResponsiveNavigation() {
 
 							{/* chart button */}
 							<button className="p-2 text-gray-700">
-								<ShoppingCartIcon className="w-5 cursor-pointer transform transition duration-300 hover:rotate-6" />
+								<CartIcon />
 							</button>
 						</div>
 					</div>
