@@ -1,4 +1,3 @@
-// src/pages/admin/AdminChat.jsx
 import React, { useState, useEffect } from "react";
 import { getFirestore, collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { chatService } from "../../services/firebaseService";

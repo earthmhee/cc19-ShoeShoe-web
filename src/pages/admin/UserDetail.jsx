@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { ArrowLeft, User, Mail, Phone, Calendar, ShoppingBag, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, User, Mail, Phone, Calendar, ShoppingBag, AlertTriangle, Home, Package, CreditCard } from 'lucide-react';
 import AdminLayout from '../../layouts/AdminLayout';
-import { getUserById, getOrders } from '../../services/api';
+import { useAuth } from "@clerk/clerk-react";
+import createAuthenticatedRequest from '../../services/api';
+
 
 const UserDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getToken } = useAuth();
   
   const [user, setUser] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
@@ -19,15 +22,23 @@ const UserDetail = () => {
         setLoading(true);
         setError(null);
         
-        // Fetch user data
-        const userData = await getUserById(id);
-        setUser(userData);
+        // Get token from Clerk
+        const token = await getToken();
         
-        // Fetch user's orders
-        // In a production app, you'd have an endpoint to get orders by user ID
-        const allOrders = await getOrders();
-        const userOrders = allOrders.filter(order => order.user_id === parseInt(id) || order.user?.id === parseInt(id));
-        setUserOrders(userOrders);
+        // Create the authenticated API client
+        const api = createAuthenticatedRequest(token);
+        
+        // Fetch user data
+        const userData = await api.getUserById(id);
+        
+        if (userData && userData.status === 'success') {
+          setUser(userData.data);
+          
+          // Set orders from the user data
+          setUserOrders(userData.data.orders || []);
+        } else {
+          throw new Error("Failed to load user data");
+        }
       } catch (err) {
         console.error('Error fetching user data:', err);
         setError('Failed to load user data. Please try again later.');
@@ -68,11 +79,19 @@ const UserDetail = () => {
     };
     
     fetchUserData();
-  }, [id]);
+  }, [id, getToken]);
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
+  const calculateTotalSpent = (orders) => {
+    if (!orders || orders.length === 0) return 0;
+    return orders
+      .filter(order => order.payment_status === 'Paid')
+      .reduce((total, order) => total + order.total_amount, 0);
   };
 
   if (loading) {
@@ -92,7 +111,7 @@ const UserDetail = () => {
           <h2 className="text-2xl font-semibold text-gray-800">User Not Found</h2>
           <p className="mt-2 text-gray-600">The user you're looking for doesn't exist or you don't have permission to view it.</p>
           <button 
-            onClick={() => navigate('/admin/users')}
+            onClick={() => navigate('/users')}
             className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
           >
             Back to User List
@@ -106,7 +125,7 @@ const UserDetail = () => {
     <AdminLayout>
       <div className="mb-6">
         <button
-          onClick={() => navigate('/admin/users')}
+          onClick={() => navigate('/users')}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
         >
           <ArrowLeft size={16} className="mr-1" />
@@ -151,7 +170,7 @@ const UserDetail = () => {
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
-                  {user.status}
+                  {user.status || 'Active'}
                 </span>
               </div>
             </div>
@@ -178,16 +197,16 @@ const UserDetail = () => {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 ml-2">Joined {formatDate(user.created_at)}</dd>
                 </div>
+
+                <div className="flex items-center">
+                  <dt className="text-sm font-medium text-gray-500 w-8">
+                    <ShoppingBag size={16} />
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 ml-2">
+                    Total Spent: ฿{calculateTotalSpent(userOrders).toLocaleString()}
+                  </dd>
+                </div>
               </dl>
-            </div>
-            
-            <div className="border-t border-gray-200 px-4 py-4">
-              <button
-                onClick={() => navigate(`/admin/users/edit/${user.id}`)}
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
-              >
-                Edit Profile
-              </button>
             </div>
           </div>
         </div>
@@ -201,7 +220,7 @@ const UserDetail = () => {
             </div>
             
             <div className="overflow-x-auto">
-              {userOrders.length > 0 ? (
+              {userOrders && userOrders.length > 0 ? (
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -257,11 +276,11 @@ const UserDetail = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ฿{order.total_amount.toLocaleString()}
+                          ฿{order.total_amount?.toLocaleString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-indigo-600">
                           <button 
-                            onClick={() => navigate(`/admin/orders/${order.id}`)}
+                            onClick={() => navigate(`/orders/${order.id}`)}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             View
@@ -288,11 +307,24 @@ const UserDetail = () => {
             </div>
             
             <div className="px-6 py-4">
-              {user.address ? (
-                <div className="text-sm text-gray-600">
-                  <p>{user.address.homenum}</p>
-                  <p>{user.address.subdistrict}, {user.address.district}</p>
-                  <p>{user.address.province}, {user.address.country} {user.address.postcode}</p>
+              {user.address && user.address.length > 0 ? (
+                <div className="space-y-4">
+                  {user.address.map((addr, index) => (
+                    <div key={addr.id || index} className="p-3 border rounded-md">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 mt-1">
+                          <Home size={18} className="text-gray-500" />
+                        </div>
+                        <div className="ml-3 text-sm text-gray-600">
+                          <p className="font-medium">{addr.firstname} {addr.lastname}</p>
+                          <p>{addr.phone}</p>
+                          <p>{addr.homenum}</p>
+                          <p>{addr.subdistrict}, {addr.district}</p>
+                          <p>{addr.province}, {addr.country} {addr.postcode}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <p className="text-sm text-gray-500">No address information available.</p>
@@ -320,18 +352,56 @@ const UserDetail = () => {
                   </div>
                 </div>
                 
-                {userOrders.length > 0 && (
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                        <ShoppingBag size={16} className="text-green-600" />
+                {userOrders && userOrders.length > 0 && (
+                  <>
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                          <ShoppingBag size={16} className="text-green-600" />
+                        </div>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-900">Last order placed</p>
+                        <p className="text-xs text-gray-500">{formatDate(userOrders[0].order_date)}</p>
                       </div>
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-900">Last order placed</p>
-                      <p className="text-xs text-gray-500">{formatDate(userOrders[0].order_date)}</p>
-                    </div>
-                  </div>
+
+                    {userOrders.some(order => order.payment_status === 'Paid') && (
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
+                            <CreditCard size={16} className="text-purple-600" />
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm font-medium text-gray-900">Last payment completed</p>
+                          <p className="text-xs text-gray-500">
+                            {formatDate(
+                              userOrders.filter(order => order.payment_status === 'Paid')[0]?.order_date
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {userOrders.some(order => order.shipment_status === 'Delivered') && (
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <Package size={16} className="text-blue-600" />
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm font-medium text-gray-900">Last delivery completed</p>
+                          <p className="text-xs text-gray-500">
+                            {formatDate(
+                              userOrders.filter(order => order.shipment_status === 'Delivered')[0]?.order_date
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

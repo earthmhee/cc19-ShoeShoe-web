@@ -12,6 +12,7 @@ import ProductForm from "../pages/admin/ProductForm";
 import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
+import UserDetail from "../pages/admin/UserDetail"
 import HowtoOrder from "../pages/FooterPages/Howtoorder";
 import Membership from "../pages/FooterPages/Membership";
 import Policies from "../pages/FooterPages/Policies";
@@ -33,7 +34,7 @@ import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
-import Payment from "../pages/Payment";
+
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -120,17 +121,19 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-	  path: "/", // Change the base path to "/admin"
-	  children: [
-		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-		{ path: "users", element: <UserManagement /> }, // /admin/users 
-		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-	  ],
+		path: "/",
+		children: [
+			{ index: true, element: <AdminDashboard /> },
+			{ path: "products", element: <AdminProducts /> },
+			{ path: "products/new", element: <ProductForm /> },
+			{ path: "products/edit/:id", element: <ProductForm /> },
+			{ path: "inventory", element: <InventoryManagement /> },
+			{ path: "orders", element: <OrderManagement /> },
+			{ path: "orders/:id", element: <OrderDetail /> },
+			{ path: "users", element: <UserManagement /> },
+			{ path: "users/:id", element: <UserDetail /> },
+			{ path: "*", element: <Navigate to="/" /> },
+		],
 	},
   ]);
 
