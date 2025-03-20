@@ -49,7 +49,8 @@ function OrderImg({ order }) {
 						</div>
 						{/* Product details */}
 						<div>
-							{item.product?.productname} ({item.quantity} x ฿{item.price})
+							{item.product?.productname} ({item.quantity} x ฿
+							{Number(item.price).toLocaleString()})
 						</div>
 					</li>
 				))}
