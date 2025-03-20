@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-const CheckoutCard = () => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [quantity, setQuantity] = useState(1);
+const CheckoutCard = ({ 
+  product, 
+  quantity: initialQuantity = 1, 
+  onClose, 
+  onContinue, 
+  onViewCart 
+}) => {
+  const [quantity, setQuantity] = useState(initialQuantity);
   
-  const product = {
-    name: "ON Cloudmonster Alloy | Silver M",
-    price: 7000.00,
-    image: "/api/placeholder/200/150"  
-  };
-
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -20,49 +19,89 @@ const CheckoutCard = () => {
     setQuantity(quantity + 1);
   };
   
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  // Use Thai Baht formatting
+  const price = product.discount ? 
+    (product.price - (product.price * (product.discount < 1 ? product.discount : product.discount/100))) : 
+    product.price;
   
-  const formattedPrice = new Intl.NumberFormat('ja-JP').format(product.price);
+  const formattedPrice = new Intl.NumberFormat('th-TH').format(price * quantity);
 
-  if (!isOpen) return null;
+  // Get product image
+  let productImage = "";
+  try {
+    if (typeof product.images === "string") {
+      const images = JSON.parse(product.images);
+      productImage = images[0];
+    } else if (Array.isArray(product.images)) {
+      productImage = product.images[0];
+    } else if (product.image) {
+      productImage = product.image;
+    }
+  } catch (e) {
+    console.error("Error parsing product images:", e);
+    productImage = "/placeholder-image.jpg";
+  }
+
+  // Custom backdrop style using inline style
+  const backdropStyle = {
+    position: 'fixed',
+    inset: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1rem',
+    zIndex: 50,
+    backgroundColor: 'rgba(240, 240, 240, 0.7)' // Light gray with 70% opacity
+  };
+
+  // Custom card style with less rounded corners
+  const cardStyle = {
+    backgroundColor: 'white',
+    width: '100%',
+    maxWidth: '28rem',
+    padding: '1.5rem',
+    borderRadius: '0.75rem', // Sharper corners
+    position: 'relative',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white w-full max-w-md p-6 rounded relative">
+    <div style={backdropStyle}>
+      <div style={cardStyle}>
         {/* Close button */}
         <button 
-          onClick={closeModal} 
+          onClick={onClose} 
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-light"
         >
           ×
         </button>
         
+        {/* Product title */}
         <div className="text-center mb-6">
-          <h2 className="text-xl font-bold">{product.name}</h2>
+          <h2 className="text-xl font-bold">{product.productname || product.name}</h2>
           <p className="text-gray-700">has been added to your cart</p>
         </div>
         
+        {/* Product image and quantity */}
         <div className="flex justify-between items-center mb-6">
           <img 
-            src={product.image} 
-            alt={product.name} 
+            src={productImage} 
+            alt={product.productname || product.name} 
             className="w-32 h-auto object-contain"
           />
           
-          <div className="flex flex-col">
-            <span className="mb-2 font-medium">Qty</span>
-            <div className="flex border border-gray-300 rounded">
+          <div>
+            <div className="mb-2 font-medium">Qty</div>
+            <div className="flex items-center border border-gray-300 rounded-md">
               <button 
                 onClick={decreaseQuantity} 
                 className="w-10 h-10 flex items-center justify-center"
               >
                 -
               </button>
-              <span className="w-10 h-10 flex items-center justify-center border-l border-r border-gray-300">
+              <div className="w-10 h-10 flex items-center justify-center border-l border-r border-gray-300">
                 {quantity}
-              </span>
+              </div>
               <button 
                 onClick={increaseQuantity} 
                 className="w-10 h-10 flex items-center justify-center"
@@ -73,23 +112,29 @@ const CheckoutCard = () => {
           </div>
         </div>
         
+        {/* Cart info */}
         <div className="text-center mb-6">
-          <p className="mb-1">There is {quantity} product in cart</p>
-          <p className="font-medium">Cart Subtotal: <span className="font-bold">¥{formattedPrice}</span></p>
+          <p className="mb-1">
+            There is {quantity} product in cart
+          </p>
+          <p className="font-medium">
+            Cart Subtotal: <span className="font-bold">฿{formattedPrice}</span>
+          </p>
         </div>
         
-        <div className="flex gap-4 mb-4">
-          <button className="w-1/2 bg-gray-600 text-white py-3 font-semibold">
+        {/* Action buttons */}
+        <div className="flex gap-4">
+          <button 
+            onClick={() => onContinue(quantity)}
+            className="w-1/2 bg-gray-600 text-white py-3 font-semibold rounded-md"
+          >
             CONTINUE({quantity})
           </button>
-          <button className="w-1/2 bg-black text-white py-3 font-semibold">
+          <button 
+            onClick={onViewCart}
+            className="w-1/2 bg-black text-white py-3 font-semibold rounded-md"
+          >
             VIEW CART
-          </button>
-        </div>
-        
-        <div className="text-center">
-          <button className="text-black underline font-medium">
-            Go to Checkout
           </button>
         </div>
       </div>
