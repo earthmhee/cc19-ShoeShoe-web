@@ -12,6 +12,7 @@ import ProductForm from "../pages/admin/ProductForm";
 import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
+import UserDetail from "../pages/admin/UserDetail"
 import HowtoOrder from "../pages/FooterPages/Howtoorder";
 import Membership from "../pages/FooterPages/Membership";
 import Policies from "../pages/FooterPages/Policies";
@@ -33,7 +34,7 @@ import CartPage from "../pages/CartPage";
 import CheckoutComplete from "../pages/CheckoutStatus";
 import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
-import Payment from "../pages/Payment";
+
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -126,6 +127,7 @@ const adminRouter = createBrowserRouter([
 			{ path: "orders", element: <OrderManagement /> },
 			{ path: "orders/:id", element: <OrderDetail /> },
 			{ path: "users", element: <UserManagement /> },
+			{ path: "users/:id", element: <UserDetail /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},

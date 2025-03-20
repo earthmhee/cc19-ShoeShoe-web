@@ -240,9 +240,16 @@ const createAuthenticatedRequest = (token) => {
 
     getUserById: async (id) => {
       try {
-        // This is a mock endpoint, replace with your actual endpoint
+        // Call the backend API endpoint to get user by ID
         const response = await apiClient.get(`/user/${id}`, { headers });
-        return response.data?.data;
+        
+        // If the response has the expected structure with data property
+        if (response.data) {
+          // Return the response data
+          return response.data;
+        } else {
+          throw new Error("Invalid response format");
+        }
       } catch (error) {
         console.error(`Error fetching user ${id}:`, error);
         throw error;
