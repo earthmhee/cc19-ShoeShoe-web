@@ -30,13 +30,9 @@ import MyOrders from "../components/ordersAndWishList/MyOrders";
 import WishList from "../components/ordersAndWishList/WishList";
 import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 import CartPage from "../pages/CartPage";
-import CheckoutTest from "../pages/CheckoutTest";
 import OrderDetail from "../pages/admin/OrderDetail";
-<<<<<<< HEAD
-import CheckoutComplete from "../pages/CheckoutStatus";
-=======
 import Payment from "../pages/Payment";
->>>>>>> dev
+import CheckoutComplete from "../pages/CheckoutStatus"
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -121,21 +117,6 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-<<<<<<< HEAD
-		path: "/", // Change the base path to "/admin"
-		children: [
-			{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-			{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-			{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-			{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-			{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-			{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-			{ path: "orders/:id", element: <OrderDetail /> },
-			{ path: "users", element: <UserManagement /> }, // /admin/users
-			{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-		],
-		
-=======
 		path: "/",
 		children: [
 			{ index: true, element: <AdminDashboard /> },
@@ -148,7 +129,6 @@ const adminRouter = createBrowserRouter([
 			{ path: "users", element: <UserManagement /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
->>>>>>> dev
 	},
 ]);
 
