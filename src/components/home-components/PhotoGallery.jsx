@@ -5,7 +5,7 @@ function PhotoGallery() {
         <div className="max-w-6xl mx-auto py-10 px-4">
 
             {/* เส้นแบ่ง */}
-            <hr className="border-t border-black mb-4" />
+            <hr className="border-t-2 border-black mb-4" />
 
             {/* Layout Grid */}
             <div className="grid grid-cols-13 gap-3">

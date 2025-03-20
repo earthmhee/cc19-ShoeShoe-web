@@ -23,12 +23,17 @@ import AboutUs from "../pages/FooterPages/AboutUs";
 
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
-import CheckoutComplete from "../pages/CheckoutStatus";
-import CheckoutTest from "../pages/CheckoutTest";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
-
+import MyOrders from "../components/ordersAndWishList/MyOrders";
+import WishList from "../components/ordersAndWishList/WishList";
+import ViewOrder from "../components/ordersAndWishList/ViewOrder";
+import CartPage from "../pages/CartPage";
+import CheckoutComplete from "../pages/CheckoutStatus";
+import CheckoutTest from "../pages/CheckoutTest";
+import OrderDetail from "../pages/admin/OrderDetail";
+import Payment from "../pages/Payment";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -38,9 +43,8 @@ const guestRouter = createBrowserRouter([
 		children: [
 			{ index: true, element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "/login", element: <p>login</p> },
-			{ path: "/register", element: <p>register</p> },
-
+			{ path: "/cart", element: <CartPage /> },
+			
 			//Home Page
 			{ path: "/home", element: <Home /> },
 
@@ -56,7 +60,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "stores", element: <StoreLocator /> },
 			{ path: "/about-us", element: <AboutUs /> },
 
-			{ path: "*", element: <Navigate to="/login" /> },
+			{ path: "*", element: <Navigate to="/" /> },
 		],
 		
 	},
@@ -76,15 +80,31 @@ const userRouter = createBrowserRouter([
 					{ index: true, element: <AccountInfo /> },
 					{ path: "update", element: <AccountUpdate /> },
 					{ path: "address", element: <Addressbook /> },
+					{ path: "wishList", element: <WishList /> },
+					{
+						path: "orders",
+						children: [
+							{ index: true, element: <MyOrders /> },
+							{ path: ":id", element: <ViewOrder /> },
+						],
+					},
+				],
+			},
+			{
+				path: "checkout",
+				children: [
+					{ path: ":id", element: <Payment /> },
+					{
+						path: "checkout-status/:session",
+						element: <CheckoutComplete />,
+					},
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "checkout/:id", element: <CheckoutTest />},
-			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			{ path: "/cart", element: <CartPage /> },
 
 			//Home Page
 			{ path: "/home", element: <Home /> },
-			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },

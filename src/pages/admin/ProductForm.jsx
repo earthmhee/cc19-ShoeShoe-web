@@ -1,440 +1,946 @@
+// import React, { useState, useEffect } from 'react';
+// import { useParams, useNavigate } from 'react-router';
+// import axios from 'axios';
+// import { 
+//   SaveIcon, 
+//   XIcon, 
+//   PlusIcon, 
+//   TrashIcon,
+//   ImageIcon,
+//   ArrowLeftIcon,
+//   AlertCircleIcon
+// } from 'lucide-react';
+// import AdminLayout from '../../layouts/AdminLayout';
+
+// const ProductForm = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const isEditMode = !!id;
+  
+//   const [formData, setFormData] = useState({
+//     productname: '',
+//     description: '',
+//     price: '',
+//     discount: '0',
+//     brand: '',
+//     gender: 'Men',
+//     images: [],
+//     category_id: '',
+//   });
+  
+//   const [categories, setCategories] = useState([]);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [errors, setErrors] = useState({});
+//   const [imageUrls, setImageUrls] = useState(['', '', '']); // Store URLs for 3 images
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         // In a real app, you would fetch categories from your API
+//         // For now, we'll use categories from the schema
+//         setCategories([
+//           { id: 1, categoryname: 'Sneakers' },
+//           { id: 2, categoryname: 'Sports' },
+//           { id: 3, categoryname: 'Sandals' },
+//           { id: 4, categoryname: 'Slippers' },
+//         ]);
+//       } catch (error) {
+//         console.error('Error fetching categories:', error);
+//       }
+//     };
+    
+//     fetchCategories();
+//   }, []);
+  
+//   useEffect(() => {
+//     if (isEditMode) {
+//       const fetchProduct = async () => {
+//         try {
+//           setIsLoading(true);
+//           const response = await axios.get(`http://localhost:8000/api/product/show-product`);
+//           const products = response.data?.data || [];
+//           const product = products.find(p => p.id === parseInt(id));
+          
+//           if (product) {
+//             // Parse images from the string to array
+//             let images = [];
+//             try {
+//               images = JSON.parse(product.images);
+//             } catch (error) {
+//               // If parsing fails, try to split the string
+//               images = product.images
+//                 ?.replace(/^\[|\]$/g, "")
+//                 .split(",")
+//                 .map((url) => url.replace(/^"|"$/g, "")) || [];
+//             }
+            
+//             setFormData({
+//               productname: product.productname,
+//               description: product.description || '',
+//               price: product.price.toString(),
+//               discount: (product.discount || 0).toString(),
+//               brand: product.brand,
+//               gender: product.gender,
+//               category_id: product.category_id.toString(),
+//               images: images
+//             });
+            
+//             // Set image URLs (up to 3)
+//             setImageUrls(images.slice(0, 3).concat(Array(3 - images.length).fill('')));
+//           }
+//           setIsLoading(false);
+//         } catch (error) {
+//           console.error('Error fetching product details:', error);
+//           setIsLoading(false);
+//         }
+//       };
+      
+//       fetchProduct();
+//     }
+//   }, [id, isEditMode]);
+  
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+    
+//     // Clear error when field is modified
+//     if (errors[name]) {
+//       setErrors(prev => ({
+//         ...prev,
+//         [name]: null
+//       }));
+//     }
+//   };
+  
+//   const handleImageUrlChange = (index, value) => {
+//     const updatedUrls = [...imageUrls];
+//     updatedUrls[index] = value;
+//     setImageUrls(updatedUrls);
+//   };
+  
+//   const validateForm = () => {
+//     const newErrors = {};
+    
+//     if (!formData.productname.trim()) {
+//       newErrors.productname = 'Product name is required';
+//     }
+    
+//     if (!formData.price.trim()) {
+//       newErrors.price = 'Price is required';
+//     } else if (isNaN(formData.price) || parseFloat(formData.price) <= 0) {
+//       newErrors.price = 'Price must be a positive number';
+//     }
+    
+//     if (formData.discount.trim() && (isNaN(formData.discount) || parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 1)) {
+//       newErrors.discount = 'Discount must be a number between 0 and 1 (e.g., 0.2 for 20%)';
+//     }
+    
+//     if (!formData.brand.trim()) {
+//       newErrors.brand = 'Brand is required';
+//     }
+    
+//     if (!formData.gender) {
+//       newErrors.gender = 'Gender is required';
+//     }
+    
+//     if (!formData.category_id) {
+//       newErrors.category_id = 'Category is required';
+//     }
+    
+//     // Validate at least one image URL
+//     const validImageUrls = imageUrls.filter(url => url.trim() !== '');
+//     if (validImageUrls.length === 0) {
+//       newErrors.images = 'At least one image URL is required';
+//     }
+    
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   };
+  
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     if (!validateForm()) {
+//       return;
+//     }
+    
+//     try {
+//       setIsSubmitting(true);
+      
+//       // Filter out empty image URLs
+//       const validImageUrls = imageUrls.filter(url => url.trim() !== '');
+      
+//       // Prepare data for submission
+//       const productData = {
+//         ...formData,
+//         price: parseInt(formData.price, 10),
+//         discount: formData.discount ? parseFloat(formData.discount) : 0,
+//         category_id: parseInt(formData.category_id, 10),
+//         images: JSON.stringify(validImageUrls)
+//       };
+      
+//       if (isEditMode) {
+//         // Update existing product
+//         await axios.put(`http://localhost:8000/api/product/update-product/${id}`, productData);
+//         alert('Product updated successfully');
+//       } else {
+//         // Create new product
+//         await axios.post('http://localhost:8000/api/product/add-product', productData);
+//         alert('Product added successfully');
+//       }
+      
+//       // Redirect to product list
+//       navigate('/products');
+//     } catch (error) {
+//       console.error('Error saving product:', error);
+//       alert(`Failed to ${isEditMode ? 'update' : 'add'} product. Please try again.`);
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+  
+//   if (isLoading) {
+//     return (
+//       <AdminLayout>
+//       <div className="flex justify-center items-center h-64">
+//         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+//       </div>
+//       </AdminLayout>
+//     );
+//   }
+  
+//   return (
+//     <AdminLayout>
+//     <div>
+//       <div className="flex justify-between items-center mb-6">
+//         <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Product' : 'Add Product'}</h1>
+//         <button
+//           onClick={() => navigate('/products')}
+//           className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center"
+//         >
+//           <ArrowLeftIcon size={20} className="mr-2" />
+//           Back to Products
+//         </button>
+//       </div>
+      
+//       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6">
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//           <div className="space-y-4">
+//             <div>
+//               <label htmlFor="productname" className="block text-sm font-medium text-gray-700 mb-1">
+//                 Product Name*
+//               </label>
+//               <input
+//                 type="text"
+//                 id="productname"
+//                 name="productname"
+//                 value={formData.productname}
+//                 onChange={handleChange}
+//                 className={`w-full border rounded-md px-4 py-2 ${errors.productname ? 'border-red-500' : 'border-gray-300'}`}
+//               />
+//               {errors.productname && (
+//                 <p className="mt-1 text-sm text-red-500 flex items-center">
+//                   <AlertCircleIcon size={14} className="mr-1" />
+//                   {errors.productname}
+//                 </p>
+//               )}
+//             </div>
+            
+//             <div>
+//               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+//                 Description
+//               </label>
+//               <textarea
+//                 id="description"
+//                 name="description"
+//                 value={formData.description}
+//                 onChange={handleChange}
+//                 rows={4}
+//                 className="w-full border border-gray-300 rounded-md px-4 py-2"
+//               />
+//             </div>
+            
+//             <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+//                   Price*
+//                 </label>
+//                 <input
+//                   type="number"
+//                   id="price"
+//                   name="price"
+//                   value={formData.price}
+//                   onChange={handleChange}
+//                   min="0"
+//                   step="1"
+//                   className={`w-full border rounded-md px-4 py-2 ${errors.price ? 'border-red-500' : 'border-gray-300'}`}
+//                 />
+//                 {errors.price && (
+//                   <p className="mt-1 text-sm text-red-500 flex items-center">
+//                     <AlertCircleIcon size={14} className="mr-1" />
+//                     {errors.price}
+//                   </p>
+//                 )}
+//               </div>
+              
+//               <div>
+//                 <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
+//                   Discount (0-1)
+//                 </label>
+//                 <input
+//                   type="number"
+//                   id="discount"
+//                   name="discount"
+//                   value={formData.discount}
+//                   onChange={handleChange}
+//                   min="0"
+//                   max="1"
+//                   step="0.01"
+//                   className={`w-full border rounded-md px-4 py-2 ${errors.discount ? 'border-red-500' : 'border-gray-300'}`}
+//                 />
+//                 {errors.discount && (
+//                   <p className="mt-1 text-sm text-red-500 flex items-center">
+//                     <AlertCircleIcon size={14} className="mr-1" />
+//                     {errors.discount}
+//                   </p>
+//                 )}
+//               </div>
+//             </div>
+            
+//             <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">
+//                   Brand*
+//                 </label>
+//                 <input
+//                   type="text"
+//                   id="brand"
+//                   name="brand"
+//                   value={formData.brand}
+//                   onChange={handleChange}
+//                   className={`w-full border rounded-md px-4 py-2 ${errors.brand ? 'border-red-500' : 'border-gray-300'}`}
+//                 />
+//                 {errors.brand && (
+//                   <p className="mt-1 text-sm text-red-500 flex items-center">
+//                     <AlertCircleIcon size={14} className="mr-1" />
+//                     {errors.brand}
+//                   </p>
+//                 )}
+//               </div>
+              
+//               <div>
+//                 <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+//                   Gender*
+//                 </label>
+//                 <select
+//                   id="gender"
+//                   name="gender"
+//                   value={formData.gender}
+//                   onChange={handleChange}
+//                   className={`w-full border rounded-md px-4 py-2 ${errors.gender ? 'border-red-500' : 'border-gray-300'}`}
+//                 >
+//                   <option value="Men">Men</option>
+//                   <option value="Women">Women</option>
+//                 </select>
+//                 {errors.gender && (
+//                   <p className="mt-1 text-sm text-red-500 flex items-center">
+//                     <AlertCircleIcon size={14} className="mr-1" />
+//                     {errors.gender}
+//                   </p>
+//                 )}
+//               </div>
+//             </div>
+            
+//             <div>
+//               <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
+//                 Category*
+//               </label>
+//               <select
+//                 id="category_id"
+//                 name="category_id"
+//                 value={formData.category_id}
+//                 onChange={handleChange}
+//                 className={`w-full border rounded-md px-4 py-2 ${errors.category_id ? 'border-red-500' : 'border-gray-300'}`}
+//               >
+//                 <option value="">Select Category</option>
+//                 {categories.map(category => (
+//                   <option key={category.id} value={category.id.toString()}>
+//                     {category.categoryname}
+//                   </option>
+//                 ))}
+//               </select>
+//               {errors.category_id && (
+//                 <p className="mt-1 text-sm text-red-500 flex items-center">
+//                   <AlertCircleIcon size={14} className="mr-1" />
+//                   {errors.category_id}
+//                 </p>
+//               )}
+//             </div>
+//           </div>
+          
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-3">
+//               Product Images*
+//             </label>
+            
+//             <div className="space-y-4">
+//               {imageUrls.map((url, index) => (
+//                 <div key={index} className="flex items-start space-x-3">
+//                   <div className="flex-grow">
+//                     <input
+//                       type="text"
+//                       value={url}
+//                       onChange={(e) => handleImageUrlChange(index, e.target.value)}
+//                       placeholder={`Image ${index + 1} URL`}
+//                       className="w-full border border-gray-300 rounded-md px-4 py-2"
+//                     />
+//                   </div>
+                  
+//                   {url && (
+//                     <div className="h-10 w-10 rounded-md overflow-hidden border border-gray-300">
+//                       <img 
+//                         src={url} 
+//                         alt={`Product preview ${index + 1}`} 
+//                         className="h-full w-full object-cover"
+//                         onError={(e) => {
+//                           e.target.onerror = null;
+//                           e.target.src = 'https://via.placeholder.com/100';
+//                         }}
+//                       />
+//                     </div>
+//                   )}
+                  
+//                   {!url && (
+//                     <div className="h-10 w-10 rounded-md overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+//                       <ImageIcon size={20} className="text-gray-400" />
+//                     </div>
+//                   )}
+//                 </div>
+//               ))}
+              
+//               {errors.images && (
+//                 <p className="mt-1 text-sm text-red-500 flex items-center">
+//                   <AlertCircleIcon size={14} className="mr-1" />
+//                   {errors.images}
+//                 </p>
+//               )}
+              
+//               <div className="bg-gray-50 p-4 rounded-md mt-6">
+//                 <h3 className="text-sm font-medium text-gray-700 mb-2">Product Image Tips</h3>
+//                 <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+//                   <li>Use high-quality images with good lighting</li>
+//                   <li>Show the product from multiple angles</li>
+//                   <li>Maintain a consistent aspect ratio (recommended: 3:4)</li>
+//                   <li>Use a clean, neutral background</li>
+//                   <li>Make sure the product takes up most of the frame</li>
+//                 </ul>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+        
+//         <div className="mt-8 pt-6 border-t flex justify-end space-x-3">
+//           <button
+//             type="button"
+//             onClick={() => navigate('/products')}
+//             className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 flex items-center"
+//             disabled={isSubmitting}
+//           >
+//             <XIcon size={20} className="mr-2" />
+//             Cancel
+//           </button>
+          
+//           <button
+//             type="submit"
+//             className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center ${
+//               isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+//             }`}
+//             disabled={isSubmitting}
+//           >
+//             <SaveIcon size={20} className="mr-2" />
+//             {isSubmitting ? 'Saving...' : isEditMode ? 'Update Product' : 'Add Product'}
+//           </button>
+//         </div>
+//       </form>
+//     </div>
+//     </AdminLayout>
+//   );
+// };
+
+// export default ProductForm;
+
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { ArrowLeft, Plus, X, Upload, AlertTriangle } from 'lucide-react';
+import { 
+  Save, 
+  X, 
+  ArrowLeft,
+  AlertCircle,
+  Image
+} from 'lucide-react';
 import AdminLayout from '../../layouts/AdminLayout';
-import { getProductById, createProduct, updateProduct, getCategories } from '../../services/api';
+import createAuthenticatedRequest from '../../services/api';
+import { useAuth } from '@clerk/clerk-react';
 
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getToken } = useAuth();
+  
   const isEditMode = !!id;
-
-  // Form state
+  
   const [formData, setFormData] = useState({
     productname: '',
     description: '',
     price: '',
-    discount: '',
+    discount: '0',
     brand: '',
     gender: 'Men',
+    images: [],
     category_id: '',
-    images: []
   });
-
-  // UI state
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
+  
   const [categories, setCategories] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
-  const [error, setError] = useState('');
-
-  // Fetch categories and product data (if editing) on component mount
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [imageUrls, setImageUrls] = useState(['', '', '']); // Store URLs for 3 images
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setLoading(true);
-      setError('');
-      
+    const fetchCategories = async () => {
       try {
-        // Fetch categories
-        const categoriesData = await getCategories();
+        setIsLoading(true);
+        
+        // Get token from Clerk
+        const token = await getToken();
+        const api = createAuthenticatedRequest(token);
+        
+        // Try to fetch categories from API
+        const categoriesData = await api.getCategories();
         setCategories(categoriesData);
         
-        // If editing, fetch product data
+        // If editing, fetch product details
         if (isEditMode) {
-          const productData = await getProductById(id);
+          const product = await api.getProductById(id);
           
-          if (productData) {
-            // Parse images from JSON string if necessary
-            let parsedImages = [];
+          if (product) {
+            // Parse images from the string to array
+            let images = [];
             try {
-              if (typeof productData.images === 'string') {
-                parsedImages = JSON.parse(productData.images);
-              } else if (Array.isArray(productData.images)) {
-                parsedImages = productData.images;
-              }
-            } catch (e) {
-              console.error('Error parsing images:', e);
-              parsedImages = [];
+              images = JSON.parse(product.images);
+            } catch (error) {
+              // If parsing fails, try to split the string
+              images = product.images
+                ?.replace(/^\[|\]$/g, "")
+                .split(",")
+                .map((url) => url.replace(/^"|"$/g, "")) || [];
             }
             
             setFormData({
-              productname: productData.productname || '',
-              description: productData.description || '',
-              price: productData.price?.toString() || '',
-              discount: productData.discount?.toString() || '',
-              brand: productData.brand || '',
-              gender: productData.gender || 'Men',
-              category_id: productData.category_id?.toString() || '',
-              images: parsedImages
+              productname: product.productname,
+              description: product.description || '',
+              price: product.price.toString(),
+              discount: (product.discount || 0).toString(),
+              brand: product.brand,
+              gender: product.gender,
+              category_id: product.category_id.toString(),
+              images: images
             });
             
-            setImageUrls(parsedImages);
+            // Set image URLs (up to 3)
+            setImageUrls(images.slice(0, 3).concat(Array(3 - images.length).fill('')));
           }
         }
-      } catch (err) {
-        console.error('Error fetching initial data:', err);
-        setError('Failed to load data. Please try refreshing the page.');
-      } finally {
-        setLoading(false);
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // In case of API error, use hardcoded categories
+        setCategories([
+          { id: 1, categoryname: 'Sneakers' },
+          { id: 2, categoryname: 'Sports' },
+          { id: 3, categoryname: 'Sandals' },
+          { id: 4, categoryname: 'Slippers' },
+        ]);
+        setIsLoading(false);
       }
     };
-
-    fetchInitialData();
-  }, [id, isEditMode]);
-
+    
+    fetchCategories();
+  }, [id, isEditMode, getToken]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0) {
-      // Store the files for later submission
-      setImageFiles(prev => [...prev, ...files]);
-      
-      // Create local URLs for preview
-      const newImageUrls = files.map(file => URL.createObjectURL(file));
-      setImageUrls(prev => [...prev, ...newImageUrls]);
-    }
-  };
-
-  const removeImage = (index) => {
-    setImageUrls(prev => prev.filter((_, i) => i !== index));
-    setImageFiles(prev => prev.filter((_, i) => i !== index));
     
-    // If we're editing and removing an existing image
-    if (isEditMode && index < formData.images.length) {
-      setFormData(prev => ({
+    // Clear error when field is modified
+    if (errors[name]) {
+      setErrors(prev => ({
         ...prev,
-        images: prev.images.filter((_, i) => i !== index)
+        [name]: null
       }));
     }
   };
-
-  const uploadImagesToCloudinary = async () => {
-    const uploadedUrls = [];
-    
-    // Keep existing images if editing
-    if (isEditMode) {
-      uploadedUrls.push(...formData.images);
-    }
-    
-    // Upload each new image to Cloudinary (or your preferred image hosting)
-    for (const file of imageFiles) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'shoeshoe_uploads'); // Replace with your upload preset
-      
-      try {
-        const response = await fetch(
-          'https://api.cloudinary.com/v1_1/your-cloud-name/image/upload', // Replace with your Cloudinary cloud name
-          {
-            method: 'POST',
-            body: formData
-          }
-        );
-        
-        const data = await response.json();
-        if (data && data.secure_url) {
-          uploadedUrls.push(data.secure_url);
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        throw new Error('Failed to upload images. Please try again.');
-      }
-    }
-    
-    return uploadedUrls;
+  
+  const handleImageUrlChange = (index, value) => {
+    const updatedUrls = [...imageUrls];
+    updatedUrls[index] = value;
+    setImageUrls(updatedUrls);
   };
-
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.productname.trim()) {
+      newErrors.productname = 'Product name is required';
+    }
+    
+    if (!formData.price.trim()) {
+      newErrors.price = 'Price is required';
+    } else if (isNaN(formData.price) || parseFloat(formData.price) <= 0) {
+      newErrors.price = 'Price must be a positive number';
+    }
+    
+    if (formData.discount.trim() && (isNaN(formData.discount) || parseFloat(formData.discount) < 0 || parseFloat(formData.discount) > 1)) {
+      newErrors.discount = 'Discount must be a number between 0 and 1 (e.g., 0.2 for 20%)';
+    }
+    
+    if (!formData.brand.trim()) {
+      newErrors.brand = 'Brand is required';
+    }
+    
+    if (!formData.gender) {
+      newErrors.gender = 'Gender is required';
+    }
+    
+    if (!formData.category_id) {
+      newErrors.category_id = 'Category is required';
+    }
+    
+    // Validate at least one image URL
+    const validImageUrls = imageUrls.filter(url => url.trim() !== '');
+    if (validImageUrls.length === 0) {
+      newErrors.images = 'At least one image URL is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     try {
-      setSaving(true);
-      setError('');
+      setIsSubmitting(true);
       
-      // Validate form data
-      if (!formData.productname || !formData.price || !formData.brand || !formData.category_id) {
-        setError('Please fill in all required fields');
-        setSaving(false);
-        return;
-      }
+      // Get token from Clerk
+      const token = await getToken();
+      const api = createAuthenticatedRequest(token);
       
-      // In a real implementation, you would upload the images
-      // const imageUrls = await uploadImagesToCloudinary();
+      // Filter out empty image URLs
+      const validImageUrls = imageUrls.filter(url => url.trim() !== '');
       
-      // For now, we'll use the existing URLs or placeholder
+      // Prepare data for submission
       const productData = {
         ...formData,
-        price: parseInt(formData.price),
+        price: parseInt(formData.price, 10),
         discount: formData.discount ? parseFloat(formData.discount) : 0,
-        images: JSON.stringify(imageUrls.length > 0 ? imageUrls : ['https://via.placeholder.com/400'])
+        category_id: parseInt(formData.category_id, 10),
+        images: JSON.stringify(validImageUrls)
       };
       
       if (isEditMode) {
         // Update existing product
-        await updateProduct(id, productData);
+        await api.updateProduct(id, productData);
+        alert('Product updated successfully');
       } else {
         // Create new product
-        await createProduct(productData);
+        await api.createProduct(productData);
+        alert('Product added successfully');
       }
       
-      // Navigate back to products list
-      navigate('/admin/products');
-    } catch (err) {
-      console.error('Error saving product:', err);
-      setError('Failed to save product. Please try again.');
+      // Redirect to product list
+      navigate('/products');
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert(`Failed to ${isEditMode ? 'update' : 'add'} product. Please try again.`);
     } finally {
-      setSaving(false);
+      setIsSubmitting(false);
     }
   };
-
-  if (loading) {
+  
+  if (isLoading) {
     return (
       <AdminLayout>
-        <div className="flex justify-center items-center h-full">
-          <div className="animate-spin h-8 w-8 border-4 border-black rounded-full border-t-transparent"></div>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       </AdminLayout>
     );
   }
-
+  
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <button
-          onClick={() => navigate('/admin/products')}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
-        >
-          <ArrowLeft size={16} className="mr-1" />
-          Back to Products
-        </button>
-        <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Product' : 'Add New Product'}</h1>
-      </div>
-      
-      {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          </div>
+      <div>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{isEditMode ? 'Edit Product' : 'Add Product'}</h1>
+          <button
+            onClick={() => navigate('/products')}
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center"
+          >
+            <ArrowLeft size={20} className="mr-2" />
+            Back to Products
+          </button>
         </div>
-      )}
-      
-      <div className="bg-white rounded-lg shadow p-6">
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* Product Name */}
-            <div>
-              <label htmlFor="productname" className="block text-sm font-medium text-gray-700 mb-1">
-                Product Name *
-              </label>
-              <input
-                type="text"
-                id="productname"
-                name="productname"
-                value={formData.productname}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                required
-              />
-            </div>
-            
-            {/* Price */}
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                Price (฿) *
-              </label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                min="0"
-                required
-              />
-            </div>
-            
-            {/* Discount */}
-            <div>
-              <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
-                Discount (decimal: 0.2 = 20%)
-              </label>
-              <input
-                type="number"
-                id="discount"
-                name="discount"
-                value={formData.discount}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                min="0"
-                max="1"
-                step="0.01"
-              />
-            </div>
-            
-            {/* Brand */}
-            <div>
-              <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">
-                Brand *
-              </label>
-              <input
-                type="text"
-                id="brand"
-                name="brand"
-                value={formData.brand}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                required
-              />
-            </div>
-            
-            {/* Gender */}
-            <div>
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
-                Gender *
-              </label>
-              <select
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                required
-              >
-                <option value="Men">Men</option>
-                <option value="Women">Women</option>
-              </select>
-            </div>
-            
-            {/* Category */}
-            <div>
-              <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
-                Category *
-              </label>
-              <select
-                id="category_id"
-                name="category_id"
-                value={formData.category_id}
-                onChange={handleChange}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-                required
-              >
-                <option value="">Select a category</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.categoryname}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
-          {/* Description */}
-          <div className="mb-6">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows="4"
-              className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
-            />
-          </div>
-          
-          {/* Image Upload */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Product Images
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-1 text-center">
-                <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="image-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
-                  >
-                    <span>Upload images</span>
-                    <input
-                      id="image-upload"
-                      name="image-upload"
-                      type="file"
-                      className="sr-only"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                    />
+        
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="productname" className="block text-sm font-medium text-gray-700 mb-1">
+                  Product Name*
+                </label>
+                <input
+                  type="text"
+                  id="productname"
+                  name="productname"
+                  value={formData.productname}
+                  onChange={handleChange}
+                  className={`w-full border rounded-md px-4 py-2 ${errors.productname ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {errors.productname && (
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
+                    <AlertCircle size={14} className="mr-1" />
+                    {errors.productname}
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                    Price*
                   </label>
-                  <p className="pl-1">or drag and drop</p>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    min="0"
+                    step="1"
+                    className={`w-full border rounded-md px-4 py-2 ${errors.price ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.price && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center">
+                      <AlertCircle size={14} className="mr-1" />
+                      {errors.price}
+                    </p>
+                  )}
                 </div>
-                <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF up to 10MB
-                </p>
+                
+                <div>
+                  <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
+                    Discount (0-1)
+                  </label>
+                  <input
+                    type="number"
+                    id="discount"
+                    name="discount"
+                    value={formData.discount}
+                    onChange={handleChange}
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    className={`w-full border rounded-md px-4 py-2 ${errors.discount ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.discount && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center">
+                      <AlertCircle size={14} className="mr-1" />
+                      {errors.discount}
+                    </p>
+                  )}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">
+                    Brand*
+                  </label>
+                  <input
+                    type="text"
+                    id="brand"
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleChange}
+                    className={`w-full border rounded-md px-4 py-2 ${errors.brand ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.brand && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center">
+                      <AlertCircle size={14} className="mr-1" />
+                      {errors.brand}
+                    </p>
+                  )}
+                </div>
+                
+                <div>
+                  <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+                    Gender*
+                  </label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className={`w-full border rounded-md px-4 py-2 ${errors.gender ? 'border-red-500' : 'border-gray-300'}`}
+                  >
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                  </select>
+                  {errors.gender && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center">
+                      <AlertCircle size={14} className="mr-1" />
+                      {errors.gender}
+                    </p>
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
+                  Category*
+                </label>
+                <select
+                  id="category_id"
+                  name="category_id"
+                  value={formData.category_id}
+                  onChange={handleChange}
+                  className={`w-full border rounded-md px-4 py-2 ${errors.category_id ? 'border-red-500' : 'border-gray-300'}`}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id.toString()}>
+                      {category.categoryname}
+                    </option>
+                  ))}
+                </select>
+                {errors.category_id && (
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
+                    <AlertCircle size={14} className="mr-1" />
+                    {errors.category_id}
+                  </p>
+                )}
               </div>
             </div>
             
-            {/* Image Previews */}
-            {imageUrls.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Product Images*
+              </label>
+              
+              <div className="space-y-4">
                 {imageUrls.map((url, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={url}
-                      alt={`Product preview ${index + 1}`}
-                      className="h-24 w-24 object-cover rounded-md"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/100';
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X size={14} />
-                    </button>
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="flex-grow">
+                      <input
+                        type="text"
+                        value={url}
+                        onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                        placeholder={`Image ${index + 1} URL`}
+                        className="w-full border border-gray-300 rounded-md px-4 py-2"
+                      />
+                    </div>
+                    
+                    {url && (
+                      <div className="h-10 w-10 rounded-md overflow-hidden border border-gray-300">
+                        <img 
+                          src={url} 
+                          alt={`Product preview ${index + 1}`} 
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://via.placeholder.com/100';
+                          }}
+                        />
+                      </div>
+                    )}
+                    
+                    {!url && (
+                      <div className="h-10 w-10 rounded-md overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+                        <Image size={20} className="text-gray-400" />
+                      </div>
+                    )}
                   </div>
                 ))}
+                
+                {errors.images && (
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
+                    <AlertCircle size={14} className="mr-1" />
+                    {errors.images}
+                  </p>
+                )}
+                
+                <div className="bg-gray-50 p-4 rounded-md mt-6">
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">Product Image Tips</h3>
+                  <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                    <li>Use high-quality images with good lighting</li>
+                    <li>Show the product from multiple angles</li>
+                    <li>Maintain a consistent aspect ratio (recommended: 3:4)</li>
+                    <li>Use a clean, neutral background</li>
+                    <li>Make sure the product takes up most of the frame</li>
+                  </ul>
+                </div>
               </div>
-            )}
+            </div>
           </div>
           
-          {/* Submit Button */}
-          <div className="flex justify-end mt-8">
+          <div className="mt-8 pt-6 border-t flex justify-end space-x-3">
             <button
               type="button"
-              onClick={() => navigate('/admin/products')}
-              className="mr-4 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              onClick={() => navigate('/products')}
+              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 flex items-center"
+              disabled={isSubmitting}
             >
+              <X size={20} className="mr-2" />
               Cancel
             </button>
+            
             <button
               type="submit"
-              className="bg-black text-white py-2 px-4 rounded-md shadow-sm text-sm font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black flex items-center"
-              disabled={saving}
+              className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+              disabled={isSubmitting}
             >
-              {saving ? (
-                <>
-                  <div className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Saving...
-                </>
-              ) : isEditMode ? 'Update Product' : 'Create Product'}
+              <Save size={20} className="mr-2" />
+              {isSubmitting ? 'Saving...' : isEditMode ? 'Update Product' : 'Add Product'}
             </button>
           </div>
         </form>

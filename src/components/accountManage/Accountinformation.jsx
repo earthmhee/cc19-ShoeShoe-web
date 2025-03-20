@@ -128,8 +128,8 @@ const AccountInformation = () => {
 			</div>
 
 			{/* Account Info Form */}
-			<form onSubmit={handleAccountSubmit} className="mb-8 ">
-				<div className="grid md:grid-cols-2 gap-x-8 gap-y-6 ">
+			<form onSubmit={handleAccountSubmit} className="mb-8">
+				<div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
 					<div>
 						<label
 							htmlFor="firstName"
@@ -233,20 +233,15 @@ const AccountInformation = () => {
 				)}
 			</form>
 
-
 			{/* change password */}
-			<div className="collapse collapse-arrow  bg-base-100 border-base-300 border rounded shadow-xs ">
-				<input
-					type="checkbox"
-					checked={isOpen}
-					onChange={() => setIsOpen(!isOpen)}
-				/>
-				<div className="collapse-title text-md font-semibold text-gray-800 px-6 ">
+			<div className="collapse collapse-arrow bg-base-100 border-base-300 border rounded shadow-xs">
+				<input type="checkbox" />
+				<div className="collapse-title text-md font-semibold text-gray-800 px-6">
 					CREATE NEW PASSWORD
 				</div>
-				<div className="collapse-content text-sm ">
+				<div className="collapse-content text-sm">
 					{/* Set Password Section */}
-					<div className="mt-0 ">
+					<div className="mt-0">
 						<form
 							onSubmit={handleChangePassword}
 							className="bg-white p-6 rounded "
@@ -330,7 +325,6 @@ const AccountInformation = () => {
 					</div>
 				</div>
 			</div>
-
 		</div>
 	);
 };
