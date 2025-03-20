@@ -69,6 +69,10 @@ const userRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Products /> },
+			// { path: "new-arrival", element: <ProductList pageType="new-arrival" /> },
+			// { path: "for-men", element: <ProductList pageType="for-men" /> },
+			// { path: "for-women", element: <ProductList pageType="for-women" /> },
+			// { path: "on-sale", element: <ProductList pageType="on-sale" /> },
 			{
 				path: "account", // children ของ account
 				element: <SubLayoutAccount />,
