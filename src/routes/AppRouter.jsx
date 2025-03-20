@@ -41,10 +41,11 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -59,6 +60,7 @@ const guestRouter = createBrowserRouter([
 
 			{ path: "*", element: <Navigate to="/" /> },
 		],
+		
 	},
 ]);
 
@@ -68,7 +70,8 @@ const userRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{
 				path: "account", // children ของ account
 				element: <SubLayoutAccount />,
@@ -98,6 +101,7 @@ const userRouter = createBrowserRouter([
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -116,20 +120,19 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-		path: "/",
-		children: [
-			{ index: true, element: <AdminDashboard /> },
-			{ path: "products", element: <AdminProducts /> },
-			{ path: "products/new", element: <ProductForm /> },
-			{ path: "products/edit/:id", element: <ProductForm /> },
-			{ path: "inventory", element: <InventoryManagement /> },
-			{ path: "orders", element: <OrderManagement /> },
-			{ path: "orders/:id", element: <OrderDetail /> },
-			{ path: "users", element: <UserManagement /> },
-			{ path: "*", element: <Navigate to="/" /> },
-		],
+	  path: "/", // Change the base path to "/admin"
+	  children: [
+		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
+		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
+		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
+		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
+		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
+		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
+		{ path: "users", element: <UserManagement /> }, // /admin/users 
+		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
+	  ],
 	},
-]);
+  ]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
