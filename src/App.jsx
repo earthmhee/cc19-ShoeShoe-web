@@ -8,7 +8,7 @@ import {
 import "./App.css";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
-import CheckoutCardMockup from "./pages/Checkoutmockup";
+// import CheckoutCardMockup from "./pages/Checkoutmockup";
 import ResponsiveNavigation from "./components/Sidebar";
 import AccountSidebar from "./components/accountManage/Accountsidebar";
 import AccountDashboard from "./components/accountManage/Accountdashboard";
@@ -30,13 +30,13 @@ function App() {
 		<div>
 			<CartProvider>
 				<ResponsiveNavigation />
-				<div className="h-fit mt-2">
+				<div className="h-fit mt-2 ">
 					<Outlet />
 				</div>
 				<Footer />
 				<SignedIn>
 					<UserChatProvider>
-						<UserChatWidget/>
+						<UserChatWidget />
 					</UserChatProvider>
 				</SignedIn>
 			</CartProvider>

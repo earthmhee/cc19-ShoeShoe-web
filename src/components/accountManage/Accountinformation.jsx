@@ -25,6 +25,7 @@ const AccountInformation = () => {
 	const navigate = useNavigate();
 	const { isSignedIn, isLoaded: authLoaded, getToken } = useAuth();
 	const { user, isLoaded: userLoaded } = useUser();
+	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		if (isSignedIn && userLoaded && user) {
@@ -118,7 +119,8 @@ const AccountInformation = () => {
 	};
 
 	return (
-		<div className="w-full max-w-4xl ">
+		<div className="w-full max-w-4xl mx-auto flex flex-col min-h-screen">
+
 			<div className="border-b border-gray-300 pb-2 mb-6">
 				<h1 className="text-2xl font-bold text-gray-800">
 					MY ACCOUNT INFORMATION
