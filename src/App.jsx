@@ -8,7 +8,7 @@ import {
 import "./App.css";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
-import CheckoutCardMockup from "./pages/Checkoutmockup";
+// import CheckoutCardMockup from "./pages/Checkoutmockup";
 import ResponsiveNavigation from "./components/Sidebar";
 import AccountSidebar from "./components/accountManage/Accountsidebar";
 import AccountDashboard from "./components/accountManage/Accountdashboard";

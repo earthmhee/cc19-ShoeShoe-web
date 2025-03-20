@@ -4,6 +4,7 @@ import { getProductById } from "../api/product";
 import useCartStore from "../stores/useCartStore";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 import axios from "axios";
+import CheckoutCard from "../assets/Checkoutcard";
 
 // API URL - replace with your actual API URL
 const API_URL = "http://localhost:8001/api";
@@ -23,6 +24,9 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Checkout popup state
+  const [showCheckoutPopup, setShowCheckoutPopup] = useState(false);
+  
   // Toast notification states
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -38,6 +42,24 @@ const ProductDetail = () => {
     setTimeout(() => {
       setShowToast(false);
     }, 3000);
+  };
+
+  // Checkout popup handlers
+  const handleClosePopup = () => {
+    setShowCheckoutPopup(false);
+  };
+
+  const handleContinueShopping = (newQuantity) => {
+    // Update quantity if changed in popup
+    if (newQuantity !== quantity) {
+      setQuantity(newQuantity);
+    }
+    setShowCheckoutPopup(false);
+  };
+
+  const handleViewCart = () => {
+    setShowCheckoutPopup(false);
+    navigate("/cart");
   };
 
   // Check if product is in wishlist on component mount
@@ -306,8 +328,8 @@ const ProductDetail = () => {
     const success = await addToCart(product, selectedSizeObj, quantity, token);
     
     if (success) {
-      // Show success message
-      showToastMessage('Product added to cart successfully!', 'success');
+      // Show checkout popup instead of toast
+      setShowCheckoutPopup(true);
     }
   };
 
@@ -628,6 +650,17 @@ const ProductDetail = () => {
           )}
         </div>
       </div>
+      
+      {/* Checkout Popup */}
+      {showCheckoutPopup && product && (
+        <CheckoutCard
+          product={product}
+          quantity={quantity}
+          onClose={handleClosePopup}
+          onContinue={handleContinueShopping}
+          onViewCart={handleViewCart}
+        />
+      )}
       
       {/* Toast notification */}
       {showToast && (

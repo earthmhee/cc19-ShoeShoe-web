@@ -8,12 +8,13 @@ import {
 	SignUpButton,
 	UserButton,
 } from "@clerk/clerk-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UpArrowIcon, UserIcon } from "../icons";
 import UserProfileForSideBar from "./UserProfileForSideBar";
 import useUserStore from "../stores/userStore";
 import UserProfileForNavBar from "./UserProfileForNavBar";
 import CartIcon from "./CartIcon";
+import { Hand } from "lucide-react";
 
 function ResponsiveNavigation() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,8 @@ function ResponsiveNavigation() {
 	const toggleSidebar = () => {
 		setIsOpen(!isOpen);
 	};
+
+	const navigate = useNavigate()
 
 	// Parse the image string into an array
 	const parseImages = (imagesString) => {
@@ -78,9 +81,14 @@ function ResponsiveNavigation() {
 		setShowUserMenu(!showUserMenu);
 	};
 
+		const handleNavigate = (path) => {
+			navigate(path)
+		}
+
+
 	// Menu data structure
 	const menuItems = [
-		{ id: "new-arrival", label: "NEW ARRIVAL", hasChildren: false },
+		{ id: "new-arrival", label: "NEW ARRIVAL", hasChildren: false, path: "/products" },
 		{
 			id: "shop",
 			label: "SHOP",
@@ -88,37 +96,28 @@ function ResponsiveNavigation() {
 			children: [
 				{
 					heading: "Category",
-					items: [
-						"Accessories",
-						"Bags",
-						"Hats",
-						"Jackets",
-						"Jeans",
-						"Jerseys",
-						"Pants",
+					items: [		
 						"Sneakers",
-						"Shirts",
-						"Shoe Care",
-						"Shorts",
-						"Socks",
-						"T-Shirts",
-						"Hoodies",
-						"Magazine",
-						"Kids",
-						"Sales",
+						"Slippers",
+						"Sandals",
+						"Sneakers",
+						"Sports",											
 					],
 				},
 				{
 					heading: "Brands",
 					items: [
-						"Carnival",
+					
 						"Nike",
 						"Adidas",
 						"Asics",
 						"Converse",
+						"Crocs",
+						"Hoka",
+						"Lacoste",
 						"New Balance",
-						"Tower Box",
-						"Crep Protect",
+						"On",
+						"Under Armour",
 					],
 				},
 			],
@@ -130,7 +129,7 @@ function ResponsiveNavigation() {
 			children: [
 				{
 					heading: "",
-					items: ["View All", "Men", "Women", "Sneakers", "Sandals", "Sale"],
+					items: ["View All", "Men", "Women", "Sneakers", "Sandals", "Sports", "Slipper", "Sale"],
 				},
 			],
 		},
@@ -141,14 +140,7 @@ function ResponsiveNavigation() {
 			children: [
 				{
 					heading: "",
-					items: [
-						"Carnival",
-						"Footwear",
-						"Sneakers",
-						"Apparel",
-						"Accessories",
-						"Sale",
-					],
+					items: ["View All","Sneakers", "Sandals", "Sports", "Slipper","Sale",],
 				},
 			],
 		},
@@ -159,14 +151,7 @@ function ResponsiveNavigation() {
 			children: [
 				{
 					heading: "",
-					items: [
-						"View All",
-						"Carnival",
-						"Footwear",
-						"Apparel",
-						"Accessories",
-						"Sale",
-					],
+					items: ["View All","Sneakers", "Sandals", "Sports", "Slipper","Sale",],
 				},
 			],
 		},
@@ -197,17 +182,17 @@ function ResponsiveNavigation() {
 
 
 							<button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
-								<Link to="/home" className="flex items-center">
-									<a><ShoeshoeLogo /></a>
-								</Link>
+								<div className="flex items-center">
+									<a href="/home"><ShoeshoeLogo /></a>
+								</div>
 							</button>
 
 
 
 							<nav className="flex space-x-6 ">
 								{menuItems.map((item) => (
-									<div key={item.id} className="relative group">
-
+									<div key={item.id} className="relative group" onClick={() => handleNavigate(item.path)}>
+											 
 										<div className="py-2 text-sm cursor-pointer flex items-center font-normal hover:scale-105"
 											onMouseEnter={() => item.hasChildren && toggleTopSubmenu(item.id)}
 											onMouseLeave={() => item.hasChildren && toggleTopSubmenu(item.id)}

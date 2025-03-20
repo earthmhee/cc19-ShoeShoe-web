@@ -41,13 +41,11 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
 			
-			//Home Page
-			{ path: "/home", element: <Home /> },
-
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -72,7 +70,8 @@ const userRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{
 				path: "account", // children ของ account
 				element: <SubLayoutAccount />,
@@ -102,9 +101,7 @@ const userRouter = createBrowserRouter([
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-
-			//Home Page
-			{ path: "/home", element: <Home /> },
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
