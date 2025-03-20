@@ -362,26 +362,43 @@ function ResponsiveNavigation() {
         </div>
       </div>
 
-      {/* Sidebar - visible when isOpen=true on mobile or small screens */}
-      <div
-        className={`fixed inset-y-0 left-0 transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:hidden transition duration-200 ease-in-out z-30 w-64 bg-white shadow-lg overflow-y-auto`}
-        aria-hidden={!isOpen}
-      >
-        <div className="flex flex-col h-full">
-          {/* Top navigation */}
-          <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-            <div className="flex items-center space-x-4">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="text-sm font-medium">Sign in</button>
-                </SignInButton>
+			{/* Sidebar - visible when isOpen=true on mobile or small screens */}
+			<div
+				className={`fixed inset-y-0 left-0 transform ${
+					isOpen ? "translate-x-0" : "-translate-x-full"
+				} lg:hidden transition duration-200 ease-in-out z-30 w-64 bg-white shadow-lg overflow-y-auto`}
+				aria-hidden={!isOpen}
+			>
+				<div className="flex flex-col h-full">
+					{/* Top navigation */}
+					<div className="flex border-b border-gray-200">
+						<SignedOut>
+							<SignInButton
+								mode="modal"
+								appearance={{
+									elements: {
+										footer: { display: "none" },
+									},
+								}}
+							>
+								<button className="  w-full h-full rounded-none shadow-none bg-black text-white flex-1 py-4 text-center text-md  font-medium border-r border-r-white hover:cursor-pointer hover:bg-gray-900">
+									Sign in
+								</button>
+							</SignInButton>
 
-                <SignUpButton mode="modal">
-                  <button className="text-sm font-medium">Register</button>
-                </SignUpButton>
-              </SignedOut>
+							<SignUpButton
+								mode="modal"
+								appearance={{
+									elements: {
+										footer: { display: "none" },
+									},
+								}}
+							>
+								<button className=" w-full h-full rounded-none shadow-none bg-black text-white flex-1 py-4 border-l border-l-white text-center text-md  font-medium hover:cursor-pointer hover:bg-gray-900">
+									Register
+								</button>
+							</SignUpButton>
+						</SignedOut>
 
               <SignedIn>
                 <UserProfileForSideBar />
@@ -464,19 +481,13 @@ function ResponsiveNavigation() {
   </div>
 </div>
 
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black/[70%] bg-opacity-50 z-20"
-          onClick={toggleSidebar}
-          aria-hidden="true"
-        ></div>
-      )}
-    </div>
+     
+  
   );
 }
 
 export default ResponsiveNavigation;
+
 
 
 // import React, { useState } from "react";

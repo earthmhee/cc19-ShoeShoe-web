@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import OrderImg from "./OrderImg"; // Import the OrderImg component
@@ -179,7 +179,7 @@ const ViewOrder = () => {
 
 					{/* Total Amount */}
 					<p className="mt-2 text-md font-medium">
-						Total: ฿{order.total_amount}
+						Total: ฿{Number(order.total_amount).toLocaleString()}
 					</p>
 
 					{/* Card Actions */}
@@ -190,9 +190,11 @@ const ViewOrder = () => {
 
 					<div className="card-actions mt-4 flex justify-end">
 						{order.payment_status === "Unpaid" && (
-							<button className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105">
-								Continue to payment
-							</button>
+							<Link to={`/checkout/${order.id}`}>
+								<button className="btn bg-black btn-sm text-white rounded hover:bg-gray-700 transition delay-50 duration-100 ease-in-out hover:scale-105">
+									Continue to payment
+								</button>
+							</Link>
 						)}
 						{order.shipment_status === "Pending" &&
 							order.payment_status === "Unpaid" && (
