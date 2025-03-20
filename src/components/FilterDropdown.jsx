@@ -16,10 +16,10 @@ const FilterDropdown = ({ label, options, selected, onChange }) => {
 	};
 
 	return (
-		<div className="dropdown dropdown-bottom flex items-center gap-2">
+		<div className="dropdown dropdown-bottom gap-1 flex items-center w-full">
 			<label
 				tabIndex={0}
-				className="btn btn-outline border-gray-300 bg-transparent text-black hover:bg-gray-100 max-w-[150px] truncate"
+				className="btn btn-outline bg-black border-none rounded text-white hover:bg-gray-800 w-full truncate "
 				style={{ fontFamily: "'Lexend', sans-serif", fontWeight: 300 }}
 			>
 				{selected ? `${label}: ${selected}` : label}
@@ -27,7 +27,7 @@ const FilterDropdown = ({ label, options, selected, onChange }) => {
 			{selected && (
 				<button
 					onClick={handleResetClick}
-					className="text-gray-500 hover:text-gray-700"
+					className="text-white bg-black hover:text-gray-100 hover:bg-gray-800 hover:cursor-pointer"
 					aria-label="Reset filter"
 				>
 					<IoClose size={16} />
@@ -35,7 +35,7 @@ const FilterDropdown = ({ label, options, selected, onChange }) => {
 			)}
 			<ul
 				tabIndex={0}
-				className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10"
+				className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10 "
 			>
 				<li>
 					<a onClick={() => handleOptionClick("")}>All</a>

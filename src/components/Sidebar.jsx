@@ -207,7 +207,7 @@ function ResponsiveNavigation() {
 	];
 
 	return (
-		<div className="flex flex-col ">
+		<div className="flex flex-col sticky -top-5 z-100 ">
 			{/* Mobile menu button - only visible below lg breakpoint */}
 			<button
 				className={`lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md ${

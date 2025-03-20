@@ -43,12 +43,12 @@ const ProductList = ({ pageType }) => {
 	return (
 		<div className="min-h-screen bg-base-100 p-4">
 			{/* Filter Section */}
-			<section className="max-w-7xl mx-auto mb-8">
+			<section className="max-w-7xl mx-auto mb-8 sticky top-20 z-50 bg-white/[50%]">
 				<h1
 					className="text-2xl font-light mb-2"
 					style={{ fontFamily: "'Lexend', sans-serif" }}
 				>
-					NEW COLLECTION
+					COLLECTION
 				</h1>
 				<h2
 					className="text-3xl font-light mb-4"
@@ -56,7 +56,8 @@ const ProductList = ({ pageType }) => {
 				>
 					{pageTitle.toUpperCase()}
 				</h2>
-				<div className="flex flex-wrap gap-4">
+
+				<div className="flex justify-between flex-1 gap-6">
 					<FilterDropdown
 						label="Brand"
 						options={brands}
