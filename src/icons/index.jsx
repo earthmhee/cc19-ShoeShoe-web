@@ -2,13 +2,13 @@
 
 export function ShoeshoeLogo() {
     return (
-        <a href="https://www.fontspace.com/category/bold">
+        <div>
             <img
                 src="https://see.fontimg.com/api/rf5/nA4zP/YzY0OWQ5ZWNjNGQxNGE5YmFhNTAzNWQxMGExNDBmNzAudHRm/c2hvZXNob2U/simple-stacked.png?r=fs&h=130&w=2000&fg=000000&bg=FFFFFF&tb=1&s=65"
                 alt="Bold fonts"
                 className="flex text-center items-center justify-center w-28 "
             />
-        </a>
+        </div>
     );
 }
 
@@ -239,6 +239,32 @@ export function DownArrowIcon(props) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
+        </svg>
+    )
+}
+
+export function LeftArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 1024 1024"
+            className="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path d="M768 903.232L717.568 960 256 512 717.568 64 768 120.768 364.928 512z" />
+        </svg>
+    )
+}
+
+export function RightArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 1024 1024"
+            className="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path d="M256 120.768L306.432 64 768 512 306.432 960 256 903.232 659.072 512z" />
         </svg>
     )
 }

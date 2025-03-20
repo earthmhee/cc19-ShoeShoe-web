@@ -2,18 +2,43 @@ import axios from "axios";
 
 // get account data
 export const createMyAccount = async (token) => {
-  return await axios.get("http://localhost:8001/api/user/my-account", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+	return await axios.get("http://localhost:8001/api/user/my-account", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 };
 
 // update role for account
 export const createUpdateAccount = async (token, input) => {
-  return await axios.put("http://localhost:8001/api/user/update-account", input, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+	return await axios.put(
+		"http://localhost:8001/api/user/update-account",
+		input,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
+};
+
+export const changePassword = async (
+	token,
+	newPassword,
+	confirmPassword,
+	signOutOtherDevices
+) => {
+	return await axios.put(
+		"http://localhost:8001/api/user/change-password",
+		{
+			newPassword,
+			confirmPassword,
+			signOutOtherDevices,
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
 };
