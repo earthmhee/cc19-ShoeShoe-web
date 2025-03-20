@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { getAllProduct } from "../api/product";
+import React from "react";
 import { Link } from "react-router";
+import FilterDropdown from "../components/FilterDropdown";
+import useProducts from "../hooks/useProducts";
 
-function ProductCard() {
-	const [products, setProducts] = useState([]);
-	const [isOpen, setIsOpen] = useState(false);
+const ProductList = ({ pageType }) => {
+	const {
+		filteredProducts,
+		brands,
+		categories,
+		priceRanges,
+		sizes,
+		filters,
+		updateFilter,
+	} = useProducts(pageType);
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await getAllProduct();
-				setProducts(response.data?.data);
-			} catch (error) {
-				console.error("Error fetching products:", error);
-			}
-		};
-
-		fetchProducts();
-	}, []);
-
-	const productNameStyle = {
-		fontFamily: "'Lexend', sans-serif",
-		fontWeight: 300,
-	};
-
-	const priceStyle = {
-		fontFamily: "'Lexend', sans-serif",
-		fontWeight: 300,
-	};
-
+	// ฟังก์ชันสำหรับ parse รูปภาพ
 	const parseImages = (imagesString) => {
 		try {
 			if (typeof imagesString === "string") {
@@ -45,29 +31,64 @@ function ProductCard() {
 		}
 	};
 
-	return (
-		<div
-			className={`flex-1 bg-white transition-all duration-200 ${
-				isOpen ? "lg:ml-0" : "ml-0"
-			} lg:pt-0 pt-16`}
-		>
-			<div className="max-w-7xl mx-auto p-4">
-				<div className="mt-8">
-					<h1
-						className="text-2xl font-light mb-2"
-						style={{ fontFamily: "'Lexend', sans-serif" }}
-					>
-						NEW COLLECTION
-					</h1>
-					<h2
-						className="text-3xl font-light mb-8"
-						style={{ fontFamily: "'Lexend', sans-serif" }}
-					>
-						NEW ARRIVAL
-					</h2>
+	const pageTitle =
+		{
+			"new-arrival": "New Arrival",
+			"for-men": "For Men",
+			"for-women": "For Women",
+			"on-sale": "On Sale",
+			all: "All Products",
+		}[pageType] || "All Products";
 
+	return (
+		<div className="min-h-screen bg-base-100 p-4">
+			{/* Filter Section */}
+			<section className="max-w-7xl mx-auto mb-8">
+				<h1
+					className="text-2xl font-light mb-2"
+					style={{ fontFamily: "'Lexend', sans-serif" }}
+				>
+					NEW COLLECTION
+				</h1>
+				<h2
+					className="text-3xl font-light mb-4"
+					style={{ fontFamily: "'Lexend', sans-serif" }}
+				>
+					{pageTitle.toUpperCase()}
+				</h2>
+				<div className="flex flex-wrap gap-4">
+					<FilterDropdown
+						label="Brand"
+						options={brands}
+						selected={filters.brand}
+						onChange={(value) => updateFilter("brand", value)}
+					/>
+					<FilterDropdown
+						label="Category"
+						options={categories}
+						selected={filters.category}
+						onChange={(value) => updateFilter("category", value)}
+					/>
+					<FilterDropdown
+						label="Price"
+						options={priceRanges}
+						selected={filters.price}
+						onChange={(value) => updateFilter("price", value)}
+					/>
+					<FilterDropdown
+						label="Size"
+						options={sizes}
+						selected={filters.size}
+						onChange={(value) => updateFilter("size", value)}
+					/>
+				</div>
+			</section>
+
+			{/* Product Grid */}
+			<div className="max-w-7xl mx-auto">
+				{filteredProducts.length > 0 ? (
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-16">
-						{products.map((product) => {
+						{filteredProducts.map((product) => {
 							const imageArray = parseImages(product.images);
 							const mainImage = imageArray[0] || "";
 
@@ -80,10 +101,9 @@ function ProductCard() {
 									<div className="relative overflow-hidden bg-gray-50 aspect-square">
 										<img
 											src={mainImage}
-											alt={product.name}
+											alt={product.productname}
 											className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
 										/>
-
 										{product.discount && parseFloat(product.discount) > 0 && (
 											<div className="absolute top-2 left-2">
 												<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500 text-white">
@@ -92,11 +112,13 @@ function ProductCard() {
 											</div>
 										)}
 									</div>
-
 									<div className="mt-4 flex flex-col items-center text-center">
 										<span
 											className="text-sm font-medium text-gray-900 truncate w-full"
-											style={productNameStyle}
+											style={{
+												fontFamily: "'Lexend', sans-serif",
+												fontWeight: 300,
+											}}
 										>
 											{product.productname}
 										</span>
@@ -105,10 +127,7 @@ function ProductCard() {
 												<>
 													<span
 														className="text-lg font-semibold"
-														style={{
-															color: "red", // A softer orange-red color
-															marginRight: "8px", // Add space between discount price and original price
-														}}
+														style={{ color: "red", marginRight: "8px" }}
 													>
 														฿
 														{(
@@ -131,10 +150,12 @@ function ProductCard() {
 							);
 						})}
 					</div>
-				</div>
+				) : (
+					<p className="text-center text-lg">No products found.</p>
+				)}
 			</div>
 		</div>
 	);
-}
+};
 
-export default ProductCard;
+export default ProductList;
