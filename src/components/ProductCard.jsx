@@ -1,30 +1,96 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { getAllProduct } from "../api/product";
 import { Link } from "react-router";
 
 function ProductCard() {
-	const [products, setProducts] = useState([]);
+	const [allProducts, setAllProducts] = useState([]);
+	const [displayedProducts, setDisplayedProducts] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
+	const observer = useRef();
+	const ITEMS_PER_PAGE = 12;
+	const currentPage = useRef(1);
+	const LOADING_DELAY = 1000; // 1 second delay to see loading state
 
+	// Fetch all products once
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
+				setLoading(true);
 				const response = await getAllProduct();
-				setProducts(response.data?.data);
+
+				// Simulate network delay
+				await new Promise((resolve) => setTimeout(resolve, LOADING_DELAY));
+
+				const products = response.data?.data || [];
+				setAllProducts(products);
+
+				// Initialize with first page of products
+				const initialProducts = products.slice(0, ITEMS_PER_PAGE);
+				setDisplayedProducts(initialProducts);
+				setHasMore(products.length > ITEMS_PER_PAGE);
+				setLoading(false);
 			} catch (error) {
 				console.error("Error fetching products:", error);
+				setLoading(false);
 			}
 		};
 
 		fetchProducts();
 	}, []);
 
-	const productNameStyle = {
-		fontFamily: "'Lexend', sans-serif",
-		fontWeight: 300,
-	};
+	// Load more products (client-side pagination)
+	const loadMoreProducts = useCallback(() => {
+		if (loading || !hasMore) return;
 
-	const priceStyle = {
+		setLoading(true);
+
+		// Simulate network delay
+		setTimeout(() => {
+			// Calculate next page
+			const nextPage = currentPage.current + 1;
+			const startIndex = (nextPage - 1) * ITEMS_PER_PAGE;
+			const endIndex = nextPage * ITEMS_PER_PAGE;
+
+			// Get next batch of products
+			const nextProducts = allProducts.slice(startIndex, endIndex);
+
+			// Update state
+			if (nextProducts.length > 0) {
+				setDisplayedProducts((prev) => [...prev, ...nextProducts]);
+				currentPage.current = nextPage;
+				setHasMore(endIndex < allProducts.length);
+			} else {
+				setHasMore(false);
+			}
+
+			setLoading(false);
+		}, LOADING_DELAY);
+	}, [allProducts, loading, hasMore]);
+
+	// Setup the intersection observer for infinite scrolling
+	const lastProductElementRef = useCallback(
+		(node) => {
+			if (loading) return;
+
+			if (observer.current) observer.current.disconnect();
+
+			observer.current = new IntersectionObserver(
+				(entries) => {
+					if (entries[0].isIntersecting && hasMore) {
+						loadMoreProducts();
+					}
+				},
+				{ threshold: 0.5 }
+			);
+
+			if (node) observer.current.observe(node);
+		},
+		[loading, hasMore, loadMoreProducts]
+	);
+
+	const productNameStyle = {
 		fontFamily: "'Lexend', sans-serif",
 		fontWeight: 300,
 	};
@@ -66,16 +132,29 @@ function ProductCard() {
 						NEW ARRIVAL
 					</h2>
 
+					{/* Initial loading state */}
+					{loading && displayedProducts.length === 0 && (
+						<div className="flex flex-col items-center justify-center py-20">
+							<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mb-4"></div>
+							<p className="text-gray-600">Loading products...</p>
+						</div>
+					)}
+
+					{/* Products grid */}
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-16">
-						{products.map((product) => {
+						{displayedProducts.map((product, index) => {
 							const imageArray = parseImages(product.images);
 							const mainImage = imageArray[0] || "";
+
+							// Add ref to the last element for infinite scrolling
+							const isLastElement = displayedProducts.length === index + 1;
 
 							return (
 								<Link
 									to={`/product/${product.id}`}
 									key={product.id}
 									className="group relative cursor-pointer transition-all duration-300"
+									ref={isLastElement ? lastProductElementRef : null}
 								>
 									<div className="relative overflow-hidden bg-gray-50 aspect-square">
 										<img
@@ -106,8 +185,8 @@ function ProductCard() {
 													<span
 														className="text-lg font-semibold"
 														style={{
-															color: "red", // A softer orange-red color
-															marginRight: "8px", // Add space between discount price and original price
+															color: "red",
+															marginRight: "8px",
 														}}
 													>
 														฿
@@ -131,6 +210,27 @@ function ProductCard() {
 							);
 						})}
 					</div>
+
+					{/* Loading more indicator */}
+					{loading && displayedProducts.length > 0 && (
+						<div className="flex justify-center mt-12 mb-8">
+							<div className="flex flex-col items-center">
+								<div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900 mb-2"></div>
+								<p className="text-gray-600 text-sm">
+									Loading more products...
+								</p>
+							</div>
+						</div>
+					)}
+
+					{/* End of results message */}
+					{!hasMore && displayedProducts.length > 0 && !loading && (
+						<div className="text-center mt-12 mb-8 py-4 border-t border-gray-200">
+							<p className="text-gray-500">
+								You've reached the end of the collection
+							</p>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
