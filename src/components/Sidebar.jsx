@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAllProduct } from "../api/product";
 import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	SignOutButton,
-	SignUpButton,
-	UserButton,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
+  UserButton,
 } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router";
 import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UpArrowIcon, UserIcon } from "../icons";
@@ -30,52 +30,52 @@ function ResponsiveNavigation() {
 
 	const navigate = useNavigate()
 
-	// Parse the image string into an array
-	const parseImages = (imagesString) => {
-		try {
-			if (typeof imagesString === "string") {
-				return JSON.parse(imagesString);
-			}
-			return imagesString || [];
-		} catch (error) {
-			// Fallback if the string isn't valid JSON
-			return (
-				imagesString
-					?.replace(/^\[|\]$/g, "")
-					.split(",")
-					.map((url) => url.replace(/^"|"$/g, "")) || []
-			);
-		}
-	};
+  // Parse the image string into an array
+  const parseImages = (imagesString) => {
+    try {
+      if (typeof imagesString === "string") {
+        return JSON.parse(imagesString);
+      }
+      return imagesString || [];
+    } catch (error) {
+      // Fallback if the string isn't valid JSON
+      return (
+        imagesString
+          ?.replace(/^\[|\]$/g, "")
+          .split(",")
+          .map((url) => url.replace(/^"|"$/g, "")) || []
+      );
+    }
+  };
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await getAllProduct();
-				setProducts(response.data.data || []);
-				console.log(response.data.data);
-			} catch (error) {
-				console.log("Error fetching products:", error);
-				setProducts([]); // Fallback to empty array on error
-			}
-		};
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllProduct();
+        setProducts(response.data.data || []);
+        console.log(response.data.data);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+        setProducts([]); // Fallback to empty array on error
+      }
+    };
 
-		fetchProducts();
-	}, []);
+    fetchProducts();
+  }, []);
 
-	const toggleSubmenu = (menuId) => {
-		setExpandedMenus((prev) => ({
-			...prev,
-			[menuId]: !prev[menuId],
-		}));
-	};
+  const toggleSubmenu = (menuId) => {
+    setExpandedMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
+    }));
+  };
 
-	const toggleTopSubmenu = (menuId) => {
-		setExpandedTopMenus((prev) => ({
-			...prev,
-			[menuId]: !prev[menuId],
-		}));
-	};
+  const toggleTopSubmenu = (menuId) => {
+    setExpandedTopMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
+    }));
+  };
 
 	const toggleUserMenu = () => {
 		setShowUserMenu(!showUserMenu);
@@ -249,17 +249,17 @@ function ResponsiveNavigation() {
 								<SearchIcon className="w-6 h-6 cursor-pointer" />
 							</button>
 
-							{/* User icon and dropdown */}
-							<UserProfileForNavBar />
+              {/* User icon and dropdown */}
+              <UserProfileForNavBar />
 
-							{/* chart button */}
-							<button className="p-2 text-gray-700">
-								<CartIcon />
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+              {/* chart button */}
+              <button className="p-2 text-gray-700">
+                <CartIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 			{/* Sidebar - visible when isOpen=true on mobile or small screens */}
 			<div
@@ -284,10 +284,16 @@ function ResponsiveNavigation() {
 							</SignUpButton>
 						</SignedOut>
 
-						<SignedIn>
-							<UserProfileForSideBar />
-						</SignedIn>
-					</div>
+              <SignedIn>
+                <UserProfileForSideBar />
+              </SignedIn>
+            </div>
+
+            {/* Cart Icon */}
+            <div className="flex items-center">
+              <CartIcon />
+            </div>
+          </div>
 
 					{/* Menu items */}
 					<nav className="flex-1 overflow-y-auto mt-4 ">
@@ -347,16 +353,9 @@ function ResponsiveNavigation() {
 
 
 
-			{/* Overlay for mobile */}
-			{isOpen && (
-				<div
-					className="lg:hidden fixed inset-0 bg-black/[70%] bg-opacity-50 z-20"
-					onClick={toggleSidebar}
-					aria-hidden="true"
-				></div>
-			)}
-		</div>
-	);
+     
+  
+  );
 }
 
 export default ResponsiveNavigation;
