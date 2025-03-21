@@ -14,80 +14,8 @@ function Membership() {
         </ul>
       </div>
 
-      {/* Membership Information */}
       <div className='ml-5 text-sm'>
-        <h2>CARNIVAL MEMBERSHIP (For English version please see below.)</h2>
-        <br />
-
-        <h3 className="font-semibold">ระดับสถานะ MEMBER</h3>
-        <br />
-        <h3 className="font-semibold">SILVER MEMBER</h3>
-        <br />
-        <p>สำหรับลูกค้าใหม่ เมื่อท่านลงทะเบียนสมาชิกผ่านทางเว็บไซต์ หรือ Application ท่านจะได้สิทธิ์ในการเป็น Silver Member โดยจะสามารถสะสมคะแนนได้ทันที (บัตรสมาชิกจะแสดงอยู่ใน Application)</p>
-        <p>**คะแนนสะสมจะเกิดจากการซื้อสินค้าที่หน้าร้าน และทางออนไลน์ โดยทุกการซื้อสินค้า 100 บาท จะเท่ากับ 1 คะแนน (1 คะแนน = 1 บาท)**</p>
-        <br />
-
-        <h3 className="font-semibold">GOLD MEMBER (Vip Member เดิม)</h3>
-        <br />
-        <h3 className="font-semibold">สิทธิประโยชน์สำหรับสมาชิก GOLD MEMBER</h3>
-        <ul className="list-disc ml-5">
-          <li>รับส่วนลด 10% สำหรับสินค้าที่เข้าร่วมรายการ</li>
-          <li>GOLD MEMBERSHIP มีอายุการใช้งาน 2 ปี</li>
-          <li>**เพื่อรับสิทธิต่างๆ ลูกค้าจะต้องแสดงบัตร MEMBER ใน Application เท่านั้น**</li>
-        </ul>
-        <br />
-
-        <h3 className="font-semibold">เงื่อนไขการเปลี่ยนสถานะสมาชิกจาก SILVER สู่ GOLD</h3>
-        <p>**ใช้คะแนนสะสมในบัญชี 150 คะแนนในการเปลี่ยนสถานะสมาชิก**</p>
-        <h4 className="font-semibold">วิธีการกดแลกสถานะ</h4>
-        <p>**สามารถทำได้ด้วยตัวเอง**</p>
-
-        <h4 className="font-semibold">การเปลี่ยนสถานะบนแอพพลิเคชั่น</h4>
-        <ol className="list-decimal ml-5">
-          <li>กดเลือกหัวข้อ ME</li>
-          <li>กดเลือกหัวข้อ “ข้อมูลผู้ใช้” (ACCOUNT INFORMATION)</li>
-          <li>กดเลือก UPGRADE สถานะเพื่อเปลี่ยนเป็น GOLD MEMBERSHIP (ใช้คะแนนสะสมในบัญชี 150 คะแนน)</li>
-        </ol>
-        <br />
-
-        <h4 className="font-semibold">การเปลี่ยนสถานะบนเว็บไซต์</h4>
-        <ol className="list-decimal ml-5">
-          <li>กดเลือกหัวข้อ บัญชีของฉัน (MY ACCOUNT)</li>
-          <li>กดเลือกหัวข้อ “ข้อมูลผู้ใช้” (ACCOUNT INFORMATION)</li>
-          <li>กดเลือก UPGRADE สถานะเพื่อเปลี่ยนเป็น GOLD MEMBERSHIP (ใช้คะแนนสะสมในบัญชี 150 คะแนน)</li>
-        </ol>
-        <br />
-
-        <h3 className="font-semibold">วิธีการต่ออายุสมาชิก</h3>
-        <p>**ใช้คะแนนสะสมในบัญชี 100 คะแนนเพื่อต่ออายุสมาชิก**</p>
-
-        <h4 className="font-semibold">การต่อสถานะสมาชิก GOLD บนแอพพลิเคชั่น</h4>
-        <ol className="list-decimal ml-5">
-          <li>กดเลือกหัวข้อ ME</li>
-          <li>กดเลือกหัวข้อ “ข้อมูลผู้ใช้” (ACCOUNT INFORMATION)</li>
-          <li>กดเลือก RENEW สถานะเพื่อเปลี่ยนเป็น GOLD MEMBERSHIP (ใช้คะแนนสะสมในบัญชี 100 คะแนน)</li>
-        </ol>
-        <br />
-
-        <h4 className="font-semibold">การต่อสถานะสมาชิก GOLD บนเว็บไซต์</h4>
-        <ol className="list-decimal ml-5">
-          <li>กดเลือกหัวข้อ บัญชีของฉัน (MY ACCOUNT)</li>
-          <li>กดเลือกหัวข้อ “ข้อมูลผู้ใช้” (ACCOUNT INFORMATION)</li>
-          <li>กดเลือก RENEW สถานะเพื่อเปลี่ยนเป็น GOLD MEMBERSHIP (ใช้คะแนนสะสมในบัญชี 100 คะแนน)</li>
-        </ol>
-        <br />
-
-        <p>หากมีข้อสงสัยเกี่ยวกับการสมัครสมาชิกท่านสามารถติดต่อเบอร์ Hotline ได้ที่ 02-114-7423</p>
-      </div>
-
-      <hr className="my-5" />
-
-      {/* English Version */}
-      <div className='ml-5 text-sm'>
-        <h2 className="font-bold">ENGLISH VERSION</h2>
-        <br />
-
-        <h3 className="font-semibold">SILVER MEMBERSHIP</h3>
+        <h2 className="font-semibold">SILVER MEMBERSHIP</h2>
         <p>For new customers, your account will be SILVER MEMBERSHIP after registration through the Carnival website or application. With this level, you can collect and earn points at your first purchase in Carnival.</p>
         <br />
 

@@ -11,11 +11,13 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useAuth } from "@clerk/clerk-react";
+import { useNavigate } from 'react-router';
 import AdminLayout from '../../layouts/AdminLayout';
-import createAuthenticatedRequest from '../../services/api'; // Import your API client
+import createAuthenticatedRequest from '../../services/api'; 
 
 const UserManagement = () => {
   const { getToken } = useAuth();
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -135,10 +137,8 @@ const UserManagement = () => {
   };
 
   const handleViewDetails = (customerId) => {
-    // Navigate to customer details page or open a modal
-    alert(`View details for customer ID: ${customerId}`);
-    // You could use React Router navigation here
-    // navigate(`/admin/customers/${customerId}`);
+    // Navigate to customer details page
+    navigate(`/users/${customerId}`);
   };
 
   // Column definition for table headers

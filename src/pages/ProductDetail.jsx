@@ -4,6 +4,7 @@ import { getProductById } from "../api/product";
 import useCartStore from "../stores/useCartStore";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 import axios from "axios";
+import CheckoutCard from "../assets/Checkoutcard";
 
 // API URL - replace with your actual API URL
 const API_URL = "http://localhost:8001/api";
@@ -23,6 +24,9 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Checkout popup state
+  const [showCheckoutPopup, setShowCheckoutPopup] = useState(false);
+  
   // Toast notification states
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -38,6 +42,24 @@ const ProductDetail = () => {
     setTimeout(() => {
       setShowToast(false);
     }, 3000);
+  };
+
+  // Checkout popup handlers
+  const handleClosePopup = () => {
+    setShowCheckoutPopup(false);
+  };
+
+  const handleContinueShopping = (newQuantity) => {
+    // Update quantity if changed in popup
+    if (newQuantity !== quantity) {
+      setQuantity(newQuantity);
+    }
+    setShowCheckoutPopup(false);
+  };
+
+  const handleViewCart = () => {
+    setShowCheckoutPopup(false);
+    navigate("/cart");
   };
 
   // Check if product is in wishlist on component mount
@@ -306,8 +328,8 @@ const ProductDetail = () => {
     const success = await addToCart(product, selectedSizeObj, quantity, token);
     
     if (success) {
-      // Show success message
-      showToastMessage('Product added to cart successfully!', 'success');
+      // Show checkout popup instead of toast
+      setShowCheckoutPopup(true);
     }
   };
 
@@ -610,8 +632,35 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
+
+          {/* Debug Information - Remove in production */}
+          {process.env.NODE_ENV === "development" && (
+            <div className="mt-8 p-4 bg-gray-100 rounded-md">
+              <h3 className="font-bold">Debug Info:</h3>
+              <p>Product ID: {product.id}</p>
+              <p>Stock Items: {product.stock ? product.stock.length : 0}</p>
+              <p>Selected Size: {selectedSize}</p>
+              <details>
+                <summary>Raw Product Data</summary>
+                <pre className="text-xs mt-2 overflow-auto max-h-40">
+                  {JSON.stringify(product, null, 2)}
+                </pre>
+              </details>
+            </div>
+          )}
         </div>
       </div>
+      
+      {/* Checkout Popup */}
+      {showCheckoutPopup && product && (
+        <CheckoutCard
+          product={product}
+          quantity={quantity}
+          onClose={handleClosePopup}
+          onContinue={handleContinueShopping}
+          onViewCart={handleViewCart}
+        />
+      )}
       
       {/* Toast notification */}
       {showToast && (

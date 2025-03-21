@@ -12,6 +12,7 @@ import ProductForm from "../pages/admin/ProductForm";
 import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
+import UserDetail from "../pages/admin/UserDetail"
 import HowtoOrder from "../pages/FooterPages/Howtoorder";
 import Membership from "../pages/FooterPages/Membership";
 import Policies from "../pages/FooterPages/Policies";
@@ -32,7 +33,6 @@ import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 import CartPage from "../pages/CartPage";
 import OrderDetail from "../pages/admin/OrderDetail";
 import Payment from "../pages/Payment";
-import CheckoutComplete from "../pages/CheckoutStatus"
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -40,10 +40,11 @@ const guestRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -58,6 +59,7 @@ const guestRouter = createBrowserRouter([
 
 			{ path: "*", element: <Navigate to="/" /> },
 		],
+		
 	},
 ]);
 
@@ -67,7 +69,8 @@ const userRouter = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ index: true, element: <Products /> },
+			{ index: true, element: <Home /> },
+			{ path: "/products", element: <Products /> },
 			{
 				path: "account", // children ของ account
 				element: <SubLayoutAccount />,
@@ -97,6 +100,7 @@ const userRouter = createBrowserRouter([
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -125,10 +129,11 @@ const adminRouter = createBrowserRouter([
 			{ path: "orders", element: <OrderManagement /> },
 			{ path: "orders/:id", element: <OrderDetail /> },
 			{ path: "users", element: <UserManagement /> },
+			{ path: "users/:id", element: <UserDetail /> },
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
-]);
+  ]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
