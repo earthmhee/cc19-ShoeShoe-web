@@ -43,7 +43,7 @@ const ProductList = ({ pageType }) => {
 	return (
 		<div className="min-h-screen bg-base-100 p-4">
 			{/* Filter Section */}
-			<section className="max-w-7xl mx-auto mb-8 sticky top-20 z-50 bg-white/[50%]">
+			<section className="max-w-7xl mx-auto mb-8 sticky top-18 z-50 bg-white py-3">
 				<h1
 					className="text-2xl font-light mb-2"
 					style={{ fontFamily: "'Lexend', sans-serif" }}
