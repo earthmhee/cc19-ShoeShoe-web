@@ -1,14 +1,13 @@
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { checkOutStatus } from "../api/payment";
-// import { createAlert } from "@/utils/createAlert";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 
 const CheckoutComplete = () => {
-  const navigate = useNavigate();
-  const { session } = useParams();
-  const { getToken } = useAuth();
-  const [status, setStatus] = useState(null);
+	const navigate = useNavigate();
+	const { session } = useParams();
+	const { getToken } = useAuth();
+	const [status, setStatus] = useState(null);
 
   useEffect(() => {
     // code
@@ -28,10 +27,10 @@ const CheckoutComplete = () => {
     }
   };
 
-  if (status === "open") {
-    return <Navigate to="/" />;
-  }
+	if (status === "open") {
+		return <Navigate to="/" />;
+	}
 
-  return <div>Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...Loading...</div>;
+	return <div>Loading...</div>;
 };
 export default CheckoutComplete;

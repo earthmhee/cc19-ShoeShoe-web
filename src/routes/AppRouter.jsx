@@ -21,16 +21,18 @@ import ShippingPolicy from "../pages/FooterPages/ShippingPolicy";
 import StatusTracking from "../pages/FooterPages/StatusTracking";
 import AboutUs from "../pages/FooterPages/AboutUs";
 
-import CheckoutTest from "../pages/CheckoutTest"
-import CheckoutComplete from "../pages/CheckoutStatus";
-
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
 import SubLayoutAccount from "../layouts/subLayoutAccount";
 import Addressbook from "../components/accountManage/Addressbook";
+import MyOrders from "../components/ordersAndWishList/MyOrders";
+import WishList from "../components/ordersAndWishList/WishList";
+import ViewOrder from "../components/ordersAndWishList/ViewOrder";
+import CartPage from "../pages/CartPage";
+import CheckoutComplete from "../pages/CheckoutStatus";
 import OrderDetail from "../pages/admin/OrderDetail";
-
+import Payment from "../pages/Payment";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -57,7 +59,6 @@ const guestRouter = createBrowserRouter([
 
 			{ path: "*", element: <Navigate to="/login" /> },
 		],
-		
 	},
 ]);
 
@@ -75,11 +76,28 @@ const userRouter = createBrowserRouter([
 					{ index: true, element: <AccountInfo /> },
 					{ path: "update", element: <AccountUpdate /> },
 					{ path: "address", element: <Addressbook /> },
+					{ path: "wishList", element: <WishList /> },
+					{
+						path: "orders",
+						children: [
+							{ index: true, element: <MyOrders /> },
+							{ path: ":id", element: <ViewOrder /> },
+						],
+					},
+				],
+			},
+			{
+				path: "checkout",
+				children: [
+					{ path: ":id", element: <Payment /> },
+					{
+						path: "checkout-status/:session",
+						element: <CheckoutComplete />,
+					},
 				],
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
-			{ path: "checkout/:id", element: <CheckoutTest />},
-			{ path: "checkout-status/:session", element: <CheckoutComplete />},
+			{ path: "/cart", element: <CartPage /> },
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -98,20 +116,20 @@ const userRouter = createBrowserRouter([
 
 const adminRouter = createBrowserRouter([
 	{
-	  path: "/", // Change the base path to "/admin"
-	  children: [
-		{ index: true, element: <AdminDashboard /> }, // This renders at /admin
-		{ path: "products", element: <AdminProducts /> }, // This will be /admin/products
-		{ path: "products/new", element: <ProductForm /> }, // /admin/products/new
-		{ path: "products/edit/:id", element: <ProductForm /> }, // /admin/products/edit/:id
-		{ path: "inventory", element: <InventoryManagement /> }, // /admin/inventory
-		{ path: "orders", element: <OrderManagement /> }, // /admin/orders
-		{ path: "orders/:id", element: <OrderDetail /> },
-		{ path: "users", element: <UserManagement /> }, // /admin/users 
-		{ path: "*", element: <Navigate to="/admin" /> }, // Redirect to /admin
-	  ],
+		path: "/",
+		children: [
+			{ index: true, element: <AdminDashboard /> },
+			{ path: "products", element: <AdminProducts /> },
+			{ path: "products/new", element: <ProductForm /> },
+			{ path: "products/edit/:id", element: <ProductForm /> },
+			{ path: "inventory", element: <InventoryManagement /> },
+			{ path: "orders", element: <OrderManagement /> },
+			{ path: "orders/:id", element: <OrderDetail /> },
+			{ path: "users", element: <UserManagement /> },
+			{ path: "*", element: <Navigate to="/" /> },
+		],
 	},
-  ]);
+]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();
