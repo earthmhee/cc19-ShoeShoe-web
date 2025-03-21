@@ -21,7 +21,7 @@ import FAQS from "../pages/FooterPages/FAQS";
 import ShippingPolicy from "../pages/FooterPages/ShippingPolicy";
 import StatusTracking from "../pages/FooterPages/StatusTracking";
 import AboutUs from "../pages/FooterPages/AboutUs";
-
+import CheckoutComplete from "../pages/CheckoutStatus";
 import { ClerkLoaded, useAuth, useUser } from "@clerk/clerk-react";
 import AccountInfo from "../pages/account/AccountInfo";
 import AccountUpdate from "../pages/account/AccountUpdate";
