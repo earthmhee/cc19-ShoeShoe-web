@@ -25,13 +25,14 @@ import UserChatProvider from "./components/chat/UserChatProvider";
 import UserChatWidget from "./components/chat/UserChatWidget";
 import "./components/chat/UserChat.css";
 
+
 function App() {
 	return (
 		<div>
 			<CartProvider>
 				<ResponsiveNavigation />
 				<div className="h-fit mt-2 ">
-					<Outlet />
+					<Outlet /> 
 				</div>
 				<Footer />
 				<SignedIn>
