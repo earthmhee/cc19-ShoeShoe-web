@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAllProduct } from "../api/product";
 import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	SignOutButton,
-	SignUpButton,
-	UserButton,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
+  UserButton,
 } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router";
 import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UpArrowIcon, UserIcon } from "../icons";
@@ -30,60 +30,60 @@ function ResponsiveNavigation() {
 
 	const navigate = useNavigate()
 
-	// Parse the image string into an array
-	const parseImages = (imagesString) => {
-		try {
-			if (typeof imagesString === "string") {
-				return JSON.parse(imagesString);
-			}
-			return imagesString || [];
-		} catch (error) {
-			// Fallback if the string isn't valid JSON
-			return (
-				imagesString
-					?.replace(/^\[|\]$/g, "")
-					.split(",")
-					.map((url) => url.replace(/^"|"$/g, "")) || []
-			);
-		}
-	};
+  // Parse the image string into an array
+  const parseImages = (imagesString) => {
+    try {
+      if (typeof imagesString === "string") {
+        return JSON.parse(imagesString);
+      }
+      return imagesString || [];
+    } catch (error) {
+      // Fallback if the string isn't valid JSON
+      return (
+        imagesString
+          ?.replace(/^\[|\]$/g, "")
+          .split(",")
+          .map((url) => url.replace(/^"|"$/g, "")) || []
+      );
+    }
+  };
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await getAllProduct();
-				setProducts(response.data.data || []);
-				console.log(response.data.data);
-			} catch (error) {
-				console.log("Error fetching products:", error);
-				setProducts([]); // Fallback to empty array on error
-			}
-		};
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllProduct();
+        setProducts(response.data.data || []);
+        console.log(response.data.data);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+        setProducts([]); // Fallback to empty array on error
+      }
+    };
 
-		fetchProducts();
-	}, []);
+    fetchProducts();
+  }, []);
 
-	const toggleSubmenu = (menuId) => {
-		setExpandedMenus((prev) => ({
-			...prev,
-			[menuId]: !prev[menuId],
-		}));
-	};
+  const toggleSubmenu = (menuId) => {
+    setExpandedMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
+    }));
+  };
 
-	const toggleTopSubmenu = (menuId) => {
-		setExpandedTopMenus((prev) => ({
-			...prev,
-			[menuId]: !prev[menuId],
-		}));
-	};
+  const toggleTopSubmenu = (menuId) => {
+    setExpandedTopMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
+    }));
+  };
 
 	const toggleUserMenu = () => {
 		setShowUserMenu(!showUserMenu);
 	};
 
-		const handleNavigate = (path) => {
-			navigate(path)
-		}
+	const handleNavigate = (path) => {
+		navigate(path)
+	}
 
 
 	// Menu data structure
@@ -159,35 +159,43 @@ function ResponsiveNavigation() {
 	];
 
 	return (
-		<div className="flex flex-col ">
-
-			{/* Mobile menu button - only visible below lg breakpoint */}
-			<button
-				className={`lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white opacity-50 hover:opacity-100 cursor-pointer shadow-md ${isOpen ? "translate-x-72" : "-translate-x-0"
-					} transition duration-200 ease-in-out`}
-				onClick={toggleSidebar}
-				aria-label="Toggle sidebar"
-			>
-				{isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6 " />}
-			</button>
+		<div className="flex flex-col">
+      {/* Mobile sticky header - always visible on mobile */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 bg-white shadow-md z-40 flex justify-between items-center px-4 py-2">
+        <div className="flex items-center">
+          <button
+            className="mr-2 p-2 text-gray-700"
+            onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
+          >
+            {isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6" />}
+          </button>
+          
+          <a href="/home" className="flex items-center">
+            <ShoeshoeLogo className="h-8" />
+          </a>
+        </div>
+        
+        <div className="flex items-center space-x-3">
+          <button className="text-gray-700">
+            <SearchIcon className="w-6 h-6" />
+          </button>
+          <CartIcon />
+        </div>
+      </div>
 
 			{/* Top Navbar - only visible on lg screens and above */}
 			<div className="hidden lg:block bg-white shadow-md z-30">
-
 				<div className="containerflex items-center gap-10">
 					{/* Top navigation */}
 					<div className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
 
 						<div className="flex items-center">
-
-
 							<button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
 								<div className="flex items-center">
 									<a href="/home"><ShoeshoeLogo /></a>
 								</div>
 							</button>
-
-
 
 							<nav className="flex space-x-6 ">
 								{menuItems.map((item) => (
@@ -249,27 +257,27 @@ function ResponsiveNavigation() {
 								<SearchIcon className="w-6 h-6 cursor-pointer" />
 							</button>
 
-							{/* User icon and dropdown */}
-							<UserProfileForNavBar />
+              {/* User icon and dropdown */}
+              <UserProfileForNavBar />
 
-							{/* chart button */}
-							<button className="p-2 text-gray-700">
-								<CartIcon />
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+              {/* chart button */}
+              <button className="p-2 text-gray-700">
+                <CartIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 			{/* Sidebar - visible when isOpen=true on mobile or small screens */}
 			<div
 				className={`fixed inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-					} lg:hidden transition duration-200 ease-in-out z-30 w-74 bg-white shadow-lg overflow-y-auto`}
+					} lg:hidden transition duration-200 ease-in-out z-30 w-74 bg-white shadow-lg overflow-y-auto pt-14`} /* Added pt-14 to make space for fixed header */
 				aria-hidden={!isOpen}
 			>
-				<div className="flex flex-col h-full ">
+				<div className="flex flex-col h-full">
 					{/* Top navigation */}
-					<div className="flex border-b  border-gray-200 ">
+					<div className="flex border-b border-gray-200">
 						<SignedOut>
 							<SignInButton mode="modal">
 								<button className="flex-1 py-4 text-center text-sm cursor-pointer hover:font-semibold text-md relative before:absolute before:right-0 before:top-[20%] before:h-[60%] before:w-[1px] before:bg-gray-200">
@@ -284,13 +292,13 @@ function ResponsiveNavigation() {
 							</SignUpButton>
 						</SignedOut>
 
-						<SignedIn>
-							<UserProfileForSideBar />
-						</SignedIn>
-					</div>
+            <SignedIn>
+              <UserProfileForSideBar />
+            </SignedIn>
+          </div>
 
 					{/* Menu items */}
-					<nav className="flex-1 overflow-y-auto mt-4 ">
+					<nav className="flex-1 overflow-y-auto mt-4">
 						{menuItems.map((item) => (
 							<div key={item.id}>
 								<div
@@ -343,20 +351,8 @@ function ResponsiveNavigation() {
 					</div>
 				</div>
 			</div>
-
-
-
-
-			{/* Overlay for mobile */}
-			{isOpen && (
-				<div
-					className="lg:hidden fixed inset-0 bg-black/[70%] bg-opacity-50 z-20"
-					onClick={toggleSidebar}
-					aria-hidden="true"
-				></div>
-			)}
 		</div>
-	);
+  );
 }
 
 export default ResponsiveNavigation;
