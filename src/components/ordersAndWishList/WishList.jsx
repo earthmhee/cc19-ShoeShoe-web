@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@clerk/clerk-react';
-import WishlistCard from '../../components/WishlistCard';
-import axios from 'axios';
-
-// Hardcoded API URL - replace this with your actual API URL
-const API_URL = "http://localhost:8001/api";
+import { Link } from 'react-router';
+import WishlistCard from '../WishlistCard';
+import { getWishlist, removeFromWishlist } from '../../api/wishlist';
 
 function WishList() {
   const { getToken, isSignedIn } = useAuth();
@@ -12,68 +10,56 @@ function WishList() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch wishlist data on component mount
-  useEffect(() => {
-    const fetchWishlist = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        if (!isSignedIn) {
-          setIsLoading(false);
-          return;
-        }
-        
-        const token = await getToken();
-        console.log("Fetching wishlist with token...");
-        
-        const response = await axios.get(`${API_URL}/wishlist`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        
-        console.log("Wishlist response:", response.data);
-        
-        if (response.data && response.data.data && response.data.data.wishlistItems) {
-          setWishlistItems(response.data.data.wishlistItems);
-        } else {
-          setWishlistItems([]);
-        }
-      } catch (err) {
-        console.error('Failed to fetch wishlist:', err);
-        setError('Failed to load your wishlist. Please try again later.');
-      } finally {
+  // Use the API function to fetch wishlist data
+  const fetchWishlist = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      if (!isSignedIn) {
         setIsLoading(false);
+        return;
       }
-    };
-
-    fetchWishlist();
+      
+      const token = await getToken();
+      const response = await getWishlist(token);
+      
+      // Use optional chaining for cleaner access to nested properties
+      const items = response?.data?.wishlistItems || [];
+      console.log("Parsed wishlist items:", items);
+      setWishlistItems(items);
+    } catch (err) {
+      console.error('Failed to fetch wishlist:', err);
+      setError('Failed to load your wishlist. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
   }, [getToken, isSignedIn]);
 
-  // Remove an item from the wishlist
+  // Fetch wishlist data on component mount
+  useEffect(() => {
+    fetchWishlist();
+  }, [fetchWishlist]);
+
+  // Remove an item from the wishlist using the API function
   const handleRemoveItem = async (productId) => {
     try {
       if (!isSignedIn) return;
       
-      setIsLoading(true);
       const token = await getToken();
-      
-      await axios.delete(`${API_URL}/wishlist/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await removeFromWishlist(token, productId);
       
       // Update state to remove the item
       setWishlistItems(prevItems => 
-        prevItems.filter(item => item.product_id !== productId)
+        prevItems.filter(item => {
+          // Check both possible ID locations
+          const itemProductId = item.product_id || (item.product && item.product.id);
+          return itemProductId !== productId;
+        })
       );
     } catch (err) {
       console.error('Failed to remove item from wishlist:', err);
       setError('Failed to remove item from wishlist. Please try again.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -92,7 +78,7 @@ function WishList() {
       <div className="text-center py-8">
         <p className="text-red-500 text-lg">{error}</p>
         <button 
-          onClick={() => window.location.reload()}
+          onClick={fetchWishlist}
           className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
         >
           Try Again
@@ -108,7 +94,7 @@ function WishList() {
         <h2 className="text-2xl font-semibold mb-4">Your Wishlist is Empty</h2>
         <p className="text-gray-600 mb-6">Browse our products and add your favorites!</p>
         <a 
-          href="/"
+          href="/products"
           className="inline-block px-6 py-3 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition"
         >
           Browse Products
@@ -117,19 +103,27 @@ function WishList() {
     );
   }
 
-  // Render wishlist
+  // Render wishlist with grid layout
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-8 border-b pb-2">My Wishlist</h1>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {wishlistItems.map(item => (
-          <WishlistCard
-            key={item.id}
-            product={item.product}
-            onRemove={handleRemoveItem}
-          />
-        ))}
+      {/* Grid layout that respects the fixed card width (w-40) */}
+      <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
+        {wishlistItems.map(item => {
+          // Get the correct product ID
+          const productId = item.product_id || (item.product && item.product.id);
+          
+          return (
+            <div key={item.id || productId}>
+              <WishlistCard
+                product={item.product}
+                productId={productId}
+                onRemove={handleRemoveItem}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export const checkout = async (token, id) => {
 
 export const checkOutStatus = async (token, session) => {
 	return await axios.post(
-		`http://localhost:8001/api/payment/checkout-status/${session}`,
+		`http://localhost:8001/api/payment/checkout-status/${session}`, {},
 		{
 			headers: {
 				Authorization: `Bearer ${token}`,

@@ -15,24 +15,27 @@ function ShippingPolicy() {
       </div>
 
       <div>
-        <h2 className='text-2xl mb-5'>Shipping</h2>
-        <h2 className='text-2xl mb-5'>การจัดส่งสินค้าภายในประเทศ</h2>
+        <h2 className='font-semibold text-2xl mb-5'>Shipping</h2>
+        <h2 className='font-semibold text-2xl mb-5'>Domestic Shipping</h2>
 
         <ul className="list-disc ml-5 mb-20">
-          <li>สินค้าทั่วไป จัดส่งภายใน 1-2 วันทำการ ไม่รวมวันเสาร์อาทิตย์และวันหยุดนักขัตฤกษ์</li>
-          <li>สินค้า Special Collection จัดส่งภายใน 3-5 วันทำการ ไม่รวมวันเสาร์อาทิตย์และวันหยุดนักขัตฤกษ์</li>
-          <li>สินค้า Pre-order จัดส่งตามวันเวลาที่ได้ทำการประกาศเอาไว้ (สามารถดูข้อมูลได้ที่ facebook ของทางร้าน หรือสามารถดูได้ที่ตัวสินค้าตอนทำรายการสั่งซื้อสินค้านั้นๆ)</li>
-          <p>หากท่านไม่ได้รับสินค้าหรือต้องการสอบถามข้อมูลเพิ่มเติมกรุณาติดต่อที่ Call center 02-114-7423 หรือทาง inbox facebook และ ทาง line : @shoeshoebkk เวลา 10.00 - 19.00 น</p>
+          <li>General products: Shipped within 1-2 business days (excluding weekends and public holidays).</li>
+          <li>Special Collection products: Shipped within 3-5 business days (excluding weekends and public holidays).</li>
+          <li>Pre-order products: Shipped according to the announced schedule (please check our Facebook page or the product details at the time of purchase).</li>
+          <p>If you do not receive your order or need further assistance, please contact our Call Center at 02-114-7423, via Facebook inbox, or through LINE: @shoeshoebkk from 10:00 AM - 7:00 PM.</p>
         </ul>
 
-        <h2 className='text-2xl mb-5'>SHOESHOE ใช้บริการขนส่งของบริษัท Kerry Express ในการส่งสินค้าภายในประเทศไทย</h2>
-        <p className='mb-3'>ลูกค้าจำเป็นต้องให้เบอร์โทรศัพท์มือถือที่ติดต่อได้ เนื่องจากทาง Kerry Express จะโทรเข้าไปก่อนจะเข้าไปส่งสินค้า หากทาง Kerry ไม่สามารถติดต่อลูกค้าได้ หรือ ลูกค้าไม่สามารถรับโทรศัพท์ได้
-          Kerry Express จะติดเข้าไปใหม่ หากภายใน 1-2 วันทาง Kerry ยังติดต่อลูกค้าไม่ได้ ทาง Kerry จะไม่สามารถส่งสินค้าได้และจะส่งสินค้าคืนมายัง SHOESHOE
-        </p>
+        <h2 className='font-semibold text-2xl mb-5'>Shipping Information</h2>
+        <p className='mb-3'>SHOESHOE uses Kerry Express for domestic shipping.</p>
+        <p className='mb-3'>Customers must provide a valid mobile phone number, as Kerry Express will call before delivering the package.</p>
+        <ul className="list-disc ml-5 mb-20">
+          <li>If Kerry Express cannot reach the customer or the customer is unable to answer the call, they will attempt to contact again.</li>
+          <li>If Kerry Express is still unable to reach the customer within 1-2 days, the package will be returned to SHOESHOE.</li>
+        </ul>
 
-        <p lassName='mb-3'>**ตรวจสอบสถานการณ์จัดส่งได้ทาง  https://th.kerryexpress.com/en/track/</p>
+        <p lassName='mb-3'>📦 Track your shipment here: https://th.kerryexpress.com/en/track/</p>
 
-        <p>หากลูกค้าไม่สะดวกรับโทรศัพท์จาก Kerry Express ลูกค้าสามารถแจ้งให้ทางเราส่งด้วย ไปรษณีย์ไทย (EMS) ได้เช่นกัน โดยไม่มีค่าใช้จ่ายเพิ่ม (ระยะเวลาในการส่งของ EMS โดยปกติจะช้ากว่า Kerry Express)</p>
+        <p>If you are unable to receive calls from Kerry Express, you may request delivery via Thailand Post (EMS) at no additional cost (EMS delivery usually takes longer than Kerry Express).</p>
       </div>
 
     </div>
