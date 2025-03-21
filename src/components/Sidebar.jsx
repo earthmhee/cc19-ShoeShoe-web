@@ -9,7 +9,16 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router";
-import { CloseIcon, DownArrowIcon, MenuIcon, SearchIcon, ShoeshoeLogo, ShoppingCartIcon, UpArrowIcon, UserIcon } from "../icons";
+import {
+	CloseIcon,
+	DownArrowIcon,
+	MenuIcon,
+	SearchIcon,
+	ShoeshoeLogo,
+	ShoppingCartIcon,
+	UpArrowIcon,
+	UserIcon,
+} from "../icons";
 import UserProfileForSideBar from "./UserProfileForSideBar";
 import useUserStore from "../stores/userStore";
 import UserProfileForNavBar from "./UserProfileForNavBar";
@@ -28,7 +37,7 @@ function ResponsiveNavigation() {
 		setIsOpen(!isOpen);
 	};
 
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
   // Parse the image string into an array
   const parseImages = (imagesString) => {
@@ -82,130 +91,81 @@ function ResponsiveNavigation() {
 	};
 
 	const handleNavigate = (path) => {
-		navigate(path)
-	}
-
+		navigate(path);
+	};
 
 	// Menu data structure
 	const menuItems = [
-		{ id: "new-arrival", label: "NEW ARRIVAL", hasChildren: false, path: "/products" },
+		{
+			id: "new-arrival",
+			label: "NEW ARRIVAL",
+			hasChildren: false,
+			path: "/new-arrival",
+		},
 		{
 			id: "shop",
 			label: "SHOP",
-			hasChildren: true,
-			children: [
-				{
-					heading: "Category",
-					items: [		
-						"Sneakers",
-						"Slippers",
-						"Sandals",
-						"Sneakers",
-						"Sports",											
-					],
-				},
-				{
-					heading: "Brands",
-					items: [
-					
-						"Nike",
-						"Adidas",
-						"Asics",
-						"Converse",
-						"Crocs",
-						"Hoka",
-						"Lacoste",
-						"New Balance",
-						"On",
-						"Under Armour",
-					],
-				},
-			],
-		},
-		{
-			id: "footwear",
-			label: "FOOTWEAR",
-			hasChildren: true,
-			children: [
-				{
-					heading: "",
-					items: ["View All", "Men", "Women", "Sneakers", "Sandals", "Sports", "Slipper", "Sale"],
-				},
-			],
+			hasChildren: false,
+			path: "/products",
 		},
 		{
 			id: "men",
 			label: "MEN",
-			hasChildren: true,
-			children: [
-				{
-					heading: "",
-					items: ["View All","Sneakers", "Sandals", "Sports", "Slipper","Sale",],
-				},
-			],
+			hasChildren: false,
+			path: "/for-men",
 		},
 		{
 			id: "women",
 			label: "WOMEN",
-			hasChildren: true,
-			children: [
-				{
-					heading: "",
-					items: ["View All","Sneakers", "Sandals", "Sports", "Slipper","Sale",],
-				},
-			],
+			hasChildren: false,
+			path: "/for-women",
 		},
-		{ id: "sale", label: "SALE", hasChildren: false },
+		{ id: "sale", label: "SALE", hasChildren: false, path: "/on-sale" },
 	];
 
 	return (
-		<div className="flex flex-col">
-      {/* Mobile sticky header - always visible on mobile */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 bg-white shadow-md z-40 flex justify-between items-center px-4 py-2">
-        <div className="flex items-center">
-          <button
-            className="mr-2 p-2 text-gray-700"
-            onClick={toggleSidebar}
-            aria-label="Toggle sidebar"
-          >
-            {isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6" />}
-          </button>
-          
-          <a href="/home" className="flex items-center">
-            <ShoeshoeLogo className="h-8" />
-          </a>
-        </div>
-        
-        <div className="flex items-center space-x-3">
-          <button className="text-gray-700">
-            <SearchIcon className="w-6 h-6" />
-          </button>
-          <CartIcon />
-        </div>
-      </div>
+		<div className="flex flex-col sticky top-0 z-100 ">
+			{/* Mobile menu button - only visible below lg breakpoint */}
+			<button
+				className={`lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white opacity-50 hover:opacity-100 cursor-pointer shadow-md ${
+					isOpen ? "translate-x-72" : "-translate-x-0"
+				} transition duration-200 ease-in-out`}
+				onClick={toggleSidebar}
+				aria-label="Toggle sidebar"
+			>
+				{isOpen ? <CloseIcon className="w-6" /> : <MenuIcon className="w-6 " />}
+			</button>
 
 			{/* Top Navbar - only visible on lg screens and above */}
 			<div className="hidden lg:block bg-white shadow-md z-30">
 				<div className="containerflex items-center gap-10">
 					{/* Top navigation */}
 					<div className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
-
 						<div className="flex items-center">
 							<button className="flex mr-6 px-6 py-3 transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
 								<div className="flex items-center">
-									<a href="/home"><ShoeshoeLogo /></a>
+									<a href="/home">
+										<ShoeshoeLogo />
+									</a>
 								</div>
 							</button>
 
 							<nav className="flex space-x-6 ">
 								{menuItems.map((item) => (
-									<div key={item.id} className="relative group" onClick={() => handleNavigate(item.path)}>
-											 
-										<div className="py-2 text-sm cursor-pointer flex items-center font-normal hover:scale-105"
-											onMouseEnter={() => item.hasChildren && toggleTopSubmenu(item.id)}
-											onMouseLeave={() => item.hasChildren && toggleTopSubmenu(item.id)}
+									<div
+										key={item.id}
+										className="relative group"
+										onClick={() => handleNavigate(item.path)}
+									>
+										<div
+											className="py-2 text-sm cursor-pointer flex items-center font-normal hover:scale-105"
+											onMouseEnter={() =>
+												item.hasChildren && toggleTopSubmenu(item.id)
+											}
+											onMouseLeave={() =>
+												item.hasChildren && toggleTopSubmenu(item.id)
+											}
 										>
-
 											{item.label}
 											{item.hasChildren}
 										</div>
@@ -214,8 +174,12 @@ function ResponsiveNavigation() {
 										{item.hasChildren && expandedTopMenus[item.id] && (
 											<div
 												className="absolute left-0 w-64 bg-white shadow-lg rounded-md border z-50"
-												onMouseEnter={() => item.hasChildren && toggleTopSubmenu(item.id)}
-												onMouseLeave={() => item.hasChildren && toggleTopSubmenu(item.id)}
+												onMouseEnter={() =>
+													item.hasChildren && toggleTopSubmenu(item.id)
+												}
+												onMouseLeave={() =>
+													item.hasChildren && toggleTopSubmenu(item.id)
+												}
 											>
 												<div className=" inline-flex space-x-8 p-4">
 													{item.children.map((section, idx) => (
@@ -271,8 +235,9 @@ function ResponsiveNavigation() {
 
 			{/* Sidebar - visible when isOpen=true on mobile or small screens */}
 			<div
-				className={`fixed inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-					} lg:hidden transition duration-200 ease-in-out z-30 w-74 bg-white shadow-lg overflow-y-auto pt-14`} /* Added pt-14 to make space for fixed header */
+				className={`fixed inset-y-0 left-0 transform ${
+					isOpen ? "translate-x-0" : "-translate-x-full"
+				} lg:hidden transition duration-200 ease-in-out z-30 w-74 bg-white shadow-lg overflow-y-auto`}
 				aria-hidden={!isOpen}
 			>
 				<div className="flex flex-col h-full">
@@ -292,63 +257,71 @@ function ResponsiveNavigation() {
 							</SignUpButton>
 						</SignedOut>
 
-            <SignedIn>
-              <UserProfileForSideBar />
-            </SignedIn>
-          </div>
-
-					{/* Menu items */}
-					<nav className="flex-1 overflow-y-auto mt-4">
-						{menuItems.map((item) => (
-							<div key={item.id}>
-								<div
-									className="py-1 px-4 text-xs flex justify-between items-center cursor-pointer hover:font-semibold"
-									onClick={() => item.hasChildren && toggleSubmenu(item.id)}
-								>
-									<span>{item.label}</span>
-									{item.hasChildren && (
-										expandedMenus[item.id] ? <UpArrowIcon className="w-6" /> : <DownArrowIcon className="w-6" />
-									)}
-								</div>
-
-								{/* Submenu */}
-								{item.hasChildren && expandedMenus[item.id] && (
-									<div className="bg-gray-50 py-2 px-4 text-sm ">
-										{item.children.map((section, idx) => (
-											<div key={idx} className="mb-4">
-												{section.heading && (
-													<h4 className="font-medium text-1xl mb-2 uppercase">
-														{section.heading}
-													</h4>
-												)}
-												<ul className="space-y-2">
-													{section.items.map((subItem, subIdx) => (
-														<li
-															key={subIdx}
-															className=" hover:underline cursor-pointer text-xs"
-														>
-															{subItem}
-														</li>
-													))}
-												</ul>
-											</div>
-										))}
-									</div>
-								)}
-							</div>
-						))}
-					</nav>
-
-					{/* Language selector */}
-					<div className="py-3 px-4 border-t border-gray-200 flex justify-between items-center">
-						<span className="text-sm font-medium">LANGUAGE</span>
-						<button
-							className="text-sm font-medium"
-							onClick={() => setLanguage(language === "TH" ? "EN" : "TH")}
-						>
-							{language}
-						</button>
+						<SignedIn>
+							<UserProfileForSideBar />
+						</SignedIn>
 					</div>
+
+					{/* Cart Icon */}
+					<div className="flex items-center">
+						<CartIcon />
+					</div>
+				</div>
+
+				{/* Menu items */}
+				<nav className="flex-1 overflow-y-auto mt-4 ">
+					{menuItems.map((item) => (
+						<div key={item.id}>
+							<div
+								className="py-1 px-4 text-xs flex justify-between items-center cursor-pointer hover:font-semibold"
+								onClick={() => item.hasChildren && toggleSubmenu(item.id)}
+							>
+								<span>{item.label}</span>
+								{item.hasChildren &&
+									(expandedMenus[item.id] ? (
+										<UpArrowIcon className="w-6" />
+									) : (
+										<DownArrowIcon className="w-6" />
+									))}
+							</div>
+
+							{/* Submenu */}
+							{item.hasChildren && expandedMenus[item.id] && (
+								<div className="bg-gray-50 py-2 px-4 text-sm ">
+									{item.children.map((section, idx) => (
+										<div key={idx} className="mb-4">
+											{section.heading && (
+												<h4 className="font-medium text-1xl mb-2 uppercase">
+													{section.heading}
+												</h4>
+											)}
+											<ul className="space-y-2">
+												{section.items.map((subItem, subIdx) => (
+													<li
+														key={subIdx}
+														className=" hover:underline cursor-pointer text-xs"
+													>
+														{subItem}
+													</li>
+												))}
+											</ul>
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+					))}
+				</nav>
+
+				{/* Language selector */}
+				<div className="py-3 px-4 border-t border-gray-200 flex justify-between items-center">
+					<span className="text-sm font-medium">LANGUAGE</span>
+					<button
+						className="text-sm font-medium"
+						onClick={() => setLanguage(language === "TH" ? "EN" : "TH")}
+					>
+						{language}
+					</button>
 				</div>
 			</div>
 		</div>
