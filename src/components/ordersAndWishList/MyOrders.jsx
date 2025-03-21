@@ -143,7 +143,7 @@ const MyOrders = () => {
 
 								{/* Total Amount */}
 								<p className="mt-2 text-md font-medium">
-									Total: ฿{order.total_amount}
+									Total: ฿{Number(order.total_amount).toLocaleString()}
 								</p>
 
 								{/* Card Actions */}

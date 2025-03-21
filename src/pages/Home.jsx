@@ -1,19 +1,19 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
-import useUserStore from "../stores/userStore";
+import React from 'react'
+import News from '../components/home-components/News';
+import Beands from '../components/home-components/Beands';
+import PhotoGallery from '../components/home-components/PhotoGallery';
+
 
 function Home() {
-	const logout = useUserStore((state) => state.logout);
-	const role = useUserStore((state) => state.role);
-	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		const timer = setTimeout(() => setIsLoading(false), 100);
-		return () => clearTimeout(timer);
-	}, []);
+	return (
+		<div>
+			<News />
 
-	return <div className="">home</div>;
+			<PhotoGallery />
+			<Beands />
+		</div>
+	);
 }
 
 export default Home;

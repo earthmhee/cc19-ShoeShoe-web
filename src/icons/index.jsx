@@ -166,3 +166,105 @@ export function YoutubeIcon(props) {
         </svg>
     )
 }
+
+export function CloseIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M18 18l-6-6m0 0L6 6m6 6l6-6m-6 6l-6 6"
+                stroke="#000"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+
+export function MenuIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M4 6h16M4 12h16M4 18h16"
+                stroke="#000"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+
+export function UpArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M17 15l-5-5-5 5"
+                stroke="#000"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+
+export function DownArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M7 10l5 5 5-5"
+                stroke="#000"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    )
+}
+
+export function LeftArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 1024 1024"
+            className="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path d="M768 903.232L717.568 960 256 512 717.568 64 768 120.768 364.928 512z" />
+        </svg>
+    )
+}
+
+export function RightArrowIcon(props) {
+    return (
+        <svg
+            viewBox="0 0 1024 1024"
+            className="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path d="M256 120.768L306.432 64 768 512 306.432 960 256 903.232 659.072 512z" />
+        </svg>
+    )
+}

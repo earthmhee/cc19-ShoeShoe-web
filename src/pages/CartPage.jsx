@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router"; // Fixed import
 import useCartStore from "../stores/useCartStore";
 import useUserStore from "../stores/userStore";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, SignInButton } from "@clerk/clerk-react";
 import AddressSelect from "../components/accountManage/AddressSelect";
+import UnPaidOrder from "../components/ordersAndWishList/UnPaidModal";
 
 const CartPage = () => {
 	const {
@@ -38,21 +39,17 @@ const CartPage = () => {
 	const handleCheckout = async () => {
 		if (items.length === 0) return;
 
-		if (!isSignedIn) {
-			alert("กรุณาเข้าสู่ระบบเพื่อดำเนินการสั่งซื้อ");
-			navigate("/login");
-			return;
-		}
-
 		setCheckoutLoading(true);
 		try {
+			if (!isSignedIn) {
+				alert("Please sign in to proceed with the purchase");
+				navigate("/");
+				return;
+			}
 			const token = await getToken();
 
 			const result = await checkout({
 				shippingDetails: selectedAddressId,
-				// city: user?.city || "กรุณาระบุเมือง",
-				// postalCode: user?.postalCode || "10110",
-				// country: "Thailand",
 			});
 
 			if (result) {
@@ -61,7 +58,7 @@ const CartPage = () => {
 			}
 		} catch (error) {
 			console.error("Checkout failed:", error);
-			alert("การสั่งซื้อล้มเหลว กรุณาลองใหม่อีกครั้ง");
+			alert("Checkout failed. Please try again.");
 		} finally {
 			setCheckoutLoading(false);
 		}
@@ -71,34 +68,37 @@ const CartPage = () => {
 		return (
 			<div className="max-w-6xl mx-auto p-6 min-h-[60vh] flex flex-col items-center justify-center">
 				<div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 mb-4"></div>
-				<p>กำลังโหลดตะกร้าสินค้า...</p>
+				<p>Loading cart...</p>
 			</div>
 		);
 	}
 
 	if (items.length === 0) {
 		return (
-			<div className="max-w-6xl mx-auto p-6 min-h-[60vh] flex flex-col items-center justify-center">
-				<h1 className="text-2xl font-bold mb-4">ตะกร้าสินค้าของคุณว่างเปล่า</h1>
+			<div className="max-w-6xl mx-auto p-6 min-h-[80vh] flex flex-col items-center justify-center">
+				<h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
 				<p className="text-gray-600 mb-8">
-					ดูเหมือนว่าคุณยังไม่ได้เพิ่มสินค้าใดๆ ลงในตะกร้า
+					It looks like you haven't added any items to your cart yet.
 				</p>
 				<Link
 					to="/"
-					className="bg-gray-900 text-white py-3 px-8 rounded-md hover:bg-black"
+					className="bg-gray-900 text-white py-3 px-8 mb-4 rounded-md hover:bg-black"
 				>
-					เลือกซื้อสินค้าต่อ
+					Continue Shopping
 				</Link>
+
+				{isSignedIn && <UnPaidOrder />}
 			</div>
 		);
 	}
+	console.log(items);
 
 	return (
 		<div className="max-w-6xl mx-auto p-6">
-			<h1 className="text-2xl font-bold mb-6">ตะกร้าสินค้า</h1>
+			<h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
 
 			{error && (
-				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+				<div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
 					{error}
 				</div>
 			)}
@@ -108,20 +108,26 @@ const CartPage = () => {
 					{items.map((item) => (
 						<div key={item.id} className="flex border-b py-6">
 							<div className="w-24 h-24 flex-shrink-0">
-								<img
-									src={item.image}
-									alt={item.productName}
-									className="w-full h-full object-cover rounded"
-								/>
+								<Link to={`/product/${item.productId}`}>
+									<img
+										src={item.image}
+										alt={item.productName}
+										className="w-full h-full object-cover rounded"
+									/>
+								</Link>
 							</div>
 
 							<div className="ml-4 flex-grow">
 								<div className="flex justify-between">
 									<div>
-										<p className="text-sm text-gray-500">{item.brand}</p>
-										<h3 className="font-medium">{item.productName}</h3>
+										<p className="text-sm text-gray-500 ">{item.brand}</p>
+										<Link to={`/product/${item.productId}`}>
+											<h3 className="font-medium hover:text-red-600">
+												{item.productName}
+											</h3>
+										</Link>
 										<p className="text-sm text-gray-600 mt-1">
-											ไซส์: US {item.sizeUS} ({item.sizeGender})
+											Size: US {item.sizeUS} ({item.sizeGender})
 										</p>
 									</div>
 
@@ -148,7 +154,7 @@ const CartPage = () => {
 											className={`px-3 py-1 text-gray-600 ${
 												item.quantity <= 1 || loading
 													? "bg-gray-100 cursor-not-allowed"
-													: "hover:bg-gray-100"
+													: "hover:bg-gray-100 hover:cursor-pointer"
 											}`}
 										>
 											-
@@ -165,7 +171,7 @@ const CartPage = () => {
 											className={`px-3 py-1 text-gray-600 ${
 												loading
 													? "bg-gray-100 cursor-not-allowed"
-													: "hover:bg-gray-100"
+													: "hover:bg-gray-100 hover:cursor-pointer"
 											}`}
 										>
 											+
@@ -178,7 +184,7 @@ const CartPage = () => {
 											const success = await removeFromCart(item.id, token);
 										}}
 										disabled={loading}
-										className="text-gray-500 hover:text-red-500"
+										className="text-gray-500 hover:text-red-500 hover:cursor-pointer"
 									>
 										Remove
 									</button>
@@ -194,50 +200,71 @@ const CartPage = () => {
 								clearCart(token);
 							}}
 							disabled={loading}
-							className="text-gray-500 hover:text-gray-700"
+							className="text-gray-500 hover:text-gray-700 hover:cursor-pointer"
 						>
-							ล้างตะกร้า
+							Clear Cart
 						</button>
 
 						<Link to="/" className="text-gray-600 hover:text-gray-900">
-							เลือกซื้อสินค้าต่อ
+							Continue Shopping
 						</Link>
 					</div>
 				</div>
 				<div>
-					<AddressSelect onSelectAddress={setSelectedAddressId} />
+					{isSignedIn && (
+						<AddressSelect onSelectAddress={setSelectedAddressId} />
+					)}
 					<div className="bg-gray-50 p-6 rounded-lg h-fit">
-						<h2 className="text-lg font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+						<h2 className="text-lg font-bold mb-4">Order Summary</h2>
 
 						<div className="space-y-2 mb-4">
 							<div className="flex justify-between">
-								<span>ยอดรวม ({totalItems} รายการ)</span>
+								<span>Subtotal ({totalItems} items)</span>
 								<span>{formatPrice(totalPrice)}</span>
 							</div>
 							<div className="flex justify-between">
-								<span>ค่าจัดส่ง</span>
-								<span>ฟรี</span>
+								<span>Shipping Fee</span>
+								<span>Free</span>
 							</div>
 						</div>
 
 						<div className="border-t pt-4 mb-6">
 							<div className="flex justify-between font-bold">
-								<span>ยอดรวมทั้งสิ้น</span>
+								<span>Total</span>
 								<span>{formatPrice(totalPrice)}</span>
 							</div>
 						</div>
 
-						<button
-							onClick={handleCheckout}
-							disabled={loading || checkoutLoading || !selectedAddressId}
-							className={`w-full py-3 px-4 rounded-md font-medium text-center  ${
-								loading || checkoutLoading || !selectedAddressId
-									? "bg-gray-300 text-gray-500 cursor-not-allowed "
-									: "bg-gray-900 text-white hover:bg-black hover:cursor-pointer"
-							}`}
-						>
-							{checkoutLoading ? "กำลังดำเนินการ..." : "ดำเนินการสั่งซื้อ"}
-						</button>
+						{isSignedIn ? (
+							<button
+								onClick={handleCheckout}
+								disabled={loading || checkoutLoading || !selectedAddressId}
+								className={`w-full py-3 px-4 rounded-md font-medium text-center  ${
+									loading || checkoutLoading || !selectedAddressId
+										? "bg-gray-300 text-gray-500 cursor-not-allowed "
+										: "bg-gray-900 text-white hover:bg-black hover:cursor-pointer"
+								}`}
+							>
+								{checkoutLoading ? "Processing..." : "Proceed to Checkout"}
+							</button>
+						) : (
+							<SignInButton
+								mode="modal"
+								appearance={{
+									elements: {
+										// footer: { display: "initial" },
+										// footerAction: { display: "initial" },
+										// footerAction__signIn: { display: "initial" },
+									},
+								}}
+							>
+								<button
+									className={`w-full py-3 px-4 rounded-md font-medium text-center bg-gray-900 text-white hover:bg-black hover:cursor-pointer`}
+								>
+									Proceed to Checkout
+								</button>
+							</SignInButton>
+						)}
 					</div>
 				</div>
 			</div>
