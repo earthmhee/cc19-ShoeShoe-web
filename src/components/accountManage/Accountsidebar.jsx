@@ -47,7 +47,7 @@ const AccountSidebar = () => {
 
   return (
     <nav 
-      className="w-full mx-auto md:max-w-lg lg:max-w-md xl:max-w-lg mt-11 p-6"
+      className="w-full mx-auto md:w-full lg:w-[300px] xl:max-w-[300px] mt-11 p-6"
       aria-label="Account navigation"
     >
       <button
