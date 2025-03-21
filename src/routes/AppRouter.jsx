@@ -12,7 +12,7 @@ import ProductForm from "../pages/admin/ProductForm";
 import InventoryManagement from "../pages/admin/InventoryManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import UserManagement from "../pages/admin/UserManagement";
-import UserDetail from "../pages/admin/UserDetail"
+import UserDetail from "../pages/admin/UserDetail";
 import HowtoOrder from "../pages/FooterPages/Howtoorder";
 import Membership from "../pages/FooterPages/Membership";
 import Policies from "../pages/FooterPages/Policies";
@@ -33,6 +33,7 @@ import ViewOrder from "../components/ordersAndWishList/ViewOrder";
 import CartPage from "../pages/CartPage";
 import OrderDetail from "../pages/admin/OrderDetail";
 import Payment from "../pages/Payment";
+import ProductList from "../pages/ProductList";
 
 // Guest Routes
 const guestRouter = createBrowserRouter([
@@ -44,7 +45,7 @@ const guestRouter = createBrowserRouter([
 			{ path: "/products", element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-			
+
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -59,7 +60,6 @@ const guestRouter = createBrowserRouter([
 
 			{ path: "*", element: <Navigate to="/" /> },
 		],
-		
 	},
 ]);
 
@@ -70,7 +70,11 @@ const userRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Home /> },
-			{ path: "/products", element: <Products /> },
+			{ path: "products", element: <Products /> },
+			{ path: "new-arrival", element: <ProductList pageType="new-arrival" /> },
+			{ path: "for-men", element: <ProductList pageType="for-men" /> },
+			{ path: "for-women", element: <ProductList pageType="for-women" /> },
+			{ path: "on-sale", element: <ProductList pageType="on-sale" /> },
 			{
 				path: "account", // children ของ account
 				element: <SubLayoutAccount />,
@@ -100,7 +104,7 @@ const userRouter = createBrowserRouter([
 			},
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-			
+
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
@@ -133,7 +137,7 @@ const adminRouter = createBrowserRouter([
 			{ path: "*", element: <Navigate to="/" /> },
 		],
 	},
-  ]);
+]);
 
 export default function AppRouter() {
 	const { isLoaded, getToken, isSignedIn, userId } = useAuth();

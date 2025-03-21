@@ -1,11 +1,13 @@
-import React from 'react'
-import ProductCard from '../components/ProductCard'
+import React from "react";
+import ProductCard from "../components/ProductCard";
+import ProductList from "./ProductList";
 function Products() {
-  return (
-    <>
-    <ProductCard/>
-    </>
-  )
+	return (
+		<>
+			{/* <ProductCard/> */}
+			<ProductList pageType="all" />
+		</>
+	);
 }
 
-export default Products
+export default Products;
