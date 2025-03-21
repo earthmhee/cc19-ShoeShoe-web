@@ -95,7 +95,7 @@ const userRouter = createBrowserRouter([
 			{
 				path: "checkout",
 				children: [
-					// { path: ":id", element: <Payment /> },
+					{ path: ":id", element: <Payment /> },
 					{
 						path: "checkout-status/:session",
 						element: <CheckoutComplete />,

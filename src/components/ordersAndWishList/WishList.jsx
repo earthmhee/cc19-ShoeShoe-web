@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@clerk/clerk-react';
-// Import from react-router instead of react-router-dom
 import { Link } from 'react-router';
 import WishlistCard from '../WishlistCard';
 import { getWishlist, removeFromWishlist } from '../../api/wishlist';
@@ -47,26 +46,20 @@ function WishList() {
     try {
       if (!isSignedIn) return;
       
-      setIsLoading(true);
       const token = await getToken();
-      
       await removeFromWishlist(token, productId);
       
       // Update state to remove the item
       setWishlistItems(prevItems => 
         prevItems.filter(item => {
           // Check both possible ID locations
-          if (item.product && item.product.id) {
-            return item.product.id !== productId;
-          }
-          return item.product_id !== productId;
+          const itemProductId = item.product_id || (item.product && item.product.id);
+          return itemProductId !== productId;
         })
       );
     } catch (err) {
       console.error('Failed to remove item from wishlist:', err);
       setError('Failed to remove item from wishlist. Please try again.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -100,9 +93,8 @@ function WishList() {
       <div className="text-center py-16">
         <h2 className="text-2xl font-semibold mb-4">Your Wishlist is Empty</h2>
         <p className="text-gray-600 mb-6">Browse our products and add your favorites!</p>
-        {/* Use a regular <a> tag if Link causes issues */}
         <a 
-          href="/"
+          href="/products"
           className="inline-block px-6 py-3 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition"
         >
           Browse Products
@@ -111,23 +103,25 @@ function WishList() {
     );
   }
 
-  // Render wishlist
+  // Render wishlist with grid layout
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-8 border-b pb-2">My Wishlist</h1>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      {/* Grid layout that respects the fixed card width (w-40) */}
+      <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
         {wishlistItems.map(item => {
-          // Log each item to debug
-          console.log("Rendering wishlist item:", item);
+          // Get the correct product ID
+          const productId = item.product_id || (item.product && item.product.id);
           
           return (
-            <WishlistCard
-              key={item.id || (item.product && item.product.id)}
-              product={item.product}
-              productId={item.product_id || (item.product && item.product.id)}
-              onRemove={handleRemoveItem}
-            />
+            <div key={item.id || productId}>
+              <WishlistCard
+                product={item.product}
+                productId={productId}
+                onRemove={handleRemoveItem}
+              />
+            </div>
           );
         })}
       </div>
