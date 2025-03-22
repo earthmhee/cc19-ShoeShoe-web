@@ -54,8 +54,8 @@ function AddressSelect({ onSelectAddress }) {
 
 	return (
 		<div className="mb-2">
-			<div className="collapse collapse-arrow border border-base-300 bg-gray-50 p-0 rounded-lg h-fit">
-				<input type="checkbox" />
+			<div className="collapse collapse-open collapse-arrow border border-base-300 bg-gray-50 p-0 rounded-lg h-fit" >
+				<input type="checkbox " />
 				<div className="collapse-title text-sm font-semibold text-gray-800 px-6">
 					SELECT SHIPPING ADDRESSES
 				</div>

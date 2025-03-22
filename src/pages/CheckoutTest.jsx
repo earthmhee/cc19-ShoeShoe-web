@@ -11,10 +11,9 @@ import { useParams } from "react-router";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutTest = () => {
-	// Javascript
-	const { getToken } = useAuth();
-	const { id } = useParams();
-	// const id = 1
+  // Javascript
+  const { getToken } = useAuth();
+  const { id } = useParams();
 
 	const fetchClientSecret = async () => {
 		const token = await getToken();
