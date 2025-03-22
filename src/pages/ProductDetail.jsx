@@ -382,7 +382,7 @@ const ProductDetail = () => {
       <div className="mb-8">
         <div className="flex items-center text-gray-600 mb-2">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="flex items-center hover:text-gray-900"
           >
             <svg
