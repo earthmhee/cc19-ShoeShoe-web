@@ -42,10 +42,14 @@ const guestRouter = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ index: true, element: <Home /> },
+			{ path: "new-arrival", element: <ProductList pageType="new-arrival" /> },
+			{ path: "for-men", element: <ProductList pageType="for-men" /> },
+			{ path: "for-women", element: <ProductList pageType="for-women" /> },
+			{ path: "on-sale", element: <ProductList pageType="on-sale" /> },
 			{ path: "/products", element: <Products /> },
 			{ path: "/product/:id", element: <ProductDetail /> },
 			{ path: "/cart", element: <CartPage /> },
-
+			
 			//Footer Pages
 			{ path: "/membership", element: <Membership /> },
 			{ path: "/howtoorder", element: <HowtoOrder /> },
