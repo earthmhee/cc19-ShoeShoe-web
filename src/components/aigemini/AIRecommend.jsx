@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const AIChatModal = () => {
@@ -7,13 +7,17 @@ const AIChatModal = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [promptOptions, setPromptOptions] = useState([]);
+  const chatEndRef = useRef(null);
 
-  // ✅ โหลดตัวเลือก Prompt จาก API เมื่่อเปิด Modal
   useEffect(() => {
     if (isOpen) {
       fetchPromptOptions();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [aiResponse]);
 
   const fetchPromptOptions = async () => {
     try {
@@ -26,7 +30,6 @@ const AIChatModal = () => {
     }
   };
 
-  // ✅ ฟังก์ชันให้ผู้ใช้กดเลือก Prompt ที่มีมาให้
   const handleSelectPrompt = (selectedPrompt) => {
     setSearch(selectedPrompt);
     handleSearch(selectedPrompt);
@@ -34,8 +37,8 @@ const AIChatModal = () => {
 
   const handleSearch = async (query) => {
     if (!query.trim()) return;
-
     setLoading(true);
+    
     setAiResponse((prev) => [...prev, { type: "user", text: query }]);
 
     try {
@@ -43,50 +46,49 @@ const AIChatModal = () => {
         prompt: query,
       });
       const aiText = response.data.response || "AI ไม่สามารถให้คำแนะนำได้";
-
-      setAiResponse((prev) => [
-        ...prev,
-        { type: "user", text: query },
-        { type: "ai", text: aiText },
-      ]);
+      
+      setAiResponse((prev) => [...prev, { type: "ai", text: aiText }]);
     } catch (error) {
       console.error("AI Error:", error);
-      setAiResponse((prev) => [
-        ...prev,
-        { type: "ai", text: "เกิดข้อผิดพลาด กรุณาลองใหม่" },
-      ]);
+      setAiResponse((prev) => [...prev, { type: "ai", text: "เกิดข้อผิดพลาด กรุณาลองใหม่" }]);
     }
 
     setSearch("");
     setLoading(false);
   };
 
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(search);
+    }
+  };
+
   return (
     <div className="text-center mt-1">
-      {/* ปุ่มเปิดแชท */}
       <button
         onClick={() => setIsOpen(true)}
         className="bg-black text-white px-4 py-2 rounded-lg hover:opacity-80 transition hover:cursor-pointer"
       >
-        OpenChat AI 💬
+        AI Shoe Advisor
       </button>
 
-      {/* Overlay + Modal */}
       {isOpen && (
         <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm">
           <div className="bg-white w-96 md:w-[500px] lg:w-[600px] rounded-2xl shadow-xl p-5">
-            {/* Header */}
             <div className="flex justify-between items-center border-b pb-2">
               <h3 className="text-lg font-bold">AI recommends shoes</h3>
               <button
                 onClick={() => setIsOpen(false)}
                 className="text-black hover:cursor-pointer text-xl"
               >
-                ✖
+                X
               </button>
             </div>
 
-            {/* ถ้ามีตัวเลือกให้เลือก */}
             {promptOptions.length > 0 && (
               <div className="mt-3 space-y-2">
                 <p className="text-sm font-semibold text-gray-600">
@@ -106,7 +108,6 @@ const AIChatModal = () => {
               </div>
             )}
 
-            {/* กล่องแชท */}
             <div className="h-80 overflow-y-auto mt-3 bg-gray-100 p-3 rounded space-y-2">
               {aiResponse.length === 0 ? (
                 <p className="text-gray-500 text-center">Type to start chat...</p>
@@ -126,15 +127,16 @@ const AIChatModal = () => {
                   </div>
                 ))
               )}
+              <div ref={chatEndRef} />
             </div>
 
-            {/* ช่องพิมพ์ข้อความ */}
             <div className="mt-3 flex">
               <input
                 type="text"
                 placeholder="Type the name of the shoe..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full p-2 border rounded-l-lg"
               />
               <button
