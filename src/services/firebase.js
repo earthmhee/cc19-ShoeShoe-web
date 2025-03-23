@@ -2,13 +2,13 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, enableNetwork, disableNetwork } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDvKFM_jj4eLoWIQyFfJLcguzveUt-imfE",
-  authDomain: "shoeshoe-chat.firebaseapp.com",
-  projectId: "shoeshoe-chat",
-  storageBucket: "shoeshoe-chat.firebasestorage.app",
-  messagingSenderId: "850512936129",
-  appId: "1:850512936129:web:ec1425b332649328f56840",
-  measurementId: "G-MJ5WST3Q19"
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 //Initialize Firebase only if it hasn't been initialized yet
