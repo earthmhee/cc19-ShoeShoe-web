@@ -10,7 +10,7 @@ const UserDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getToken } = useAuth();
-  
+
   const [user, setUser] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,19 +21,19 @@ const UserDetail = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         // Get token from Clerk
         const token = await getToken();
-        
+
         // Create the authenticated API client
         const api = createAuthenticatedRequest(token);
-        
+
         // Fetch user data
         const userData = await api.getUserById(id);
-        
+
         if (userData && userData.status === 'success') {
           setUser(userData.data);
-          
+
           // Set orders from the user data
           setUserOrders(userData.data.orders || []);
         } else {
@@ -42,7 +42,7 @@ const UserDetail = () => {
       } catch (err) {
         console.error('Error fetching user data:', err);
         setError('Failed to load user data. Please try again later.');
-        
+
         // Set mock data for development
         setUser({
           id: parseInt(id),
@@ -55,7 +55,7 @@ const UserDetail = () => {
           status: 'Active',
           created_at: new Date().toISOString()
         });
-        
+
         // Mock orders
         setUserOrders([
           {
@@ -77,7 +77,7 @@ const UserDetail = () => {
         setLoading(false);
       }
     };
-    
+
     fetchUserData();
   }, [id, getToken]);
 
@@ -98,7 +98,8 @@ const UserDetail = () => {
     return (
       <AdminLayout>
         <div className="flex justify-center items-center h-full">
-          <div className="animate-spin h-8 w-8 border-4 border-black rounded-full border-t-transparent"></div>
+          {/* Standardized loading spinner */}
+          <div className="animate-spin h-8 w-8 border-4 border-gray-900 rounded-full border-t-transparent"></div>
         </div>
       </AdminLayout>
     );
@@ -110,7 +111,8 @@ const UserDetail = () => {
         <div className="text-center py-12">
           <h2 className="text-2xl font-semibold text-gray-800">User Not Found</h2>
           <p className="mt-2 text-gray-600">The user you're looking for doesn't exist or you don't have permission to view it.</p>
-          <button 
+          {/* Standardized primary button - black */}
+          <button
             onClick={() => navigate('/users')}
             className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
           >
@@ -124,6 +126,7 @@ const UserDetail = () => {
   return (
     <AdminLayout>
       <div className="mb-6">
+        {/* Standardized back button */}
         <button
           onClick={() => navigate('/users')}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
@@ -133,7 +136,7 @@ const UserDetail = () => {
         </button>
         <h1 className="text-2xl font-bold">User Profile</h1>
       </div>
-      
+
       {error && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
           <div className="flex">
@@ -146,7 +149,7 @@ const UserDetail = () => {
           </div>
         </div>
       )}
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* User Profile Card */}
         <div className="lg:col-span-1">
@@ -158,23 +161,23 @@ const UserDetail = () => {
               <h2 className="mt-4 text-xl font-bold text-gray-900">{user.firstname} {user.lastname}</h2>
               <p className="text-gray-500">@{user.username}</p>
               <div className="mt-2">
-                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                  user.role === 'Admin' 
-                    ? 'bg-purple-100 text-purple-800' 
-                    : 'bg-blue-100 text-blue-800'
-                }`}>
+                {/* Role badge */}
+                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === 'Admin'
+                    ? 'bg-black text-white'
+                    : 'bg-gray-100 text-gray-800'
+                  }`}>
                   {user.role}
                 </span>
-                <span className={`ml-2 px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                  user.status === 'Active' 
-                    ? 'bg-green-100 text-green-800' 
+                {/* Status badge - maintain semantic colors */}
+                <span className={`ml-2 px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active'
+                    ? 'bg-green-100 text-green-800'
                     : 'bg-red-100 text-red-800'
-                }`}>
+                  }`}>
                   {user.status || 'Active'}
                 </span>
               </div>
             </div>
-            
+
             <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
               <dl className="space-y-4">
                 <div className="flex items-center">
@@ -183,14 +186,14 @@ const UserDetail = () => {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 ml-2">{user.email}</dd>
                 </div>
-                
+
                 <div className="flex items-center">
                   <dt className="text-sm font-medium text-gray-500 w-8">
                     <Phone size={16} />
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 ml-2">{user.phone || 'Not provided'}</dd>
                 </div>
-                
+
                 <div className="flex items-center">
                   <dt className="text-sm font-medium text-gray-500 w-8">
                     <Calendar size={16} />
@@ -210,15 +213,15 @@ const UserDetail = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Right Side Content */}
         <div className="lg:col-span-2">
-          {/* Order History */}
+          {/* Order History - Standardized table */}
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-medium text-gray-900">Order History</h3>
             </div>
-            
+
             <div className="overflow-x-auto">
               {userOrders && userOrders.length > 0 ? (
                 <table className="min-w-full divide-y divide-gray-200">
@@ -246,7 +249,7 @@ const UserDetail = () => {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {userOrders.map((order) => (
-                      <tr key={order.id}>
+                      <tr key={order.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           #{order.id}
                         </td>
@@ -254,34 +257,33 @@ const UserDetail = () => {
                           {formatDate(order.order_date)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            order.shipment_status === 'Delivered' 
-                              ? 'bg-green-100 text-green-800' 
-                              : order.shipment_status === 'Pending' 
-                                ? 'bg-yellow-100 text-yellow-800' 
-                                : order.shipment_status === 'Shipped' 
-                                  ? 'bg-blue-100 text-blue-800' 
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${order.shipment_status === 'Delivered'
+                              ? 'bg-green-100 text-green-800'
+                              : order.shipment_status === 'Pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : order.shipment_status === 'Shipped'
+                                  ? 'bg-gray-100 text-gray-800'
                                   : 'bg-gray-100 text-gray-800'
-                          }`}>
+                            }`}>
                             {order.shipment_status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            order.payment_status === 'Paid' 
-                              ? 'bg-green-100 text-green-800' 
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${order.payment_status === 'Paid'
+                              ? 'bg-green-100 text-green-800'
                               : 'bg-yellow-100 text-yellow-800'
-                          }`}>
+                            }`}>
                             {order.payment_status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           ฿{order.total_amount?.toLocaleString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-indigo-600">
-                          <button 
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {/* Standardized link button */}
+                          <button
                             onClick={() => navigate(`/orders/${order.id}`)}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-gray-700 hover:text-black hover:underline"
                           >
                             View
                           </button>
@@ -299,13 +301,13 @@ const UserDetail = () => {
               )}
             </div>
           </div>
-          
+
           {/* Address Information */}
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-medium text-gray-900">Address Information</h3>
             </div>
-            
+
             <div className="px-6 py-4">
               {user.address && user.address.length > 0 ? (
                 <div className="space-y-4">
@@ -331,19 +333,19 @@ const UserDetail = () => {
               )}
             </div>
           </div>
-          
-          {/* Account Activity */}
+
+          {/* Account Activity - Standardized icons and colors */}
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
             </div>
-            
+
             <div className="px-6 py-4">
               <div className="space-y-4">
                 <div className="flex">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                      <User size={16} className="text-blue-600" />
+                    <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <User size={16} className="text-gray-600" />
                     </div>
                   </div>
                   <div className="ml-4">
@@ -351,13 +353,13 @@ const UserDetail = () => {
                     <p className="text-xs text-gray-500">{formatDate(user.created_at)}</p>
                   </div>
                 </div>
-                
+
                 {userOrders && userOrders.length > 0 && (
                   <>
                     <div className="flex">
                       <div className="flex-shrink-0">
-                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                          <ShoppingBag size={16} className="text-green-600" />
+                        <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                          <ShoppingBag size={16} className="text-gray-600" />
                         </div>
                       </div>
                       <div className="ml-4">
@@ -369,8 +371,8 @@ const UserDetail = () => {
                     {userOrders.some(order => order.payment_status === 'Paid') && (
                       <div className="flex">
                         <div className="flex-shrink-0">
-                          <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                            <CreditCard size={16} className="text-purple-600" />
+                          <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                            <CreditCard size={16} className="text-gray-600" />
                           </div>
                         </div>
                         <div className="ml-4">
@@ -387,8 +389,8 @@ const UserDetail = () => {
                     {userOrders.some(order => order.shipment_status === 'Delivered') && (
                       <div className="flex">
                         <div className="flex-shrink-0">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                            <Package size={16} className="text-blue-600" />
+                          <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                            <Package size={16} className="text-gray-600" />
                           </div>
                         </div>
                         <div className="ml-4">

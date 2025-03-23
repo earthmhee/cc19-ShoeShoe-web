@@ -23,8 +23,8 @@ import UserProfileForSideBar from "./UserProfileForSideBar";
 import useUserStore from "../stores/userStore";
 import UserProfileForNavBar from "./UserProfileForNavBar";
 import CartIcon from "./CartIcon";
-import { Hand } from "lucide-react";
 import AIChatModal from "./aigemini/AIRecommend";
+import ProductSearch from "./ProductSearch";
 
 function ResponsiveNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -148,9 +148,7 @@ function ResponsiveNavigation() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <button className="text-gray-700">
-            <SearchIcon className="w-5 h-5" />
-          </button>
+          <ProductSearch />
           <CartIcon />
         </div>
       </div>
@@ -231,16 +229,16 @@ function ResponsiveNavigation() {
             </div>
 
             <div className="flex justify-center items-center space-x-4 m-3">
-              <button
+              {/* <button
                 className="text-sm font-medium cursor-pointer"
                 onClick={() => setLanguage(language === "TH" ? "EN" : "TH")}
               >
                 {language}
-              </button>
+              </button> */}
               <AIChatModal />
-              <button className="text-gray-700 cursor-pointer">
-                <SearchIcon className="w-6 h-6 cursor-pointer" />
-              </button>
+              
+              {/* Replace search icon with ProductSearch component */}
+              <ProductSearch />
 
               {/* User icon and dropdown */}
               <UserProfileForNavBar />

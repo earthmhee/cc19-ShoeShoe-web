@@ -8,12 +8,14 @@ import {
   Phone,
   Eye,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from 'react-router';
 import AdminLayout from '../../layouts/AdminLayout';
-import createAuthenticatedRequest from '../../services/api'; 
+import createAuthenticatedRequest from '../../services/api';
 
 const UserManagement = () => {
   const { getToken } = useAuth();
@@ -158,23 +160,26 @@ const UserManagement = () => {
         <h1 className="text-2xl font-bold mb-6">User Management</h1>
 
         <div className="bg-white rounded-lg shadow mb-8">
-          {/* Improved Search Section */}
+          {/* Improved Search Section - Standardized */}
           <div className="p-4">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search by name, email or phone..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 transition-colors"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
 
+              {/* Standardized filter button */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center justify-center px-4 py-2 rounded-md border whitespace-nowrap ${showFilters ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                className={`flex items-center justify-center px-4 py-2 rounded-md border whitespace-nowrap ${showFilters
+                    ? 'bg-gray-800 border-gray-800 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
                   }`}
               >
                 <SlidersHorizontal size={18} className="mr-2" />
@@ -183,7 +188,7 @@ const UserManagement = () => {
             </div>
           </div>
 
-          {/* Fixed Filter Section - Matches the Screenshot */}
+          {/* Filter Section - Standardized */}
           {showFilters && (
             <div className="border border-gray-200 rounded-md mx-4 mb-4">
               <div className="grid grid-cols-3 border-b border-gray-200">
@@ -193,13 +198,13 @@ const UserManagement = () => {
               </div>
 
               <div className="grid grid-cols-3 p-3 gap-3">
-                {/* Date Range - Fixed Layout */}
+                {/* Date Range - Standardized forms */}
                 <div className="flex items-center space-x-2">
                   <div className="relative flex-1">
                     <input
                       type="text"
                       placeholder="dd/mm/yyyy"
-                      className="pl-9 pr-2 py-2 border rounded-md w-full focus:outline-none"
+                      className="pl-9 pr-2 py-2 border rounded-md w-full focus:outline-none focus:ring-gray-500 focus:border-gray-500"
                       value={dateRange.from}
                       onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
                     />
@@ -210,7 +215,7 @@ const UserManagement = () => {
                     <input
                       type="text"
                       placeholder="dd/mm/yyyy"
-                      className="pl-9 pr-2 py-2 border rounded-md w-full focus:outline-none"
+                      className="pl-9 pr-2 py-2 border rounded-md w-full focus:outline-none focus:ring-gray-500 focus:border-gray-500"
                       value={dateRange.to}
                       onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
                     />
@@ -218,10 +223,10 @@ const UserManagement = () => {
                   </div>
                 </div>
 
-                {/* Orders Dropdown - Fixed Layout */}
+                {/* Orders Dropdown - Standardized */}
                 <div className="px-2">
                   <select
-                    className="border rounded-md px-3 py-2 w-full focus:outline-none appearance-none bg-white"
+                    className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-gray-500 focus:border-gray-500 appearance-none bg-white"
                     value={orderFilter}
                     onChange={(e) => setOrderFilter(e.target.value)}
                   >
@@ -231,12 +236,12 @@ const UserManagement = () => {
                   </select>
                 </div>
 
-                {/* Total Spent Range - Fixed Layout */}
+                {/* Total Spent Range - Standardized */}
                 <div className="flex items-center space-x-2">
                   <input
                     type="text"
                     placeholder="Min"
-                    className="border rounded-md px-3 py-2 w-full focus:outline-none"
+                    className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-gray-500 focus:border-gray-500"
                     value={spentRange.min}
                     onChange={(e) => setSpentRange({ ...spentRange, min: e.target.value })}
                   />
@@ -244,7 +249,7 @@ const UserManagement = () => {
                   <input
                     type="text"
                     placeholder="Max"
-                    className="border rounded-md px-3 py-2 w-full focus:outline-none"
+                    className="border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-gray-500 focus:border-gray-500"
                     value={spentRange.max}
                     onChange={(e) => setSpentRange({ ...spentRange, max: e.target.value })}
                   />
@@ -256,7 +261,8 @@ const UserManagement = () => {
           {/* Responsive Table Section */}
           {isLoading ? (
             <div className="flex justify-center items-center py-16">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+              {/* Standardized loader */}
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900"></div>
             </div>
           ) : error ? (
             <div className="flex justify-center items-center py-16">
@@ -264,6 +270,7 @@ const UserManagement = () => {
             </div>
           ) : (
             <>
+              {/* Standardized table */}
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -334,8 +341,9 @@ const UserManagement = () => {
                             {formatCurrency(customer.totalSpent)}
                           </td>
                           <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                            {/* Standardized action button */}
                             <button
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-blue-600 hover:text-blue-800 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none"
                               title="View Details"
                               onClick={() => handleViewDetails(customer.id)}
                             >
@@ -355,59 +363,53 @@ const UserManagement = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
+              {/* Standardized pagination */}
               {totalPages > 1 && (
                 <div className="px-4 sm:px-6 py-3 border-t flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="text-sm text-gray-500 order-2 sm:order-1">
                     Showing {indexOfFirstCustomer + 1} to {Math.min(indexOfLastCustomer, sortedCustomers.length)} of {sortedCustomers.length} customers
                   </div>
                   <div className="flex order-1 sm:order-2">
+                    {/* Previous button */}
                     <button
                       onClick={() => setCurrentPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`flex items-center justify-center px-3 py-1 rounded-l-md border ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-blue-600 hover:bg-blue-50'
+                      className={`flex items-center justify-center px-3 py-1 rounded-l-md border ${currentPage === 1
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <ChevronLeft size={16} className="mr-1" />
                       <span className="hidden sm:inline">Previous</span>
                     </button>
 
+                    {/* Page numbers - Standardized styling */}
                     <div className="hidden sm:flex">
-                      {Array.from({ length: totalPages }).map((_, index) => {
-                        // Show limited page numbers with ellipsis
-                        if (
-                          totalPages <= 7 ||
-                          index === 0 ||
-                          index === totalPages - 1 ||
-                          (index >= currentPage - 2 && index <= currentPage + 1)
-                        ) {
-                          return (
-                            <button
-                              key={index}
-                              onClick={() => setCurrentPage(index + 1)}
-                              className={`px-3 py-1 border-t border-b ${currentPage === index + 1
-                                  ? 'bg-blue-600 text-white border-blue-600'
-                                  : 'bg-white text-blue-600 hover:bg-blue-50'
-                                }`}
-                            >
-                              {index + 1}
-                            </button>
-                          );
-                        } else if (
-                          index === 1 ||
-                          index === totalPages - 2
-                        ) {
-                          return (
-                            <button
-                              key={index}
-                              className="px-3 py-1 border-t border-b bg-white text-gray-500"
-                              disabled
-                            >
-                              ...
-                            </button>
-                          );
+                      {Array.from({ length: Math.min(5, totalPages) }).map((_, index) => {
+                        // Show limited page numbers with smart logic
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = index + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = index + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + index;
+                        } else {
+                          pageNum = currentPage - 2 + index;
                         }
-                        return null;
+
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`px-3 py-1 border-t border-b ${currentPage === pageNum
+                                ? 'bg-black text-white border-black'
+                                : 'bg-white text-gray-700 hover:bg-gray-50'
+                              }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
                       })}
                     </div>
 
@@ -416,10 +418,13 @@ const UserManagement = () => {
                       <span className="text-sm text-gray-700">{currentPage} / {totalPages}</span>
                     </div>
 
+                    {/* Next button */}
                     <button
                       onClick={() => setCurrentPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`flex items-center justify-center px-3 py-1 rounded-r-md border ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-blue-600 hover:bg-blue-50'
+                      className={`flex items-center justify-center px-3 py-1 rounded-r-md border ${currentPage === totalPages
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <span className="hidden sm:inline">Next</span>
