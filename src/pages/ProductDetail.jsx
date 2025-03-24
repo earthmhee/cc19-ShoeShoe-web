@@ -489,8 +489,9 @@ const ProductDetail = () => {
 								<button
 									key={index}
 									onClick={() => setCurrentImage(index)}
-									className={`border rounded w-20 h-20 flex-shrink-0 ${currentImage === index ? "border-black" : "border-gray-200"
-										}`}
+									className={`border rounded w-20 h-20 flex-shrink-0 ${
+										currentImage === index ? "border-black" : "border-gray-200"
+									}`}
 								>
 									<img
 										src={img}
@@ -549,13 +550,15 @@ const ProductDetail = () => {
 									disabled={!size.available}
 									className={`
                     min-w-[40px] h-10 border flex items-center justify-center px-3
-                    ${selectedSize === size.id
-											? "border-2 border-black font-medium"
-											: "border-gray-300"
+                    ${
+											selectedSize === size.id
+												? "border-2 border-black font-medium"
+												: "border-gray-300"
 										}
-                    ${!size.available
-											? "opacity-50 bg-gray-100 cursor-not-allowed"
-											: "hover:border-black"
+                    ${
+											!size.available
+												? "opacity-50 bg-gray-100 cursor-not-allowed"
+												: "hover:border-black"
 										}
                   `}
 								>
@@ -610,16 +613,17 @@ const ProductDetail = () => {
 						<button
 							onClick={handleAddToCart}
 							disabled={isOutOfStock() || !selectedSize || cartLoading}
-							className={`flex-1 py-3 px-4 font-medium text-center uppercase ${isOutOfStock() || !selectedSize || cartLoading
+							className={`flex-1 py-3 px-4 font-medium text-center uppercase ${
+								isOutOfStock() || !selectedSize || cartLoading
 									? "bg-gray-300 text-gray-500 cursor-not-allowed"
 									: "bg-gray-900 text-white hover:bg-black"
-								}`}
+							}`}
 						>
 							{isOutOfStock()
 								? "Out of Stock"
 								: cartLoading
-									? "Adding..."
-									: "Add to Cart"}
+								? "Adding..."
+								: "Add to Cart"}
 						</button>
 
 						<button
@@ -661,29 +665,15 @@ const ProductDetail = () => {
 						</div>
 					</div>
 
-					{/* Debug Information - Remove in production */}
-					{process.env.NODE_ENV === "development" && (
-						<div className="mt-8 p-4 bg-gray-100 rounded-md">
-							<h3 className="font-bold">Debug Info:</h3>
-							<p>Product ID: {product.id}</p>
-							<p>Stock Items: {product.stock ? product.stock.length : 0}</p>
-							<p>Selected Size: {selectedSize}</p>
-							<details>
-								<summary>Raw Product Data</summary>
-								<pre className="text-xs mt-2 overflow-auto max-h-40">
-									{JSON.stringify(product, null, 2)}
-								</pre>
-							</details>
-						</div>
-					)}
-
 					<div className="mt-8">
 						<button
 							onClick={() => setShowOutfits(!showOutfits)}
 							className="w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center"
 						>
 							<span className="mr-2">👕</span>
-							{showOutfits ? 'Hide Outfit Ideas' : 'Complete Your Look with AI Outfit Ideas'}
+							{showOutfits
+								? "Hide Outfit Ideas"
+								: "Complete Your Look with AI Outfit Ideas"}
 						</button>
 
 						{/* Outfit generator component (only shown when toggled) */}
@@ -707,12 +697,13 @@ const ProductDetail = () => {
 			{showToast && (
 				<div className="fixed bottom-5 right-5 z-50 animate-fade-in-up">
 					<div
-						className={`px-4 py-3 rounded-md shadow-lg max-w-md ${toastType === "success"
+						className={`px-4 py-3 rounded-md shadow-lg max-w-md ${
+							toastType === "success"
 								? "bg-green-50 text-green-800 border border-green-200"
 								: toastType === "error"
-									? "bg-red-50 text-red-800 border border-red-200"
-									: "bg-blue-50 text-blue-800 border border-blue-200"
-							}`}
+								? "bg-red-50 text-red-800 border border-red-200"
+								: "bg-blue-50 text-blue-800 border border-blue-200"
+						}`}
 					>
 						<div className="flex items-center">
 							{toastType === "success" && (

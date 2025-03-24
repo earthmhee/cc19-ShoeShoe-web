@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const emptyData = {
 	firstname: "",
@@ -31,7 +31,7 @@ const Addressbook = () => {
 	const handleCancel = () => {
 		setFormData(emptyData);
 	};
-
+	const userName = useUser();
 	// Fetch provinces data
 	useEffect(() => {
 		const fetchProvinces = async () => {
@@ -194,7 +194,9 @@ const Addressbook = () => {
 	return (
 		<div className="w-full max-w-4xl mx-auto">
 			<div className="border-b border-gray-300 pb-2 mb-6">
-				<h1 className="text-2xl font-bold text-gray-800">TON'S ACCOUNT</h1>
+				<h1 className="text-2xl font-bold text-gray-800">
+					{userName.user.firstName}
+				</h1>
 			</div>
 
 			{/* Existing Addresses Collapse */}

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-	useUser,
-	useAuth,
-	UserProfile,
-	UserButton,
-	useClerk,
-} from "@clerk/clerk-react";
+import { useUser, useAuth, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router";
 
 function UserProfileForSideBar() {
