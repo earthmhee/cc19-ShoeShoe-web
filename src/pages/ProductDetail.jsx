@@ -661,22 +661,6 @@ const ProductDetail = () => {
 						</div>
 					</div>
 
-					{/* Debug Information - Remove in production */}
-					{process.env.NODE_ENV === "development" && (
-						<div className="mt-8 p-4 bg-gray-100 rounded-md">
-							<h3 className="font-bold">Debug Info:</h3>
-							<p>Product ID: {product.id}</p>
-							<p>Stock Items: {product.stock ? product.stock.length : 0}</p>
-							<p>Selected Size: {selectedSize}</p>
-							<details>
-								<summary>Raw Product Data</summary>
-								<pre className="text-xs mt-2 overflow-auto max-h-40">
-									{JSON.stringify(product, null, 2)}
-								</pre>
-							</details>
-						</div>
-					)}
-
 					<div className="mt-8">
 						<button
 							onClick={() => setShowOutfits(!showOutfits)}
