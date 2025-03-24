@@ -184,6 +184,7 @@ const AdminProducts = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Products</h1>
+          {/* Standardized primary button - black */}
           <Link 
             to="/products/new" 
             className="px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 hover:bg-gray-800"
@@ -209,21 +210,23 @@ const AdminProducts = () => {
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="p-4 border-b">
             <div className="flex flex-col sm:flex-row justify-between gap-4">
+              {/* Search input */}
               <div className="relative flex-grow">
                 <input
                   type="text"
                   placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-md"
+                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-gray-500 focus:border-gray-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Search size={20} className="absolute left-3 top-2.5 text-gray-400" />
               </div>
               
+              {/* Filter buttons with standardized styling */}
               <div className="flex gap-2">
                 <button 
                   onClick={() => setShowFilters(!showFilters)}
-                  className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center"
+                  className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center text-gray-700"
                 >
                   <Filter size={20} className="mr-2" />
                   Filters
@@ -233,7 +236,7 @@ const AdminProducts = () => {
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="border rounded-md px-4 py-2 appearance-none pr-10 bg-white"
+                    className="border rounded-md px-4 py-2 appearance-none pr-10 bg-white focus:ring-gray-500 focus:border-gray-500"
                   >
                     <option value="">All Categories</option>
                     {categories.map((category, index) => (
@@ -245,12 +248,14 @@ const AdminProducts = () => {
               </div>
             </div>
             
+            {/* Additional filters section */}
             {showFilters && (
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t">
+                {/* Brand filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
                   <select 
-                    className="border rounded-md px-4 py-2 w-full"
+                    className="border rounded-md px-4 py-2 w-full focus:ring-gray-500 focus:border-gray-500"
                     value={filterBrand}
                     onChange={(e) => setFilterBrand(e.target.value)}
                   >
@@ -261,10 +266,11 @@ const AdminProducts = () => {
                   </select>
                 </div>
                 
+                {/* Gender filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
                   <select 
-                    className="border rounded-md px-4 py-2 w-full"
+                    className="border rounded-md px-4 py-2 w-full focus:ring-gray-500 focus:border-gray-500"
                     value={filterGender}
                     onChange={(e) => setFilterGender(e.target.value)}
                   >
@@ -274,28 +280,32 @@ const AdminProducts = () => {
                   </select>
                 </div>
                 
+                {/* Price range filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
                   <div className="flex items-center space-x-2">
-                    <input type="number" placeholder="Min" className="border rounded-md px-4 py-2 w-full" />
+                    <input type="number" placeholder="Min" className="border rounded-md px-4 py-2 w-full focus:ring-gray-500 focus:border-gray-500" />
                     <span>-</span>
-                    <input type="number" placeholder="Max" className="border rounded-md px-4 py-2 w-full" />
+                    <input type="number" placeholder="Max" className="border rounded-md px-4 py-2 w-full focus:ring-gray-500 focus:border-gray-500" />
                   </div>
                 </div>
               </div>
             )}
           </div>
 
+          {/* Loading indicator */}
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900"></div>
             </div>
           ) : (
             <>
+              {/* Products table with standardized styling */}
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50">
                     <tr>
+                      {/* ID column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('id')}
@@ -309,7 +319,11 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Image column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                      
+                      {/* Name column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('productname')}
@@ -323,6 +337,8 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Category column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('category')}
@@ -336,6 +352,8 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Price column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('price')}
@@ -349,6 +367,8 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Brand column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('brand')}
@@ -362,6 +382,8 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Gender column */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <button 
                           onClick={() => toggleSort('gender')}
@@ -375,9 +397,13 @@ const AdminProducts = () => {
                           )}
                         </button>
                       </th>
+                      
+                      {/* Actions column */}
                       <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
+                  
+                  {/* Table body */}
                   <tbody className="bg-white divide-y divide-gray-200">
                     {currentProducts.length > 0 ? (
                       currentProducts.map((product) => {
@@ -385,7 +411,7 @@ const AdminProducts = () => {
                         const mainImage = imageArray[0] || "";
                         
                         return (
-                          <tr key={product.id}>
+                          <tr key={product.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.id}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="h-10 w-10 rounded-md overflow-hidden">
@@ -418,15 +444,18 @@ const AdminProducts = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.gender}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
                               <div className="flex justify-center items-center space-x-2">
+                                {/* Edit button with standardized styling */}
                                 <Link 
                                   to={`/products/edit/${product.id}`}
-                                  className="text-blue-600 hover:text-blue-900"
+                                  className="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded"
                                 >
                                   <Pencil size={18} />
                                 </Link>
+                                
+                                {/* Delete button with standardized styling */}
                                 <button 
                                   onClick={() => handleDeleteProduct(product.id)}
-                                  className="text-red-600 hover:text-red-900"
+                                  className="p-1 text-red-600 hover:text-red-900 hover:bg-red-50 rounded"
                                 >
                                   <Trash size={18} />
                                 </button>
@@ -446,7 +475,7 @@ const AdminProducts = () => {
                 </table>
               </div>
               
-              {/* Pagination */}
+              {/* Standardized pagination */}
               {totalPages > 1 && (
                 <div className="p-4 border-t flex justify-between items-center">
                   <div className="text-sm text-gray-500">
@@ -457,27 +486,48 @@ const AdminProducts = () => {
                       onClick={() => setCurrentPage(currentPage - 1)}
                       disabled={currentPage === 1}
                       className={`px-3 py-1 rounded-l-md border ${
-                        currentPage === 1 ? 'bg-white text-gray-700 cursor-not-allowed' : 'bg-white text-grey-500 hover:bg-white-100'
+                        currentPage === 1 
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       Previous
                     </button>
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentPage(index + 1)}
-                        className={`px-3 py-1 border-t border-b ${
-                          currentPage === index + 1 ? 'bg-white text-gray-700' : 'bg-white text-grey-500 hover:bg-white-100'
-                        }`}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
+                    
+                    {Array.from({ length: Math.min(5, totalPages) }).map((_, index) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = index + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = index + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + index;
+                      } else {
+                        pageNum = currentPage - 2 + index;
+                      }
+                      
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-1 border-t border-b ${
+                            currentPage === pageNum 
+                              ? 'bg-black text-white' 
+                              : 'bg-white text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                    
                     <button
                       onClick={() => setCurrentPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
                       className={`px-3 py-1 rounded-r-md border ${
-                        currentPage === totalPages ? 'bg-white text-gray-700 cursor-not-allowed' : 'bg-white text-grey-500 hover:bg-white-50'
+                        currentPage === totalPages 
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       Next
