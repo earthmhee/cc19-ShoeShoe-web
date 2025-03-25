@@ -458,7 +458,7 @@ const InventoryManagement = () => {
                         {product.category?.categoryname || 'No Category'}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-wrap justify-center gap-2 max-w-lg mx-auto">
+                        <div className="grid grid-cols-2 gap-2 max-w-fit mx-auto">
                           {relevantSizes.map((size, index) => {
                             const stockQuantity = getStockQuantity(product, size.id);
                             const editing = isEditing(product.id, size.id);
@@ -539,8 +539,8 @@ const InventoryManagement = () => {
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`px-3 py-1 rounded-l-md border flex items-center ${currentPage === 1
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
@@ -566,8 +566,8 @@ const InventoryManagement = () => {
                     key={`page-${pageNum}`}
                     onClick={() => setCurrentPage(pageNum)}
                     className={`px-3 py-1 border-t border-b ${currentPage === pageNum
-                        ? 'bg-black text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                      ? 'bg-black text-white'
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
                       }`}
                   >
                     {pageNum}
@@ -579,8 +579,8 @@ const InventoryManagement = () => {
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className={`px-3 py-1 rounded-r-md border flex items-center ${currentPage === totalPages
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 Next
