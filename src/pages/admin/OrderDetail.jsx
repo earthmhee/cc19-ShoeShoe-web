@@ -141,8 +141,7 @@ const OrderDetail = () => {
     // Log the customer object for debugging
     console.log("Customer object:", customer);
 
-    const address = customer.address;
-
+    const address = customer.address[0];
     // Log the address property for debugging
     console.log("Address property:", address);
 
